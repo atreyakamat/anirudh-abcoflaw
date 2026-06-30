@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isStaff() { return request.auth != null && exists(/databases/$(database)/documents/staff/$(request.auth.uid)); }
+    function isAdmin() { return isStaff() && get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == "admin"; }
+    match /users/{userId} { allow read: if isStaff(); allow write: if false; }
+    match /lawyers/{lawyerId} { allow read: if isStaff(); allow create, update, delete: if isAdmin();
+      match /slots/{slotId} { allow read: if isStaff(); allow create, update, delete: if isAdmin(); }
+    }
+    match /appointments/{appointmentId} { allow read: if isStaff(); allow update: if isStaff() && request.resource.data.keys().hasOnly(["status", "notes"]); allow create, delete: if false; }
+    match /staff/{staffId} { allow read: if isStaff(); allow write: if isAdmin(); }
+  }
+}
