@@ -1,0 +1,8 @@
+{
+  "indexes": [
+    { "collectionGroup": "slots", "queryScope": "COLLECTION", "fields": [ { "fieldPath": "date", "order": "ASCENDING" }, { "fieldPath": "status", "order": "ASCENDING" } ] },
+    { "collectionGroup": "appointments", "queryScope": "COLLECTION", "fields": [ { "fieldPath": "date", "order": "ASCENDING" }, { "fieldPath": "status", "order": "ASCENDING" } ] },
+    { "collectionGroup": "appointments", "queryScope": "COLLECTION", "fields": [ { "fieldPath": "lawyerId", "order": "ASCENDING" }, { "fieldPath": "date", "order": "ASCENDING" } ] }
+  ],
+  "fieldOverrides": []
+}
