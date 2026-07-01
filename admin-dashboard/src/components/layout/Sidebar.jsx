@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, Users, LayoutDashboard, ShieldAlert, LogOut } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom'; 
 
 export default function Sidebar() {
+  const [isOpen, setIsOpen] = useState(true);
+  const location = useLocation(); // Track current URL
+
+
   const navigation = [
-    { name: 'Dashboard', icon: LayoutDashboard, href: '#', active: true },
-    { name: 'Appointments', icon: Calendar, href: '#' },
-    { name: 'Lawyers Management', icon: Users, href: '#' },
-    { name: 'Availability Slots', icon: ShieldAlert, href: '#' },
+    { name: 'Dashboard', icon: LayoutDashboard, href: '/' },
+    { name: 'Appointments', icon: Calendar, href: '/appointments' },
+    { name: 'Lawyers Management', icon: Users, href: '/lawyers' },
+    { name: 'Availability Slots', icon: ShieldAlert, href: '/availability' },
   ];
 
   return (
@@ -21,25 +26,27 @@ export default function Sidebar() {
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex flex-col gap-1">
-          {navigation.map((item) => {
-            const Icon = item.icon;
-            return (
-              <a
-                key={item.name}
-                href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                  item.active
-                    ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-slate-100'
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {item.name}
-              </a>
-            );
-          })}
-        </nav>
+    <nav className="flex flex-col gap-2">
+      {navigation.map((item) => {
+        const Icon = item.icon;
+        const isActive = location.pathname === item.href;
+        return (
+          <Link
+            key={item.name}
+            to={item.href}
+            title={!isOpen ? item.name : ""}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all overflow-hidden whitespace-nowrap ${
+              isActive
+                ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20'
+                : 'text-slate-400 hover:bg-slate-900 hover:text-slate-100'
+            } ${!isOpen && 'justify-center'}`}
+          >
+            <Icon className="h-5 w-5 shrink-0" />
+            {isOpen && <span>{item.name}</span>}
+          </Link>
+        );
+      })}
+    </nav>
       </div>
 
       {/* User Logout Footer */}
