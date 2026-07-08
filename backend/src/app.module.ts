@@ -17,6 +17,7 @@ import { CalendarBlocksModule } from './modules/calendar-blocks/calendar-blocks.
 import { SearchModule } from './modules/search/search.module.js';
 import { DocumentsModule } from './modules/documents/documents.module.js';
 import { BlogCategoriesModule } from './modules/blog-categories/blog-categories.module.js';
+import { PortalModule } from './modules/portal/portal.module.js';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { BlogCategoriesModule } from './modules/blog-categories/blog-categories.
     SearchModule,
     DocumentsModule,
     BlogCategoriesModule,
+    PortalModule,
   ],
 })
 export class AppModule {}

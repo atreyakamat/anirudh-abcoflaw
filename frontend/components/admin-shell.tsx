@@ -21,6 +21,7 @@ import {
 import { logout } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { SessionGate } from '@/components/session-gate';
 
 const adminNav = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -45,8 +46,9 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-white">
-      <div className="grid min-h-screen lg:grid-cols-[18rem_1fr]">
+    <SessionGate mode="staff" allowedRoles={['admin', 'receptionist', 'lawyer']} redirectTo="/admin/login">
+      <div className="min-h-screen bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-white">
+        <div className="grid min-h-screen lg:grid-cols-[18rem_1fr]">
         <aside className="border-r border-slate-200 bg-white/90 px-4 py-5 dark:border-slate-800 dark:bg-slate-950/90">
           <div className="flex items-center gap-3 px-2">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">LP</div>
@@ -89,10 +91,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </Button>
         </aside>
 
-        <main className="min-w-0 px-4 py-6 sm:px-6 lg:px-8">
-          {children}
-        </main>
+          <main className="min-w-0 px-4 py-6 sm:px-6 lg:px-8">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </SessionGate>
   );
 }

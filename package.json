@@ -12,10 +12,15 @@
   ],
   "scripts": {
     "dev": "npm run dev -w frontend",
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:backend": "npm run dev -w backend",
     "build": "npm run build -w shared && npm run build -w backend && npm run build -w frontend",
     "lint": "npm run lint -w backend && npm run lint -w frontend",
     "typecheck": "npm run typecheck -w backend && npm run typecheck -w frontend",
     "db:generate": "npm run prisma:generate -w backend",
-    "db:migrate": "npm run prisma:migrate -w backend"
+    "db:migrate": "npm run prisma:migrate -w backend",
+    "db:seed": "npm run prisma:seed -w backend",
+    "db:prepare": "npm run db:generate && npm run db:migrate && npm run db:seed",
+    "start:local": "powershell -ExecutionPolicy Bypass -File scripts/start-local.ps1"
   }
 }

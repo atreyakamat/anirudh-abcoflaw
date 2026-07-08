@@ -13,6 +13,7 @@ export class StaticCredentialsProvider {
   private readonly accounts = [
     { id: 'admin-user', username: 'admin', displayName: 'Practice Admin', role: Roles.ADMIN, password: 'admin123' },
     { id: 'receptionist-user', username: 'receptionist', displayName: 'Receptionist', role: Roles.RECEPTIONIST, password: 'admin123' },
+    { id: 'lawyer-user', username: 'lawyer', displayName: 'Lead Lawyer', role: Roles.LAWYER, password: 'admin123' },
   ] satisfies Array<AuthenticatedIdentity & { password: string }>;
 
   verify(username: string, password: string): AuthenticatedIdentity | null {

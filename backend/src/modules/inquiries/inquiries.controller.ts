@@ -1,7 +1,48 @@
-import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadConstraints } from '@crm/shared';
+import { plainToInstance } from 'class-transformer';
+import { IsEmail, IsOptional, IsString, MinLength, validateSync } from 'class-validator';
 import { InquiriesService } from './inquiries.service.js';
+
+class InquiryCreateDto {
+  @IsString()
+  @MinLength(2)
+  fullName!: string;
+
+  @IsString()
+  @MinLength(7)
+  phone!: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  preferredDate?: string;
+
+  @IsOptional()
+  @IsString()
+  preferredTime?: string;
+
+  @IsString()
+  @MinLength(10)
+  description!: string;
+
+  @IsString()
+  @MinLength(2)
+  source!: string;
+}
+
+function assertInquiryBody(body: unknown) {
+  const instance = plainToInstance(InquiryCreateDto, body);
+  const errors = validateSync(instance, { whitelist: true, forbidUnknownValues: true });
+  if (errors.length > 0) {
+    throw new BadRequestException('Invalid inquiry payload');
+  }
+  return instance;
+}
 
 @Controller('inquiries')
 export class InquiriesController {
@@ -19,7 +60,7 @@ export class InquiriesController {
       callback(new Error('Unsupported file type'), false);
     },
   }))
-  create(@Body() body: Record<string, any>, @UploadedFile() file?: Express.Multer.File) {
-    return this.inquiriesService.createInquiry(body, file);
+  create(@Body() body: unknown, @UploadedFile() file?: Express.Multer.File) {
+    return this.inquiriesService.createInquiry(assertInquiryBody(body), file);
   }
 }

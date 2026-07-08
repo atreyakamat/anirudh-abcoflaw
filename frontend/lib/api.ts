@@ -45,6 +45,28 @@ export async function login(username: string, password: string) {
   );
 }
 
+export async function getCurrentUser() {
+  return fetchJSON<{ ok: boolean; user: { id: string; username: string; displayName: string; role: string } }>('/auth/me');
+}
+
+export async function clientPortalLogin(phone: string, email?: string) {
+  return fetchJSON<{ ok: boolean; user: { id: string; username: string; displayName: string; role: string } }>(
+    '/portal/login',
+    {
+      method: 'POST',
+      body: JSON.stringify({ phone, email }),
+    },
+  );
+}
+
+export async function getPortalSummary() {
+  return fetchJSON('/portal/summary');
+}
+
+export async function getPortalMe() {
+  return fetchJSON('/portal/me');
+}
+
 export async function logout() {
   return fetchJSON<{ ok: boolean }>('/auth/logout', { method: 'POST' });
 }

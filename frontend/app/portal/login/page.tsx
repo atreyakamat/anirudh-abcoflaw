@@ -5,38 +5,29 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { login } from '@/lib/api';
+import { clientPortalLogin } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
 const schema = z.object({
-  username: z.string().min(2),
-  password: z.string().min(4),
+  phone: z.string().min(7),
+  email: z.string().email().optional().or(z.literal('')),
 });
 
 type LoginValues = z.infer<typeof schema>;
 
-export default function AdminLoginPage() {
+export default function PortalLoginPage() {
   const router = useRouter();
   const [error, setError] = useState('');
   const form = useForm<LoginValues>({ resolver: zodResolver(schema) });
 
   async function handleSubmit(values: LoginValues) {
     try {
-      const response = await login(values.username, values.password);
-      const role = response.user.role;
-      if (role === 'lawyer') {
-        router.push('/lawyer');
-        return;
-      }
-      if (role === 'receptionist') {
-        router.push('/receptionist');
-        return;
-      }
-      router.push('/admin');
+      await clientPortalLogin(values.phone, values.email || undefined);
+      router.push('/portal');
     } catch (submissionError) {
-      setError(submissionError instanceof Error ? submissionError.message : 'Login failed');
+      setError(submissionError instanceof Error ? submissionError.message : 'Portal login failed');
     }
   }
 
@@ -44,16 +35,15 @@ export default function AdminLoginPage() {
     <main className="section-shell flex min-h-[70vh] items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Admin Login</CardTitle>
-          <CardDescription>Use the static MVP credentials to enter the dashboard.</CardDescription>
+          <CardTitle>Client Portal</CardTitle>
+          <CardDescription>Use your registered phone and email to access your case timeline.</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
-            <Input placeholder="Username" {...form.register('username')} />
-            <Input placeholder="Password" type="password" {...form.register('password')} />
+            <Input placeholder="Phone" {...form.register('phone')} />
+            <Input placeholder="Email" type="email" {...form.register('email')} />
             {error ? <p className="text-sm text-red-600">{error}</p> : null}
-            <Button type="submit" className="w-full">Login</Button>
-            <p className="text-xs text-slate-500">Username: admin or receptionist. Password: admin123.</p>
+            <Button type="submit" className="w-full">Enter portal</Button>
           </form>
         </CardContent>
       </Card>

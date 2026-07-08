@@ -35,6 +35,7 @@ export default function HomePage() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/book-consultation"><Button size="lg">Book Consultation</Button></Link>
+                <Link href="/portal/login"><Button size="lg" variant="outline">Client Portal</Button></Link>
                 <Link href="/about"><Button size="lg" variant="outline">Explore the practice</Button></Link>
               </div>
               <div className="grid gap-3 pt-4 sm:grid-cols-2 xl:grid-cols-4">

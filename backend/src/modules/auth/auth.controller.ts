@@ -1,4 +1,6 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { plainToInstance } from 'class-transformer';
+import { IsString, MinLength, validateSync } from 'class-validator';
 import { Request, Response } from 'express';
 import { SessionGuard } from '../../common/auth/session.guard.js';
 import { CurrentUser } from '../../common/auth/current-user.decorator.js';
@@ -6,8 +8,22 @@ import { StaticCredentialsProvider } from '../../common/auth/static-credentials.
 import { SessionTokenService } from '../../common/auth/session-token.service.js';
 
 class LoginDto {
+  @IsString()
+  @MinLength(2)
   username!: string;
+
+  @IsString()
+  @MinLength(4)
   password!: string;
+}
+
+function assertValidLogin(body: unknown) {
+  const instance = plainToInstance(LoginDto, body);
+  const errors = validateSync(instance, { whitelist: true, forbidUnknownValues: true });
+  if (errors.length > 0) {
+    throw new BadRequestException('Invalid login payload');
+  }
+  return instance;
 }
 
 @Controller('auth')
@@ -18,8 +34,9 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  login(@Body() body: LoginDto, @Res({ passthrough: true }) response: Response) {
-    const identity = this.credentials.verify(body.username, body.password);
+  login(@Body() body: unknown, @Res({ passthrough: true }) response: Response) {
+    const payload = assertValidLogin(body);
+    const identity = this.credentials.verify(payload.username, payload.password);
     if (!identity) {
       return { ok: false, message: 'Invalid credentials' };
     }
