@@ -1,66 +1,146 @@
-import { BadRequestException, Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
-import { IsString, MinLength, validateSync } from 'class-validator';
-import { Request, Response } from 'express';
-import { SessionGuard } from '../../common/auth/session.guard.js';
-import { CurrentUser } from '../../common/auth/current-user.decorator.js';
-import { StaticCredentialsProvider } from '../../common/auth/static-credentials.provider.js';
-import { SessionTokenService } from '../../common/auth/session-token.service.js';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Res,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiCookieAuth } from '@nestjs/swagger';
+import { Response, Request } from 'express';
+import { ConfigService } from '@nestjs/config';
+import { AuthService } from './auth.service.js';
+import { LoginDto } from './dto/login.dto.js';
+import { RegisterDto } from './dto/register.dto.js';
+import { Public } from '../../common/decorators/public.decorator.js';
+import { CurrentUser, CurrentUserData } from '../../common/decorators/current-user.decorator.js';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 
-class LoginDto {
-  @IsString()
-  @MinLength(2)
-  username!: string;
-
-  @IsString()
-  @MinLength(4)
-  password!: string;
-}
-
-function assertValidLogin(body: unknown) {
-  const instance = plainToInstance(LoginDto, body);
-  const errors = validateSync(instance, { whitelist: true, forbidUnknownValues: true });
-  if (errors.length > 0) {
-    throw new BadRequestException('Invalid login payload');
-  }
-  return instance;
-}
-
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly credentials: StaticCredentialsProvider,
-    private readonly sessionTokens: SessionTokenService,
+    private authService: AuthService,
+    private configService: ConfigService,
   ) {}
 
+  @Public()
   @Post('login')
-  login(@Body() body: unknown, @Res({ passthrough: true }) response: Response) {
-    const payload = assertValidLogin(body);
-    const identity = this.credentials.verify(payload.username, payload.password);
-    if (!identity) {
-      return { ok: false, message: 'Invalid credentials' };
-    }
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Login with username and password' })
+  async login(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const { tokens, user } = await this.authService.login(loginDto);
 
-    const token = this.sessionTokens.sign(identity);
-    response.cookie('session', token, {
+    const isProduction = this.configService.get<string>('NODE_ENV') === 'production';
+
+    response.cookie('access_token', tokens.accessToken, {
       httpOnly: true,
+      secure: isProduction,
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
+      maxAge: tokens.expiresIn * 1000,
     });
 
-    return { ok: true, user: identity };
+    response.cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    return { user, expiresIn: tokens.expiresIn };
+  }
+
+  @Public()
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Register a new client account' })
+  async register(
+    @Body() registerDto: RegisterDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const { tokens, user } = await this.authService.registerClient(registerDto);
+
+    const isProduction = this.configService.get<string>('NODE_ENV') === 'production';
+
+    response.cookie('access_token', tokens.accessToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax',
+      maxAge: tokens.expiresIn * 1000,
+    });
+
+    response.cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return { user, expiresIn: tokens.expiresIn };
   }
 
   @Post('logout')
-  logout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('session', { path: '/' });
-    return { ok: true };
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Logout and invalidate tokens' })
+  @ApiCookieAuth()
+  async logout(
+    @CurrentUser() user: CurrentUserData,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    await this.authService.logout(user.id);
+
+    response.clearCookie('access_token');
+    response.clearCookie('refresh_token');
+
+    return { message: 'Logged out successfully' };
   }
 
-  @UseGuards(SessionGuard)
+  @Public()
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Refresh access token' })
+  async refresh(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const refreshToken = request.cookies?.refresh_token;
+
+    if (!refreshToken) {
+      return { error: 'No refresh token provided' };
+    }
+
+    const { tokens, user } = await this.authService.refreshTokens(refreshToken);
+
+    const isProduction = this.configService.get<string>('NODE_ENV') === 'production';
+
+    response.cookie('access_token', tokens.accessToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax',
+      maxAge: tokens.expiresIn * 1000,
+    });
+
+    response.cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return { user, expiresIn: tokens.expiresIn };
+  }
+
   @Get('me')
-  me(@CurrentUser() user: ReturnType<StaticCredentialsProvider['verify']>) {
-    return { ok: true, user };
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiCookieAuth()
+  async getProfile(@CurrentUser() user: CurrentUserData) {
+    return this.authService.getProfile(user.id);
   }
 }

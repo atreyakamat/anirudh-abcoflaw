@@ -1,45 +1,69 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module.js';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './modules/auth/auth.module.js';
+import { UsersModule } from './modules/users/users.module.js';
 import { AppointmentsModule } from './modules/appointments/appointments.module.js';
 import { ClientsModule } from './modules/clients/clients.module.js';
-import { DashboardModule } from './modules/dashboard/dashboard.module.js';
-import { AuditLogsModule } from './modules/audit-logs/audit-logs.module.js';
-import { FilesModule } from './modules/files/files.module.js';
-import { InquiriesModule } from './modules/inquiries/inquiries.module.js';
 import { BlogsModule } from './modules/blogs/blogs.module.js';
-import { FAQsModule } from './modules/faqs/faqs.module.js';
+import { FaqsModule } from './modules/faqs/faqs.module.js';
 import { PaymentsModule } from './modules/payments/payments.module.js';
-import { NotificationsModule } from './modules/notifications/notifications.module.js';
-import { SettingsModule } from './modules/settings/settings.module.js';
-import { CalendarBlocksModule } from './modules/calendar-blocks/calendar-blocks.module.js';
-import { SearchModule } from './modules/search/search.module.js';
 import { DocumentsModule } from './modules/documents/documents.module.js';
-import { BlogCategoriesModule } from './modules/blog-categories/blog-categories.module.js';
-import { PortalModule } from './modules/portal/portal.module.js';
+import { NotificationsModule } from './modules/notifications/notifications.module.js';
+import { AuditLogsModule } from './modules/audit-logs/audit-logs.module.js';
+import { AnalyticsModule } from './modules/analytics/analytics.module.js';
+import { CalendarModule } from './modules/calendar/calendar.module.js';
+import { SettingsModule } from './modules/settings/settings.module.js';
+import { ChatbotModule } from './modules/chatbot/chatbot.module.js';
+import { SearchModule } from './modules/search/search.module.js';
+import { WebhooksModule } from './modules/webhooks/webhooks.module.js';
+import { PrismaModule } from './prisma/prisma.module.js';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    DatabaseModule,
+    // Configuration
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env.local', '.env'],
+    }),
+
+    // Rate limiting
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        ttl: config.get<number>('THROTTLE_TTL', 60000),
+        limit: config.get<number>('THROTTLE_LIMIT', 100),
+      }),
+    }),
+
+    // Prisma
+    PrismaModule,
+
+    // Feature Modules
     AuthModule,
+    UsersModule,
     AppointmentsModule,
     ClientsModule,
-    DashboardModule,
-    AuditLogsModule,
-    FilesModule,
-    InquiriesModule,
     BlogsModule,
-    FAQsModule,
+    FaqsModule,
     PaymentsModule,
-    NotificationsModule,
-    SettingsModule,
-    CalendarBlocksModule,
-    SearchModule,
     DocumentsModule,
-    BlogCategoriesModule,
-    PortalModule,
+    NotificationsModule,
+    AuditLogsModule,
+    AnalyticsModule,
+    CalendarModule,
+    SettingsModule,
+    ChatbotModule,
+    SearchModule,
+    WebhooksModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule {}

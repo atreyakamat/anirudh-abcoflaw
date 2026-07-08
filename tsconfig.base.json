@@ -1,22 +1,27 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "allowJs": false,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "esModuleInterop": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "isolatedModules": true,
+    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@crm/shared": ["shared/src/index.ts"],
-      "@crm/shared/*": ["shared/src/*"]
-    }
-  }
+      "@law-practice-crm/shared": ["shared/src"],
+      "@law-practice-crm/backend": ["backend/src"],
+      "@law-practice-crm/frontend": ["frontend/src"]
+    },
+    "typeRoots": ["./node_modules/@types", "./shared/src/types"]
+  },
+  "exclude": ["node_modules", "dist", "build", ".next", ".turbo"]
 }
