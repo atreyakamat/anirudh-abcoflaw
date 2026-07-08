@@ -1,0 +1,21 @@
+{
+  "name": "law-practice-crm-platform",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "npm@10.9.0",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared",
+    "bot",
+    "functions"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w frontend",
+    "build": "npm run build -w shared && npm run build -w backend && npm run build -w frontend",
+    "lint": "npm run lint -w backend && npm run lint -w frontend",
+    "typecheck": "npm run typecheck -w backend && npm run typecheck -w frontend",
+    "db:generate": "npm run prisma:generate -w backend",
+    "db:migrate": "npm run prisma:migrate -w backend"
+  }
+}
