@@ -1,14 +1,81 @@
+version: '3.8'
+
 services:
   postgres:
-    image: postgres:16
+    image: postgres:16-alpine
+    container_name: law_practice_crm_db
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
     environment:
-      POSTGRES_DB: law_crm
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: law_practice_crm
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - law_practice_network
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    container_name: law_practice_crm_backend
+    restart: unless-stopped
+    ports:
+      - '3001:3001'
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      API_PREFIX: api/v1
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/law_practice_crm?schema=public
+      JWT_SECRET: dev-jwt-secret-minimum-32-characters-long
+      JWT_REFRESH_SECRET: dev-refresh-secret-minimum-32-characters-long
+      JWT_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 7d
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin123
+      CORS_ORIGINS: http://localhost:3000
+      THROTTLE_TTL: 60000
+      THROTTLE_LIMIT: 100
+    volumes:
+      - ../backend/src:/app/src
+      - ../backend/prisma:/app/prisma
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - law_practice_network
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.dev
+    container_name: law_practice_crm_frontend
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+    volumes:
+      - ../frontend/src:/app/src
+      - ../frontend/public:/app/public
+    depends_on:
+      - backend
+    networks:
+      - law_practice_network
 
 volumes:
-  postgres-data:
+  postgres_data:
+
+networks:
+  law_practice_network:
+    driver: bridge
