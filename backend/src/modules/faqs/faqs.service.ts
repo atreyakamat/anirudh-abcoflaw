@@ -31,7 +31,7 @@ export class FaqsService {
     return this.prisma.faq.update({ where: { id }, data: dto, include: { category: true } });
   }
 
-  async reorder(items: ReorderFaqDto[]): Promise<{ updated: number }> {
+  async reorder(items: { id: string; order: number; categoryId?: string }[]): Promise<{ updated: number }> {
     await Promise.all(items.map((item) => this.prisma.faq.update({ where: { id: item.id }, data: { order: item.order, categoryId: item.categoryId } })));
     return { updated: items.length };
   }

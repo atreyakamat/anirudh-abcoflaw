@@ -1,14 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Roles } from '@crm/shared';
-import { PrismaService } from '../../database/prisma.service.js';
-import { SessionTokenService } from '../../common/auth/session-token.service.js';
-import { AuthenticatedIdentity } from '../../common/auth/static-credentials.provider.js';
+import { PrismaService } from '../../prisma/prisma.service.js';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class PortalService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly sessionTokens: SessionTokenService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async login(phone: string, email?: string) {
@@ -23,16 +21,21 @@ export class PortalService {
       throw new UnauthorizedException('Client portal access not found');
     }
 
-    const identity: AuthenticatedIdentity = {
-      id: client.id,
-      username: client.phone,
-      displayName: client.fullName,
-      role: Roles.CLIENT,
-    };
+    const token = this.jwtService.sign({
+      sub: client.id,
+      email: client.email,
+      role: 'CLIENT',
+    });
 
     return {
-      token: this.sessionTokens.sign(identity),
-      user: identity,
+      token,
+      user: {
+        id: client.id,
+        email: client.email,
+        firstName: client.firstName,
+        lastName: client.lastName,
+        role: 'CLIENT',
+      },
     };
   }
 
@@ -41,13 +44,13 @@ export class PortalService {
       where: { id: clientId },
       include: {
         appointments: { orderBy: { createdAt: 'desc' }, take: 5 },
-        documents: { orderBy: { createdAt: 'desc' }, take: 5 },
+        documents: { orderBy: { uploadedAt: 'desc' }, take: 5 },
         payments: { orderBy: { createdAt: 'desc' }, take: 5 },
       },
     });
 
     if (!client) {
-      throw new UnauthorizedException('Client portal access not found');
+      throw new UnauthorizedException('Client not found');
     }
 
     return client;
@@ -59,18 +62,18 @@ export class PortalService {
         where: { id: clientId },
         include: {
           appointments: { orderBy: { createdAt: 'desc' }, take: 5 },
-          documents: { orderBy: { createdAt: 'desc' }, take: 5 },
+          documents: { orderBy: { uploadedAt: 'desc' }, take: 5 },
           payments: { orderBy: { createdAt: 'desc' }, take: 5 },
         },
       }),
       this.prisma.appointment.count({ where: { clientId } }),
-      this.prisma.appointment.count({ where: { clientId, status: 'pending_review' } }),
-      this.prisma.appointment.count({ where: { clientId, status: 'confirmed' } }),
+      this.prisma.appointment.count({ where: { clientId, status: 'PENDING_REVIEW' as any } }),
+      this.prisma.appointment.count({ where: { clientId, status: 'CONFIRMED' as any } }),
       this.prisma.payment.findMany({ where: { clientId }, orderBy: { createdAt: 'desc' }, take: 5 }),
     ]);
 
     if (!client) {
-      throw new UnauthorizedException('Client portal access not found');
+      throw new UnauthorizedException('Client not found');
     }
 
     return {

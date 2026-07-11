@@ -33,8 +33,10 @@ import { PrismaModule } from './prisma/prisma.module.js';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        ttl: config.get<number>('THROTTLE_TTL', 60000),
-        limit: config.get<number>('THROTTLE_LIMIT', 100),
+        throttlers: [{
+          ttl: config.get<number>('THROTTLE_TTL', 60000),
+          limit: config.get<number>('THROTTLE_LIMIT', 100),
+        }],
       }),
     }),
 

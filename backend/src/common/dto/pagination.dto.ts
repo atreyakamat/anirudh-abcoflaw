@@ -44,6 +44,11 @@ export class FilterableDto {
 
   @ApiPropertyOptional()
   @IsOptional()
+  @IsString()
+  categoryId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsDateString()
   startDate?: string;
 

@@ -2,9 +2,8 @@ import { BadRequestException, Body, Controller, Get, Post, Res, UseGuards } from
 import { IsEmail, IsOptional, IsString, MinLength, validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { Response } from 'express';
-import { CurrentUser } from '../../common/auth/current-user.decorator.js';
-import { SessionGuard } from '../../common/auth/session.guard.js';
-import { Roles } from '@crm/shared';
+import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { PortalService } from './portal.service.js';
 
 class PortalLoginDto {
@@ -50,19 +49,19 @@ export class PortalController {
     return { ok: true };
   }
 
-  @UseGuards(SessionGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('me')
   async me(@CurrentUser() user: { id: string; role: string }) {
-    if (user.role !== Roles.CLIENT) {
+    if (user.role !== 'CLIENT') {
       return { ok: false, message: 'Client role required' };
     }
     return { ok: true, client: await this.portalService.me(user.id) };
   }
 
-  @UseGuards(SessionGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('summary')
   async summary(@CurrentUser() user: { id: string; role: string }) {
-    if (user.role !== Roles.CLIENT) {
+    if (user.role !== 'CLIENT') {
       return { ok: false, message: 'Client role required' };
     }
     return this.portalService.summary(user.id);

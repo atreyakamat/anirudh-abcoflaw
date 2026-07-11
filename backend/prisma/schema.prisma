@@ -8,7 +8,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -144,6 +143,8 @@ model User {
   notifications    Notification[]
   blogPosts        BlogPost[]
   settings         Setting[]
+  availabilitySlots AvailabilitySlot[]
+  refreshTokens    RefreshToken[]
 
   // Indexes
   @@index([email])
@@ -169,9 +170,9 @@ model ClientPortalUser {
   deletedAt DateTime?
 
   // Relations
-  appointments Appointment[]
-  documents    Document[]
+  documents     Document[]
   notifications Notification[]
+  refreshTokens RefreshToken[]
 
   // Indexes
   @@index([email])
@@ -630,6 +631,9 @@ model ChatbotSession {
   source     String? // website, whatsapp, etc.
   metadata   Json?
 
+  // Relations
+  messages ChatbotMessage[]
+
   // Indexes
   @@index([clientId])
   @@index([isActive])
@@ -663,7 +667,7 @@ model ChatbotMessage {
 
 model RefreshToken {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String?
   token     String   @unique
   expiresAt DateTime
   isRevoked Boolean  @default(false)

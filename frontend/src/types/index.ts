@@ -15,6 +15,9 @@ export interface Client {
   lastName: string;
   notes?: string;
   createdAt: string;
+  appointments?: Appointment[];
+  payments?: Payment[];
+  documents?: Document[];
   _count?: { appointments: number; payments: number };
 }
 

@@ -33,7 +33,7 @@ export class DocumentsController {
 
   @Post('upload')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.LAWYER, UserRole.RECEPTIONIST, UserRole.CLIENT)
+  @Roles(UserRole.ADMIN, UserRole.LAWYER, UserRole.RECEPTIONIST)
   @ApiBearerAuth()
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')

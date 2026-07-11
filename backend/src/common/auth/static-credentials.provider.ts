@@ -1,5 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Roles, Role } from '@crm/shared';
+
+export type Role = 'ADMIN' | 'RECEPTIONIST' | 'LAWYER' | 'CLIENT';
+
+export const Roles = {
+  ADMIN: 'ADMIN' as const,
+  RECEPTIONIST: 'RECEPTIONIST' as const,
+  LAWYER: 'LAWYER' as const,
+  CLIENT: 'CLIENT' as const,
+};
 
 export interface AuthenticatedIdentity {
   id: string;

@@ -59,16 +59,18 @@ export const api = {
     published: (params?: any) => apiClient.get('/blogs/published', { params }),
     get: (id: string) => apiClient.get(`/blogs/${id}`),
     bySlug: (slug: string) => apiClient.get(`/blogs/slug/${slug}`),
+    getBySlug: (slug: string) => apiClient.get(`/blogs/slug/${slug}`),
     create: (data: any) => apiClient.post('/blogs', data),
     update: (id: string, data: any) => apiClient.put(`/blogs/${id}`, data),
     publish: (id: string) => apiClient.post(`/blogs/${id}/publish`),
   },
   faqs: {
     list: (params?: any) => apiClient.get('/faqs', { params }),
+    published: (params?: any) => apiClient.get('/faqs', { params: { ...params, isVisible: true } }),
     categories: () => apiClient.get('/faqs/categories'),
     create: (data: any) => apiClient.post('/faqs', data),
     update: (id: string, data: any) => apiClient.put(`/faqs/${id}`, data),
-    reorder: (items: any[]) => apiClient.put('/faqs/reorder/batch', items),
+    reorder: (items: any[]) => apiClient.put('/faqs/reorder/batch', { items }),
   },
   payments: {
     list: (params?: any) => apiClient.get('/payments', { params }),
@@ -97,5 +99,9 @@ export const api = {
   },
   search: {
     global: (q: string) => apiClient.get('/search', { params: { q } }),
+  },
+  calendar: {
+    getAppointments: (startDate: string, endDate: string) => apiClient.get('/calendar/appointments', { params: { startDate, endDate } }),
+    getSlots: (date: string) => apiClient.get('/calendar/slots', { params: { date } }),
   },
 };

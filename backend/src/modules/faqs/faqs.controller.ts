@@ -67,8 +67,8 @@ export class FaqsController {
   @Roles(UserRole.ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Reorder FAQs' })
-  reorder(@Body() dto: ReorderFaqDto[]) {
-    return this.faqsService.reorder(dto);
+  reorder(@Body() dto: { items: { id: string; order: number; categoryId?: string }[] }) {
+    return this.faqsService.reorder(dto.items);
   }
 
   @Delete(':id')

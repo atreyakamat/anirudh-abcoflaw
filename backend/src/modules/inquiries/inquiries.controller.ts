@@ -1,9 +1,13 @@
 import { BadRequestException, Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadConstraints } from '@crm/shared';
 import { plainToInstance } from 'class-transformer';
 import { IsEmail, IsOptional, IsString, MinLength, validateSync } from 'class-validator';
 import { InquiriesService } from './inquiries.service.js';
+
+const UploadConstraints = {
+  MAX_BYTES: 10 * 1024 * 1024, // 10MB
+  MIME_TYPES: ['application/pdf', 'image/jpeg', 'image/png', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+};
 
 class InquiryCreateDto {
   @IsString()
@@ -56,7 +60,6 @@ export class InquiriesController {
         callback(null, true);
         return;
       }
-
       callback(new Error('Unsupported file type'), false);
     },
   }))

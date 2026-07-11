@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../database/prisma.service.js';
+import { PrismaService } from '../../prisma/prisma.service.js';
 
 @Injectable()
 export class DashboardService {
@@ -10,7 +10,7 @@ export class DashboardService {
       this.prisma.appointment.groupBy({ by: ['status'], _count: { status: true } }),
       this.prisma.client.count(),
       this.prisma.payment.count(),
-      this.prisma.payment.count({ where: { status: 'pending' } }),
+      this.prisma.payment.count({ where: { status: 'PENDING' as any } }),
       this.prisma.payment.aggregate({ _sum: { amount: true } }),
     ]);
 

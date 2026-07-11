@@ -32,7 +32,18 @@ export class PaymentsService {
   async create(dto: CreatePaymentDto): Promise<Payment> {
     const appointment = await this.prisma.appointment.findUnique({ where: { id: dto.appointmentId } });
     if (!appointment) throw new BadRequestException('Appointment not found');
-    return this.prisma.payment.create({ data: dto, include: { client: true } });
+    return this.prisma.payment.create({
+      data: {
+        appointmentId: dto.appointmentId,
+        clientId: dto.clientId,
+        amount: dto.amount,
+        method: dto.method as any,
+        status: dto.status as any || 'PENDING',
+        referenceNumber: dto.referenceNumber,
+        notes: dto.notes,
+      },
+      include: { client: true },
+    });
   }
 
   async update(id: string, dto: UpdatePaymentDto): Promise<Payment> {

@@ -28,7 +28,7 @@ export default function BlogListPage() {
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2"><Calendar className="w-4 h-4" /><span>{post.createdAt}</span></div>
                   <h2 className="text-xl font-bold mb-2">{post.title}</h2>
                   <p className="text-muted-foreground line-clamp-2">{post.excerpt}</p>
-                  <div className="flex gap-2 mt-3">{post.tags?.map((t) => <span key={t.id} className="px-2 py-0.5 bg-muted text-xs rounded">{t.name}</span>)}</div>
+                  <div className="flex gap-2 mt-3">{post.tags?.map((t) => <span key={t.tag?.id} className="px-2 py-0.5 bg-muted text-xs rounded">{t.tag?.name}</span>)}</div>
                 </CardContent></Card>
               </Link>
             ))}
