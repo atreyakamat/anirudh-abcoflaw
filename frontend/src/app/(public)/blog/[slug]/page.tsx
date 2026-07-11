@@ -3,8 +3,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
 import { useParams } from 'next/navigation';
-import { Calendar, Tag } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
+import { Calendar, Tag, ArrowLeft } from 'lucide-react';
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -19,9 +19,10 @@ export default function BlogPostPage() {
 
   return (
     <div className="animate-in max-w-3xl mx-auto px-4 py-12">
+      <Link href="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6"><ArrowLeft className="w-4 h-4" /> Back to blog</Link>
       <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4"><Calendar className="w-4 h-4" /><span>{post.createdAt}</span></div>
       <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
-      <div className="flex gap-2 mb-8">{post.tags?.map((t: any) => <span key={t.id} className="inline-flex items-center gap-1 px-2 py-0.5 bg-muted text-xs rounded"><Tag className="w-3 h-3" />{t.name}</span>)}</div>
+      <div className="flex gap-2 mb-8">{post.tags?.map((t: any) => <span key={t.tag?.id} className="inline-flex items-center gap-1 px-2 py-0.5 bg-muted text-xs rounded"><Tag className="w-3 h-3" />{t.tag?.name}</span>)}</div>
       <div className="prose prose-neutral dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
     </div>
   );
