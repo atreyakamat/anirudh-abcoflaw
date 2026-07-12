@@ -4,6 +4,7 @@ import Sidebar from './components/layout/Sidebar';
 import LoginPage from './pages/LoginPage';
 import AppointmentList from './components/appointments/AppointmentList'; // Fixed singular filename path
 import LawyerList from './components/lawyers/LawyerList.jsx';
+import AvailabilitySlots from './components/availability/AvailabilitySlots'; // 1. Added this import
 
 // This acts as a wrapper for all pages that need the sidebar
 function DashboardLayout({ children }) {
