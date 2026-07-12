@@ -15,55 +15,62 @@ export default function AppointmentList() {
       setAppointments(data);
       setError(null);
     } catch (err) {
-      setError("Failed to retrieve the consultation queue.");
+      setError('Failed to retrieve the consultation queue.');
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
+  useEffect(() => { fetchAppointments(); }, []);
 
   const handleStatusChange = async (id, newStatus) => {
     try {
       await updateAppointmentStatus(id, newStatus);
-      await fetchAppointments(); // Hot reload local view
+      await fetchAppointments();
     } catch (err) {
-      console.error("Failed to transition status state:", err);
+      console.error('Failed to transition status state:', err);
     }
   };
 
-  const filteredAppointments = appointments.filter(appt => {
-    if (activeFilter === 'All') return true;
-    return appt.status === activeFilter;
-  });
+  const filteredAppointments = appointments.filter((appt) =>
+    activeFilter === 'All' ? true : appt.status === activeFilter
+  );
 
   const getStatusStyle = (status) => {
     switch (status) {
       case 'Confirmed': return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400';
-      case 'Pending': return 'border-amber-500/20 bg-amber-500/10 text-amber-400';
-      case 'Completed': return 'border-blue-500/20 bg-blue-500/10 text-blue-400';
-      default: return 'border-slate-700 bg-slate-800 text-slate-400';
+      case 'Pending':   return 'border-amber-500/20  bg-amber-500/10  text-amber-400';
+      case 'Completed': return 'border-info/20        bg-info/10        text-info';
+      default:          return 'border-border         bg-muted          text-muted-foreground';
     }
   };
 
+  const filters = ['All', 'Pending', 'Confirmed', 'Completed'];
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-2xl font-bold text-slate-100">Consultation Queue</h2>
-        
-        {/* State Filters */}
-        <div className="flex rounded-lg bg-slate-900 p-1 border border-slate-800">
-          {['All', 'Pending', 'Confirmed', 'Completed'].map((filter) => (
+    <div className="space-y-6 animate-in">
+      {/* Page header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border pb-5">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+            Consultation Queue
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Review, approve, or reject incoming appointment requests.
+          </p>
+        </div>
+
+        {/* Status filter pill group */}
+        <div className="flex rounded-md border border-border bg-muted p-1 gap-0.5">
+          {filters.map((filter) => (
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
-                activeFilter === filter 
-                  ? 'bg-blue-600 text-white shadow' 
-                  : 'text-slate-400 hover:text-slate-200'
+              className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                activeFilter === filter
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {filter}
@@ -72,73 +79,86 @@ export default function AppointmentList() {
         </div>
       </div>
 
+      {/* Loading */}
       {loading && (
-        <div className="flex h-48 items-center justify-center rounded-xl border border-slate-800 bg-slate-950/50">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+        <div className="flex h-48 items-center justify-center rounded-xl border border-border bg-card/50">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       )}
 
+      {/* Error */}
       {error && !loading && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-center text-sm text-red-400">
+        <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-center text-sm text-destructive">
           {error}
         </div>
       )}
 
+      {/* Cards grid */}
       {!loading && !error && (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {filteredAppointments.map((appt) => (
-            <div key={appt.id} className="rounded-xl border border-slate-800 bg-slate-950 p-5 transition-all hover:border-slate-700 flex flex-col justify-between">
+            <div
+              key={appt.id}
+              className="card p-5 flex flex-col justify-between hover:shadow-md transition-shadow"
+            >
               <div className="space-y-4">
+                {/* Client + status */}
                 <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="rounded-lg bg-slate-900 border border-slate-800 p-2 text-slate-300">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
                       <User className="h-4 w-4" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-slate-100">{appt.clientName}</h3>
-                      <p className="text-xs text-blue-400 mt-0.5">{appt.caseType}</p>
+                      <h3 className="text-sm font-semibold text-card-foreground">
+                        {appt.clientName}
+                      </h3>
+                      <p className="text-xs text-info mt-0.5">{appt.caseType}</p>
                     </div>
                   </div>
-                  <span className={`rounded border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${getStatusStyle(appt.status)}`}>
+                  <span
+                    className={`rounded border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${getStatusStyle(appt.status)}`}
+                  >
                     {appt.status}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 border-t border-b border-slate-900 py-3 text-slate-400">
+                {/* Date / Time row */}
+                <div className="grid grid-cols-2 gap-2 border-t border-b border-border py-3 text-muted-foreground">
                   <div className="flex items-center gap-2 text-xs">
-                    <Calendar className="h-3.5 w-3.5 text-slate-500" />
+                    <Calendar className="h-3.5 w-3.5" />
                     <span>{appt.date}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs">
-                    <Clock className="h-3.5 w-3.5 text-slate-500" />
+                    <Clock className="h-3.5 w-3.5" />
                     <span>{appt.time}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Conditional Action Controls based on status state */}
+              {/* Pending actions */}
               {appt.status === 'Pending' && (
-                <div className="mt-4 flex gap-2 pt-2">
-                  <button 
+                <div className="mt-4 flex gap-2">
+                  <button
                     onClick={() => handleStatusChange(appt.id, 'Confirmed')}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 border border-emerald-500/20 py-2 text-xs font-semibold transition-colors"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-emerald-500/20 bg-emerald-500/10 py-2 text-xs font-semibold text-emerald-400 transition-colors hover:bg-emerald-500/20"
                   >
                     <CheckCircle className="h-3.5 w-3.5" /> Approve
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleStatusChange(appt.id, 'Cancelled')}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-950/20 hover:bg-red-950/40 text-red-400 border border-red-500/10 py-2 text-xs font-semibold transition-colors"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-destructive/20 bg-destructive/10 py-2 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20"
                   >
                     <XCircle className="h-3.5 w-3.5" /> Reject
                   </button>
                 </div>
               )}
 
+              {/* Confirmed actions */}
               {appt.status === 'Confirmed' && (
-                <div className="mt-4 pt-2">
-                  <button 
+                <div className="mt-4">
+                  <button
                     onClick={() => handleStatusChange(appt.id, 'Completed')}
-                    className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 py-2 text-xs font-semibold transition-colors"
+                    className="flex w-full items-center justify-center gap-1.5 rounded-md border border-info/20 bg-info/10 py-2 text-xs font-semibold text-info transition-colors hover:bg-info/20"
                   >
                     <CheckCircle className="h-3.5 w-3.5" /> Mark Completed
                   </button>
@@ -148,9 +168,9 @@ export default function AppointmentList() {
           ))}
 
           {filteredAppointments.length === 0 && (
-            <div className="col-span-full rounded-xl border-2 border-dashed border-slate-800 p-12 text-center text-slate-500 flex flex-col items-center justify-center gap-2">
-              <AlertCircle className="h-6 w-6 text-slate-600" />
-              <span>No appointments found matching this queue filter.</span>
+            <div className="col-span-full flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border p-12 text-center text-muted-foreground">
+              <AlertCircle className="h-5 w-5" />
+              <span className="text-sm">No appointments found matching this filter.</span>
             </div>
           )}
         </div>

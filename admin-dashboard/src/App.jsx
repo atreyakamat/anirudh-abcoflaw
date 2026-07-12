@@ -1,71 +1,108 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar';
 import LoginPage from './pages/LoginPage';
-import AppointmentList from './components/appointments/AppointmentList'; // Fixed singular filename path
+import AppointmentList from './components/appointments/AppointmentList';
 import LawyerList from './components/lawyers/LawyerList.jsx';
-import AvailabilitySlots from './components/availability/AvailabilitySlots'; // 1. Added this import
+import AvailabilitySlots from './components/availability/AvailabilitySlots';
+import { subscribeToAuthChanges } from './services/authService'; // Imported subscriber
 
-// This acts as a wrapper for all pages that need the sidebar
+// Wrapper for all authenticated pages
 function DashboardLayout({ children }) {
   return (
-    <div className="flex min-h-screen bg-slate-900 text-slate-100">
+    <div className="flex h-screen bg-background text-foreground overflow-hidden">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto p-8">
         {children}
       </main>
     </div>
   );
 }
 
-// Main Landings Overview Panel
-function Dashboard() {
+// Stat card helper
+function StatCard({ label, value }) {
   return (
-    <>
-      <header className="border-b border-slate-800 pb-4 mb-6">
-        <h2 className="text-2xl font-bold text-slate-100">Welcome back, Admin</h2>
-        <p className="text-sm text-slate-400">Here's a breakdown of the firm's schedule today.</p>
-      </header>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 bg-slate-950 border border-slate-800 rounded-xl">
-          <h3 className="text-sm font-medium text-slate-400">Total Bookings Today</h3>
-          <p className="text-3xl font-bold text-slate-100 mt-2">14</p>
-        </div>
-        <div className="p-6 bg-slate-950 border border-slate-800 rounded-xl">
-          <h3 className="text-sm font-medium text-slate-400">Active Attending Lawyers</h3>
-          <p className="text-3xl font-bold text-slate-100 mt-2">4</p>
-        </div>
-      </div>
-    </>
+    <div className="card p-6">
+      <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
+        {value}
+      </p>
+    </div>
   );
 }
 
-// Temporary Placeholder for other pages
+// Dashboard overview
+function Dashboard() {
+  return (
+    <div className="space-y-8 animate-in">
+      <header className="border-b border-border pb-5">
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+          Welcome back, Admin
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Here's a breakdown of the firm's schedule today.
+        </p>
+      </header>
+
+      <section>
+        <p className="mb-4 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          Today's Overview
+        </p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <StatCard label="Total Bookings Today" value="14" />
+          <StatCard label="Active Attending Lawyers" value="4" />
+          <StatCard label="Pending Approvals" value="3" />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// Placeholder page
 function PlaceholderPage({ title }) {
   return (
-    <div className="flex h-full items-center justify-center border-2 border-dashed border-slate-800 rounded-xl p-12">
-      <h2 className="text-xl font-medium text-slate-500">{title} Area Coming Soon</h2>
+    <div className="flex h-64 items-center justify-center rounded-xl border-2 border-dashed border-border p-12 text-center">
+      <p className="text-sm font-medium text-muted-foreground">{title} — Coming Soon</p>
     </div>
   );
 }
 
 export default function App() {
-  // Hardcoded for now until we connect Firebase Auth
-  const isAuthenticated = true; 
+ const [user, setUser] = useState(null);
+  const [initializing, setInitializing] = useState(true);
+
+  useEffect(() => {
+    // Listen directly to active session tokens across updates
+    const unsubscribe = subscribeToAuthChanges((currentUser) => {
+      setUser(currentUser);
+      setInitializing(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (initializing) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-900">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+      </div>
+    );
+  }
+
+  const isAuthenticated = !!user;
 
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Route */}
         <Route 
           path="/login" 
           element={isAuthenticated ? <Navigate to="/" /> : <LoginPage />} 
         />
 
-        {/* Protected Routes (Wrapped in DashboardLayout) */}
         <Route 
           path="/" 
-          element = {
+          element={
             isAuthenticated ? (
               <DashboardLayout>
                 <Dashboard />
@@ -76,11 +113,10 @@ export default function App() {
           } 
         />
         
-        {/* Sub-navigation Module Targets */}
         <Route path="/appointments" element={isAuthenticated ? <DashboardLayout><AppointmentList /></DashboardLayout> : <Navigate to="/login" />} />
         <Route path="/lawyers" element={isAuthenticated ? <DashboardLayout><LawyerList /></DashboardLayout> : <Navigate to="/login" />} />
-        <Route path="/availability" element={isAuthenticated ? <DashboardLayout><PlaceholderPage title="Availability Slots" /></DashboardLayout> : <Navigate to="/login" />} />
+        <Route path="/availability" element={isAuthenticated ? <DashboardLayout><AvailabilitySlots /></DashboardLayout> : <Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );
-}
+} 
