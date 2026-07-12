@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit2, Loader2 } from 'lucide-react';
 import Modal from '../common/Modal';
-import { addLawyer, getAllLawyers } from '../../services/lawyerService';
+import { addLawyer, getAllLawyers, removeLawyer, updateLawyer } from '../../services/lawyerService';
 
 export default function LawyerList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', specialization: '' });
-  
+  const [editingId, setEditingId] = useState(null);
+
   // Database state
   const [lawyers, setLawyers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,14 +32,11 @@ export default function LawyerList() {
   }, []);
 
   const handleDelete = async (id) => {
-    // Basic browser confirmation before dropping database records
     if (!window.confirm("Are you sure you want to remove this lawyer from the directory?")) return;
 
     try {
       console.log(`Deleting lawyer with ID: ${id}`);
       await removeLawyer(id);
-      
-      // Optimistic UI change: filter out the deleted card immediately
       setLawyers(prev => prev.filter(lawyer => lawyer.id !== id));
     } catch (error) {
       console.error("Failed to delete lawyer from Firestore:", error);
@@ -46,17 +44,35 @@ export default function LawyerList() {
     }
   };
 
+  const openEditModal = (lawyer) => {
+    setEditingId(lawyer.id);
+    setFormData({ name: lawyer.name, specialization: lawyer.specialization });
+    setIsModalOpen(true);
+  };
+
+  const openAddModal = () => {
+    setEditingId(null);
+    setFormData({ name: '', specialization: '' });
+    setIsModalOpen(true);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Submitting new lawyer:", formData);
-      await addLawyer(formData.name, formData.specialization);
+      if (editingId) {
+        console.log("Updating lawyer:", editingId);
+        await updateLawyer(editingId, formData);
+      } else {
+        console.log("Submitting new lawyer:", formData);
+        await addLawyer(formData.name, formData.specialization);
+      }
+      
       setIsModalOpen(false);
       setFormData({ name: '', specialization: '' });
-      await fetchLawyers(); // Refresh list
+      setEditingId(null);
+      await fetchLawyers();
     } catch (error) {
-      console.error("Failed to add lawyer to database:", error);
+      console.error("Failed to save lawyer to database:", error);
     }
   };
 
@@ -66,7 +82,7 @@ export default function LawyerList() {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-slate-100">Lawyers Management</h2>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={openAddModal}
           className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-blue-500"
         >
           <Plus className="h-4 w-4" /> Add Lawyer
@@ -98,10 +114,16 @@ export default function LawyerList() {
                   <p className="mt-1 text-xs text-blue-400">{lawyer.specialization}</p>
                 </div>
                 <div className="flex gap-2">
-                  <button className="rounded p-1.5 text-slate-500 hover:bg-slate-800 hover:text-slate-300 transition-colors">
+                  <button 
+                    onClick={() => openEditModal(lawyer)}
+                    className="rounded p-1.5 text-slate-500 hover:bg-slate-800 hover:text-slate-300 transition-colors"
+                  >
                     <Edit2 className="h-4 w-4" />
                   </button>
-                  <button className="rounded p-1.5 text-slate-500 hover:bg-red-950/30 hover:text-red-400 transition-colors">
+                  <button 
+                    onClick={() => handleDelete(lawyer.id)}
+                    className="rounded p-1.5 text-slate-500 hover:bg-red-950/30 hover:text-red-400 transition-colors"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
@@ -120,11 +142,14 @@ export default function LawyerList() {
         </div>
       )}
 
-      {/* Add Lawyer Modal */}
+      {/* Dynamic Modal */}
       <Modal 
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        title="Add New Lawyer"
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingId(null);
+        }} 
+        title={editingId ? "Edit Lawyer Details" : "Add New Lawyer"}
       >
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
@@ -153,7 +178,10 @@ export default function LawyerList() {
           <div className="mt-6 flex justify-end gap-3 pt-2">
             <button
               type="button"
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => {
+                setIsModalOpen(false);
+                setEditingId(null);
+              }}
               className="rounded-lg px-4 py-2 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
             >
               Cancel
@@ -162,7 +190,7 @@ export default function LawyerList() {
               type="submit"
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
             >
-              Save Lawyer
+              {editingId ? "Save Changes" : "Save Lawyer"}
             </button>
           </div>
         </form>

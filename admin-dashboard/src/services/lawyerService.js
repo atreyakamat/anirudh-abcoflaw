@@ -4,7 +4,8 @@ import {
   addDoc, 
   getDocs, 
   deleteDoc, 
-  doc 
+  doc,
+  updateDoc
 } from 'firebase/firestore';
 
 const COLLECTION_NAME = 'lawyers';
@@ -70,6 +71,25 @@ export const removeLawyer = async (id) => {
     return { success: true };
   } catch (error) {
     console.error("Error removing document: ", error);
+    throw error;
+  }
+};
+
+export const updateLawyer = async (id, data) => {
+  if (!hasKeys) {
+    const index = localMockLawyers.findIndex(l => l.id === id);
+    if (index !== -1) {
+      localMockLawyers[index] = { ...localMockLawyers[index], ...data };
+    }
+    return { success: true };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTION_NAME, id);
+    await updateDoc(docRef, data);
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating document: ", error);
     throw error;
   }
 };

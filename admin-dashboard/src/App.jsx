@@ -2,9 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar';
 import LoginPage from './pages/LoginPage';
-import AppointmentsList from './components/appointments/AppointmentsList';
+import AppointmentList from './components/appointments/AppointmentList'; // Fixed singular filename path
 import LawyerList from './components/lawyers/LawyerList.jsx';
-
 
 // This acts as a wrapper for all pages that need the sidebar
 function DashboardLayout({ children }) {
@@ -18,7 +17,7 @@ function DashboardLayout({ children }) {
   );
 }
 
-// Your existing Dashboard content
+// Main Landings Overview Panel
 function Dashboard() {
   return (
     <>
@@ -65,7 +64,7 @@ export default function App() {
         {/* Protected Routes (Wrapped in DashboardLayout) */}
         <Route 
           path="/" 
-          element={
+          element = {
             isAuthenticated ? (
               <DashboardLayout>
                 <Dashboard />
@@ -76,8 +75,8 @@ export default function App() {
           } 
         />
         
-        {/* We will build these out later */}
-        <Route path="/appointments" element={isAuthenticated ? <DashboardLayout><AppointmentsList /></DashboardLayout> : <Navigate to="/login" />} />
+        {/* Sub-navigation Module Targets */}
+        <Route path="/appointments" element={isAuthenticated ? <DashboardLayout><AppointmentList /></DashboardLayout> : <Navigate to="/login" />} />
         <Route path="/lawyers" element={isAuthenticated ? <DashboardLayout><LawyerList /></DashboardLayout> : <Navigate to="/login" />} />
         <Route path="/availability" element={isAuthenticated ? <DashboardLayout><PlaceholderPage title="Availability Slots" /></DashboardLayout> : <Navigate to="/login" />} />
       </Routes>
