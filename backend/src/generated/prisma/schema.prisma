@@ -1,0 +1,690 @@
+// ============================================
+// Law Practice CRM - Prisma Schema
+// ============================================
+// Version: 1.0.0
+// Database: PostgreSQL 16+
+// ORM: Prisma 5+
+// ============================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Enums
+// ============================================
+
+enum UserRole {
+  RECEPTIONIST
+  LAWYER
+  ADMIN
+}
+
+enum ClientRole {
+  CLIENT
+}
+
+enum AppointmentStatus {
+  PENDING_REVIEW
+  PENDING_LAWYER_CONFIRMATION
+  CONFIRMED
+  REJECTED
+  RESCHEDULED
+  UPCOMING
+  REMINDER_SENT
+  COMPLETED
+  CANCELLED
+  ARCHIVED
+}
+
+enum BookingSource {
+  WEBSITE
+  CHATBOT
+  RECEPTIONIST
+  LAWYER
+  CLIENT_PORTAL
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PARTIAL
+  VOID
+}
+
+enum PaymentMethod {
+  CASH
+  GPAY
+  BANK_TRANSFER
+}
+
+enum DocumentType {
+  PDF
+  DOCX
+  JPG
+  PNG
+}
+
+enum BlogPostStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+}
+
+enum NotificationType {
+  APPOINTMENT_CREATED
+  APPOINTMENT_CONFIRMED
+  APPOINTMENT_REJECTED
+  APPOINTMENT_RESCHEDULED
+  APPOINTMENT_CANCELLED
+  APPOINTMENT_COMPLETED
+  APPOINTMENT_REMINDER
+  PAYMENT_RECEIVED
+  BLOG_PUBLISHED
+  SYSTEM
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  SOFT_DELETE
+  RESTORE
+  STATUS_CHANGE
+  LOGIN
+  LOGOUT
+  PASSWORD_CHANGE
+}
+
+enum AuditEntity {
+  USER
+  CLIENT
+  APPOINTMENT
+  PAYMENT
+  BLOG_POST
+  BLOG_CATEGORY
+  BLOG_TAG
+  FAQ
+  FAQ_CATEGORY
+  DOCUMENT
+  SETTING
+  NOTIFICATION
+  AVAILABILITY_SLOT
+  CHATBOT_SESSION
+}
+
+// ============================================
+// User (Internal Staff - Receptionist, Lawyer, Admin)
+// ============================================
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  username  String    @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole  @default(RECEPTIONIST)
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  appointments      Appointment[]
+  appointmentNotes  AppointmentNote[]
+  auditLogs         AuditLog[]
+  notifications     Notification[]
+  blogPosts         BlogPost[]
+  settings          Setting[]
+  availabilitySlots AvailabilitySlot[]
+  refreshTokens     RefreshToken[]
+
+  // Indexes
+  @@index([email])
+  @@index([username])
+  @@index([role])
+  @@index([deletedAt])
+}
+
+// ============================================
+// Client Portal User (External Clients)
+// ============================================
+
+model ClientPortalUser {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  firstName String
+  lastName  String
+  phone     String?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  documents     Document[]
+  notifications Notification[]
+  refreshTokens RefreshToken[]
+
+  // Indexes
+  @@index([email])
+  @@index([deletedAt])
+}
+
+// ============================================
+// Client (External Client Profile - used for booking/matching)
+// ============================================
+
+model Client {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  phone     String
+  firstName String
+  lastName  String
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  appointments Appointment[]
+  documents    Document[]
+  payments     Payment[]
+
+  // Indexes
+  @@index([email])
+  @@index([phone])
+  @@index([deletedAt])
+}
+
+// ============================================
+// Appointment
+// ============================================
+
+model Appointment {
+  id              String            @id @default(cuid())
+  clientId        String
+  bookedByUserId  String? // User who created the booking (for manual bookings)
+  lawyerNote      String? // Private note only lawyer can see
+  description     String
+  preferredDate   DateTime
+  preferredTime   String // Store as string "HH:MM" for 30-min slots
+  status          AppointmentStatus @default(PENDING_REVIEW)
+  source          BookingSource     @default(WEBSITE)
+  referenceNumber String            @unique @default(cuid())
+
+  // Conflict detection
+  conflictingAppointmentId String?
+
+  // Reschedule tracking
+  originalDate DateTime?
+  originalTime String?
+
+  // Reminder tracking
+  reminderSentAt DateTime?
+  reminderMethod String? // WAHA, EMAIL, SMS
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  client       Client               @relation(fields: [clientId], references: [id])
+  bookedByUser User?                @relation(fields: [bookedByUserId], references: [id])
+  history      AppointmentHistory[]
+  documents    Document[]
+  payments     Payment[]
+  notes        AppointmentNote[]
+
+  // Indexes
+  @@index([clientId])
+  @@index([status])
+  @@index([preferredDate])
+  @@index([referenceNumber])
+  @@index([deletedAt])
+  @@index([createdAt])
+}
+
+// ============================================
+// Appointment History (Immutable Audit Trail)
+// ============================================
+
+model AppointmentHistory {
+  id              String  @id @default(cuid())
+  appointmentId   String
+  changedByUser   String? // User ID (nullable for system changes)
+  changedByClient String? // Client Portal User ID (nullable)
+
+  previousStatus AppointmentStatus?
+  newStatus      AppointmentStatus
+
+  reason String? // Reason for status change
+  notes  String? // Additional notes
+
+  metadata Json? // Store additional context (IP, user agent, etc.)
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@index([appointmentId])
+  @@index([createdAt])
+  @@index([newStatus])
+}
+
+// ============================================
+// Appointment Notes (Internal notes by lawyer)
+// ============================================
+
+model AppointmentNote {
+  id            String   @id @default(cuid())
+  appointmentId String
+  userId        String
+  content       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id])
+
+  // Indexes
+  @@index([appointmentId])
+  @@index([userId])
+}
+
+// ============================================
+// Document (File Uploads)
+// ============================================
+
+model Document {
+  id            String  @id @default(cuid())
+  clientId      String?
+  userId        String? // Uploaded by portal user
+  appointmentId String?
+
+  originalName String
+  fileName     String
+  filePath     String
+  fileSize     Int // in bytes
+  mimeType     String
+  documentType DocumentType
+
+  uploadedAt DateTime  @default(now())
+  deletedAt  DateTime?
+
+  // Relations
+  client      Client?           @relation(fields: [clientId], references: [id])
+  portalUser  ClientPortalUser? @relation(fields: [userId], references: [id])
+  appointment Appointment?      @relation(fields: [appointmentId], references: [id])
+
+  // Indexes
+  @@index([clientId])
+  @@index([appointmentId])
+  @@index([userId])
+  @@index([deletedAt])
+}
+
+// ============================================
+// Blog Post
+// ============================================
+
+model BlogPost {
+  id            String  @id @default(cuid())
+  authorId      String
+  categoryId    String?
+  title         String
+  slug          String  @unique
+  excerpt       String?
+  content       String  @db.Text
+  featuredImage String?
+
+  // SEO
+  seoTitle       String?
+  seoDescription String?
+
+  status      BlogPostStatus @default(DRAFT)
+  publishedAt DateTime?
+  scheduledAt DateTime?
+
+  viewCount Int @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  // Relations
+  author   User          @relation(fields: [authorId], references: [id])
+  category BlogCategory? @relation(fields: [categoryId], references: [id])
+  tags     BlogPostTag[]
+
+  // Indexes
+  @@index([slug])
+  @@index([status])
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([publishedAt])
+  @@index([deletedAt])
+}
+
+// ============================================
+// Blog Category
+// ============================================
+
+model BlogCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  posts BlogPost[]
+
+  // Indexes
+  @@index([slug])
+  @@index([order])
+}
+
+// ============================================
+// Blog Tag
+// ============================================
+
+model BlogTag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  // Relations
+  posts BlogPostTag[]
+
+  // Indexes
+  @@index([slug])
+}
+
+// ============================================
+// Blog Post Tags (Many-to-Many)
+// ============================================
+
+model BlogPostTag {
+  postId String
+  tagId  String
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  BlogTag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@index([postId])
+  @@index([tagId])
+}
+
+// ============================================
+// FAQ Category
+// ============================================
+
+model FaqCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  faqs Faq[]
+
+  // Indexes
+  @@index([order])
+}
+
+// ============================================
+// FAQ
+// ============================================
+
+model Faq {
+  id         String   @id @default(cuid())
+  categoryId String?
+  question   String
+  answer     String   @db.Text
+  order      Int      @default(0)
+  isVisible  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  category FaqCategory? @relation(fields: [categoryId], references: [id])
+
+  // Indexes
+  @@index([categoryId])
+  @@index([order])
+  @@index([isVisible])
+}
+
+// ============================================
+// Payment
+// ============================================
+
+model Payment {
+  id            String @id @default(cuid())
+  appointmentId String
+  clientId      String
+
+  amount Decimal       @db.Decimal(10, 2)
+  method PaymentMethod
+  status PaymentStatus @default(PENDING)
+
+  // Reference
+  referenceNumber String?
+  notes           String?
+
+  paidAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  client      Client      @relation(fields: [clientId], references: [id])
+
+  // Indexes
+  @@index([appointmentId])
+  @@index([clientId])
+  @@index([status])
+  @@index([paidAt])
+}
+
+// ============================================
+// Notification
+// ============================================
+
+model Notification {
+  id       String  @id @default(cuid())
+  userId   String?
+  clientId String? // For client portal notifications
+
+  type    NotificationType
+  title   String
+  message String
+  data    Json? // Additional payload
+
+  isRead Boolean   @default(false)
+  readAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  user   User?             @relation(fields: [userId], references: [id])
+  client ClientPortalUser? @relation(fields: [clientId], references: [id])
+
+  // Indexes
+  @@index([userId])
+  @@index([clientId])
+  @@index([isRead])
+  @@index([type])
+  @@index([createdAt])
+}
+
+// ============================================
+// Audit Log (Immutable)
+// ============================================
+
+model AuditLog {
+  id     String  @id @default(cuid())
+  userId String?
+
+  action   AuditAction
+  entity   AuditEntity
+  entityId String
+
+  oldValue Json?
+  newValue Json?
+
+  reason    String?
+  ipAddress String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id])
+
+  // NOTE: AuditLog is append-only. No updatedAt, no deletedAt
+  // Indexes
+  @@index([userId])
+  @@index([entity])
+  @@index([entityId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ============================================
+// Setting (Key-Value Store)
+// ============================================
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  category  String   @default("general")
+  isPublic  Boolean  @default(false) // Public settings can be fetched without auth
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  updatedByUser   User?   @relation(fields: [updatedByUserId], references: [id])
+  updatedByUserId String?
+
+  // Indexes
+  @@index([key])
+  @@index([category])
+  @@index([isPublic])
+}
+
+// ============================================
+// Availability Slot (Lawyer Calendar)
+// ============================================
+
+model AvailabilitySlot {
+  id          String   @id @default(cuid())
+  userId      String
+  date        DateTime @db.Date
+  startTime   String // "HH:MM"
+  endTime     String // "HH:MM"
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  // Indexes
+  @@index([userId])
+  @@index([date])
+  @@index([isAvailable])
+}
+
+// ============================================
+// Chatbot Session
+// ============================================
+
+model ChatbotSession {
+  id        String    @id @default(cuid())
+  clientId  String? // Anonymous or identified client
+  email     String? // Client email if provided
+  isActive  Boolean   @default(true)
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+
+  // Context for ML/analytics
+  source   String? // website, whatsapp, etc.
+  metadata Json?
+
+  // Relations
+  messages ChatbotMessage[]
+
+  // Indexes
+  @@index([clientId])
+  @@index([isActive])
+  @@index([startedAt])
+}
+
+// ============================================
+// Chatbot Message
+// ============================================
+
+model ChatbotMessage {
+  id         String   @id @default(cuid())
+  sessionId  String
+  content    String   @db.Text
+  isFromBot  Boolean  @default(true)
+  intent     String? // Recognized intent
+  confidence Decimal? @db.Decimal(3, 2) // ML confidence score
+  createdAt  DateTime @default(now())
+
+  // Relations
+  session ChatbotSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@index([sessionId])
+  @@index([createdAt])
+}
+
+// ============================================
+// Refresh Token (for JWT refresh token rotation)
+// ============================================
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String
+  token     String    @unique
+  expiresAt DateTime
+  isRevoked Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  // For client portal users
+  clientPortalUserId String?
+
+  // Relations
+  user             User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientPortalUser ClientPortalUser? @relation(fields: [clientPortalUserId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  @@index([userId])
+  @@index([clientPortalUserId])
+  @@index([token])
+  @@index([expiresAt])
+}
