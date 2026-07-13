@@ -7,12 +7,16 @@ import {
 import { Appointment, AppointmentStatus, BookingSource } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { PaginationDto, PaginatedResultDto, SortableDto, FilterableDto } from '../../common/dto/pagination.dto.js';
+import { NotificationsService } from '../notifications/notifications.service.js';
 import { CreateAppointmentDto } from './dto/create-appointment.dto.js';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto.js';
 
 @Injectable()
 export class AppointmentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationsService: NotificationsService,
+  ) {}
 
   // Valid status transitions
   private readonly validTransitions: Record<AppointmentStatus, AppointmentStatus[]> = {
@@ -196,6 +200,9 @@ export class AppointmentsService {
     // Create history entry
     await this.createHistoryEntry(appointment.id, null, null, AppointmentStatus.PENDING_REVIEW, 'Appointment created');
 
+    // Trigger n8n webhook
+    this.notificationsService.sendN8nWebhook('APPOINTMENT_CREATED', { appointment }).catch(err => console.error(err));
+
     return appointment;
   }
 
@@ -234,6 +241,9 @@ export class AppointmentsService {
 
     // Create history entry
     await this.createHistoryEntry(id, userId, currentStatus, newStatus, reason);
+
+    // Trigger n8n webhook
+    this.notificationsService.sendN8nWebhook('APPOINTMENT_STATUS_UPDATED', { appointment: updated, previousStatus: currentStatus, newStatus, reason }).catch(err => console.error(err));
 
     return updated;
   }

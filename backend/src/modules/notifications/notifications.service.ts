@@ -1,11 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Notification, NotificationType } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { PaginationDto, PaginatedResultDto } from '../../common/dto/pagination.dto.js';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class NotificationsService {
-  constructor(private prisma: PrismaService) {}
+  private readonly logger = new Logger(NotificationsService.name);
+
+  constructor(
+    private prisma: PrismaService,
+    private httpService: HttpService,
+    private configService: ConfigService,
+  ) {}
 
   async findAll(userId: string, pagination: PaginationDto & { type?: NotificationType; unreadOnly?: boolean }): Promise<PaginatedResultDto<Notification>> {
     const { page = 1, limit = 20, type, unreadOnly } = pagination;
@@ -35,5 +44,26 @@ export class NotificationsService {
 
   async create(data: { userId?: string; clientId?: string; type: NotificationType; title: string; message: string; data?: any }): Promise<Notification> {
     return this.prisma.notification.create({ data });
+  }
+
+  async sendN8nWebhook(event: string, payload: any): Promise<void> {
+    const webhookUrl = this.configService.get<string>('N8N_WEBHOOK_URL');
+    if (!webhookUrl) {
+      this.logger.warn('N8N_WEBHOOK_URL is not set. Skipping Telegram notification via n8n.');
+      return;
+    }
+
+    try {
+      this.logger.log(`Sending webhook to n8n for event: ${event}`);
+      await firstValueFrom(
+        this.httpService.post(webhookUrl, { event, ...payload }, {
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 5000,
+        })
+      );
+      this.logger.log(`Successfully triggered n8n webhook for event: ${event}`);
+    } catch (error: any) {
+      this.logger.error(`Failed to send n8n webhook for event ${event}: ${error.message}`, error.stack);
+    }
   }
 }

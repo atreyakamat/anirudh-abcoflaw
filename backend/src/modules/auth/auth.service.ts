@@ -198,7 +198,7 @@ export class AuthService {
     };
   }
 
-  private async generateTokens(user: User): Promise<AuthTokens> {
+  public async generateTokens(user: User): Promise<AuthTokens> {
     const payload = {
       sub: user.id,
       email: user.email,
@@ -228,7 +228,7 @@ export class AuthService {
     };
   }
 
-  private async generateClientTokens(client: ClientPortalUser): Promise<AuthTokens> {
+  public async generateClientTokens(client: ClientPortalUser): Promise<AuthTokens> {
     const payload = {
       sub: client.id,
       email: client.email,
@@ -258,7 +258,7 @@ export class AuthService {
     };
   }
 
-  private async saveRefreshToken(userId: string, token: string): Promise<void> {
+  public async saveRefreshToken(userId: string, token: string): Promise<void> {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
@@ -271,7 +271,7 @@ export class AuthService {
     });
   }
 
-  private async saveClientRefreshToken(clientId: string, token: string): Promise<void> {
+  public async saveClientRefreshToken(clientId: string, token: string): Promise<void> {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 

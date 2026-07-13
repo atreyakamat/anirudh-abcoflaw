@@ -36,6 +36,7 @@ export default apiClient;
 export const api = {
   auth: {
     login: (data: { username: string; password: string }) => apiClient.post('/auth/login', data),
+    googleLogin: (token: string) => apiClient.post('/auth/google', { token }),
     logout: () => apiClient.post('/auth/logout'),
     me: () => apiClient.get('/auth/me'),
     refresh: () => apiClient.post('/auth/refresh'),

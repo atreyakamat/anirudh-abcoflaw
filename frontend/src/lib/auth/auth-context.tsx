@@ -10,6 +10,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
+  loginWithGoogle: (token: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   isAuthenticated: false,
   login: async () => {},
+  loginWithGoogle: async () => {},
   logout: async () => {},
 });
 
@@ -49,6 +51,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.location.href = '/dashboard';
   };
 
+  const loginWithGoogle = async (token: string) => {
+    const res = await api.auth.googleLogin(token);
+    const loggedUser = res.data.data?.user || res.data.user;
+    setUser(loggedUser);
+    
+    // Redirect based on role
+    if (loggedUser.role === 'CLIENT') {
+      window.location.href = '/portal';
+    } else {
+      window.location.href = '/dashboard';
+    }
+  };
+
   const logout = async () => {
     try {
       await api.auth.logout();
@@ -59,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );
