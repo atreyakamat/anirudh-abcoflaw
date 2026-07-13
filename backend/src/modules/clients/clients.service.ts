@@ -10,7 +10,9 @@ export class ClientsService {
   async findAll(
     pagination: PaginationDto & SortableDto & FilterableDto,
   ): Promise<PaginatedResultDto<Client>> {
-    const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'DESC', search, startDate, endDate } = pagination;
+    const page = Number(pagination.page) || 1;
+    const limit = Number(pagination.limit) || 20;
+    const { sortBy = 'createdAt', sortOrder = 'DESC', search, startDate, endDate } = pagination;
 
     const where: any = {
       deletedAt: null,

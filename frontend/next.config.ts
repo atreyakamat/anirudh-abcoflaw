@@ -11,7 +11,10 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/:path*`,
+        // BACKEND_URL is a server-only env var pointing to the NestJS instance.
+        // NEVER use NEXT_PUBLIC_API_URL here — it's now a relative path (/api/v1)
+        // which would create a circular rewrite.
+        destination: `${process.env.BACKEND_URL || 'http://localhost:3001/api/v1'}/:path*`,
       },
     ];
   },

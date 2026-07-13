@@ -43,8 +43,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string) => {
     const res = await api.auth.login({ username, password });
-    setUser(res.data.user);
-    router.push('/dashboard');
+    setUser(res.data.data?.user || res.data.user);
+    // Hard redirect so the browser commits the Set-Cookie header before
+    // Next.js middleware checks for access_token on the next request.
+    window.location.href = '/dashboard';
   };
 
   const logout = async () => {

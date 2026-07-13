@@ -24,6 +24,7 @@
     "typecheck:frontend": "npm run typecheck -w frontend",
     "db:prepare": "npm run db:generate && npm run db:migrate:dev && npm run db:seed",
     "start:local": "powershell -ExecutionPolicy Bypass -File scripts/start-local.ps1",
+    "db:generate": "npm run prisma:generate -w backend",
     "db:migrate:dev": "npm run prisma:migrate:dev -w backend",
     "db:studio": "npm run prisma:studio -w backend",
     "db:seed": "npm run prisma:seed -w backend",

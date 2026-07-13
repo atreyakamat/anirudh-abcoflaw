@@ -1,4 +1,4 @@
-import { Injectable, ExecutionContext } from '@nestjs/common';
+import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator.js';
@@ -30,8 +30,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err: any, user: any, info: any) {
     if (err || !user) {
       // Allow through for public routes (handled by reflector above)
-      // For protected routes, throw error
-      throw err || new Error('Unauthorized');
+      // For protected routes, throw UnauthorizedException instead of generic Error
+      throw err || new UnauthorizedException();
     }
     return user;
   }

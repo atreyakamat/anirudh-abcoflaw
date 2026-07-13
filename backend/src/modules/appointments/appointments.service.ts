@@ -35,9 +35,9 @@ export class AppointmentsService {
   async findAll(
     pagination: PaginationDto & SortableDto & FilterableDto & { status?: AppointmentStatus; clientId?: string },
   ): Promise<PaginatedResultDto<Appointment>> {
+    const page = Number(pagination.page) || 1;
+    const limit = Number(pagination.limit) || 20;
     const {
-      page = 1,
-      limit = 20,
       sortBy = 'createdAt',
       sortOrder = 'DESC',
       search,

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/auth-context';
 import { Scale, Loader2, Eye, EyeOff } from 'lucide-react';
 
@@ -12,7 +11,6 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +18,6 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       await login(username, password);
-      router.push('/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Invalid credentials');
     } finally {

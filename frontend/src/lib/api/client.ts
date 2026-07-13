@@ -1,7 +1,15 @@
 import axios from 'axios';
 
+// In the browser, use relative path (/api/v1) so requests go through the
+// Next.js proxy rewrite → same-origin → httpOnly cookies work correctly.
+// In SSR (Node.js), use the direct backend URL since the proxy doesn't apply.
+const baseURL =
+  typeof window !== 'undefined'
+    ? process.env.NEXT_PUBLIC_API_URL || '/api/v1'
+    : process.env.NEXT_PUBLIC_API_URL_INTERNAL || 'http://localhost:3001/api/v1';
+
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1',
+  baseURL,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });

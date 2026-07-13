@@ -9,7 +9,9 @@ export class BlogsService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(pagination: PaginationDto & SortableDto & FilterableDto & { status?: BlogPostStatus; categoryId?: string }): Promise<PaginatedResultDto<BlogPost>> {
-    const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'DESC', search, status, categoryId } = pagination;
+    const page = Number(pagination.page) || 1;
+    const limit = Number(pagination.limit) || 20;
+    const { sortBy = 'createdAt', sortOrder = 'desc', search, status, categoryId } = pagination;
     const where: any = { deletedAt: null };
     if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { slug: { contains: search, mode: 'insensitive' } }, { excerpt: { contains: search, mode: 'insensitive' } }];
     if (status) where.status = status;
@@ -26,7 +28,9 @@ export class BlogsService {
   }
 
   async findPublished(pagination: PaginationDto & SortableDto & FilterableDto): Promise<PaginatedResultDto<BlogPost>> {
-    const { page = 1, limit = 20, search, categoryId } = pagination;
+    const page = Number(pagination.page) || 1;
+    const limit = Number(pagination.limit) || 20;
+    const { search, categoryId } = pagination;
     const where: any = { status: BlogPostStatus.PUBLISHED, deletedAt: null };
     if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { excerpt: { contains: search, mode: 'insensitive' } }];
     if (categoryId) where.categoryId = categoryId;
