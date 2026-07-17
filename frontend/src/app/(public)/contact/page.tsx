@@ -18,6 +18,7 @@ export default function ContactPage() {
     setSubmitting(false);
   };
 
+  return (
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
       {/* Header Section */}
       <section className="relative py-24 md:py-32 bg-[#0F172A] text-center text-white overflow-hidden">

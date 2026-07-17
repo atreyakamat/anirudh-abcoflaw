@@ -60,3 +60,19 @@ uploads/
 .vercel
 .netlify
 .turbo
+
+# AI Assistants
+.agent/
+.claude/
+.codebuddy/
+.codex/
+.continue/
+.cursor/
+.gemini/
+.github/prompts/
+.kiro/
+.opencode/
+.qoder/
+.roo/
+.trae/
+.windsurf/
