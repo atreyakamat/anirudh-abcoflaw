@@ -25,7 +25,7 @@ export default function AboutPage() {
               <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-xl aspect-[4/5]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src="/profilepic.jpg" 
+                  src="/lawyer1.png" 
                   alt="Anirudha Sinai Borkar" 
                   className="w-full h-full object-cover"
                 />
@@ -84,6 +84,31 @@ export default function AboutPage() {
                   </div>
                   <h3 className="font-bold font-serif text-lg text-slate-900 mb-1">{v.t}</h3>
                   <p className="text-xs text-slate-500 uppercase tracking-wider">{v.d}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Our Team Section */}
+          <div className="pt-16 border-t border-slate-100">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl font-bold font-serif text-slate-900 mb-4">Our Legal Team</h2>
+              <p className="text-slate-600 text-lg">Backed by a team of dedicated legal professionals, we ensure that every case is handled with precision and care.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+              {[
+                { img: '/lawyer2.png', name: 'Associate Advocate', role: 'Civil & Corporate Litigation' },
+                { img: '/lawyer3.png', name: 'Associate Advocate', role: 'Family Law & Contracts' }
+              ].map((member, i) => (
+                <div key={i} className="group">
+                  <div className="relative rounded-2xl overflow-hidden aspect-[3/4] mb-6">
+                    <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors z-10" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={member.img} alt={member.name} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
+                  </div>
+                  <h3 className="text-2xl font-bold font-serif text-slate-900 mb-2 group-hover:text-yellow-600 transition-colors">{member.name}</h3>
+                  <p className="text-yellow-600 font-medium">{member.role}</p>
                 </div>
               ))}
             </div>
