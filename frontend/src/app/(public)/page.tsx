@@ -189,16 +189,28 @@ export default function HomePage() {
       {/* Curated Legal Advice / Services */}
       <section className="py-24 bg-white border-y border-slate-200">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Comprehensive Legal Solutions</h2>
-            <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6">Curated Advice by Expert Lawyers</h3>
-            <p className="text-slate-600 text-lg leading-relaxed mb-8">
-              The law is vast, and every case is unique. Rather than limiting our practice to predefined rigid categories, AB & Co. Legal provides holistic, adaptive, and highly curated legal strategies. From high-stakes commercial tech negotiations to sensitive personal family matters, our decades of litigation and consultancy experience ensure you are protected across all sectors of the law.
-            </p>
-            <div className="flex flex-wrap justify-center items-center gap-6 text-sm font-bold text-slate-700">
-              <span className="flex items-center gap-2"><Shield className="w-5 h-5 text-yellow-600" /> Strategic Litigation</span>
-              <span className="flex items-center gap-2"><Landmark className="w-5 h-5 text-yellow-600" /> Dispute Resolution</span>
-              <span className="flex items-center gap-2"><Briefcase className="w-5 h-5 text-yellow-600" /> Advisory & Consultancy</span>
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="max-w-xl">
+              <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Comprehensive Legal Solutions</h2>
+              <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6">Curated Advice by Expert Lawyers</h3>
+              <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                The law is vast, and every case is unique. Rather than limiting our practice to predefined rigid categories, AB & Co. Legal provides holistic, adaptive, and highly curated legal strategies. From high-stakes commercial tech negotiations to sensitive personal family matters, our decades of litigation and consultancy experience ensure you are protected across all sectors of the law.
+              </p>
+              <div className="flex flex-col sm:flex-row flex-wrap gap-6 text-sm font-bold text-slate-700">
+                <span className="flex items-center gap-2"><Shield className="w-5 h-5 text-yellow-600" /> Strategic Litigation</span>
+                <span className="flex items-center gap-2"><Landmark className="w-5 h-5 text-yellow-600" /> Dispute Resolution</span>
+                <span className="flex items-center gap-2"><Briefcase className="w-5 h-5 text-yellow-600" /> Advisory</span>
+              </div>
+            </div>
+            
+            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src="/curatedlegaladvice.png" 
+                alt="Curated Legal Advice" 
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
             </div>
           </div>
         </div>
