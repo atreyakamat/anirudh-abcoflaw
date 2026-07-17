@@ -83,25 +83,19 @@ export default function HomePage() {
             </div>
           </div>
           
-          <div className="hidden md:block relative">
+          <div className="hidden md:flex relative items-center justify-center">
             <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/20 to-transparent rounded-full blur-3xl" />
-            <div className="relative bg-white/10 border border-white/20 p-8 rounded-3xl backdrop-blur-md shadow-2xl flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-500">
-              {/* 3D Sketchfab Interactive Component */}
-              <div className="w-48 h-48 rounded-full border-2 border-yellow-500/30 flex items-center justify-center mb-6 shadow-inner overflow-hidden relative bg-black/20 backdrop-blur-sm">
-                <iframe 
-                  title="Lion Capital of Ashoka" 
-                  frameBorder="0" 
-                  allowFullScreen 
-                  allow="autoplay; fullscreen; xr-spatial-tracking" 
-                  src="https://sketchfab.com/models/12e2969ab0f24e759f35ed92efd51a00/embed?autostart=1&autospin=0.1&transparent=1&ui_infos=0&ui_watermark_link=0&ui_watermark=0&ui_hint=0&ui_theme=dark"
-                  className="w-[150%] h-[150%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
-                />
-              </div>
-              <div className="space-y-3 text-center">
-                <p className="text-xl font-serif text-white font-bold tracking-wide">Central Government Notary</p>
-                <div className="h-px w-16 bg-gradient-to-r from-transparent via-yellow-500/80 to-transparent mx-auto" />
-                <p className="text-slate-300 font-medium text-sm">Appointed by the Government of India</p>
-              </div>
+            
+            {/* Large Circular 3D Component */}
+            <div className="relative w-80 h-80 rounded-full border border-white/20 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-md flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
+              <iframe 
+                title="Lion Capital of Ashoka" 
+                frameBorder="0" 
+                allowFullScreen 
+                allow="autoplay; fullscreen; xr-spatial-tracking" 
+                src="https://sketchfab.com/models/12e2969ab0f24e759f35ed92efd51a00/embed?autostart=1&autospin=0.1&transparent=1&ui_infos=0&ui_watermark_link=0&ui_watermark=0&ui_hint=0&ui_theme=dark"
+                className="w-[150%] h-[150%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+              />
             </div>
           </div>
         </div>
