@@ -69,12 +69,27 @@ export default function HomePage() {
           
           <div className="hidden md:block relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/20 to-transparent rounded-full blur-3xl" />
-            <div className="relative bg-white/5 border border-white/10 p-8 rounded-2xl backdrop-blur-sm shadow-2xl">
-              <Scale className="w-24 h-24 text-yellow-500 opacity-80 mb-6 mx-auto" />
-              <div className="space-y-4 text-center">
-                <p className="text-2xl font-serif text-white">Central Government Notary</p>
-                <div className="h-px w-16 bg-yellow-600/50 mx-auto" />
-                <p className="text-slate-400">Appointed by the Government of India</p>
+            
+            <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl border border-slate-700/50">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=1200&auto=format&fit=crop" 
+                alt="Legal Scales of Justice" 
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-[#0F172A]/20" /> {/* Subtle darkening overlay */}
+              
+              {/* Floating Badge */}
+              <div className="absolute bottom-6 left-6 right-6 bg-[#0F172A]/80 backdrop-blur-md border border-white/10 p-6 rounded-xl shadow-2xl">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-yellow-600/20 flex items-center justify-center shrink-0">
+                    <Scale className="w-6 h-6 text-yellow-500" />
+                  </div>
+                  <div>
+                    <p className="text-xl font-serif text-white font-bold">Central Government Notary</p>
+                    <p className="text-sm text-slate-300">Appointed by the Government of India</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
