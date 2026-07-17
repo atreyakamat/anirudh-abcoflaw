@@ -123,14 +123,19 @@ export default function HomePage() {
           <div className="grid md:grid-cols-12 gap-16 items-center">
             
             <div className="md:col-span-5 relative">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-[#0F172A] relative">
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-300 p-8 text-center bg-gradient-to-b from-[#1E293B] to-[#0F172A]">
-                  <Briefcase className="w-16 h-16 mb-4 opacity-50 text-yellow-500" />
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-[#0F172A] relative border border-slate-200 shadow-xl">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src="/lawyer1.png" 
+                  alt="Adv. Anirudha A. Sinai Borkar" 
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-transparent to-transparent flex flex-col justify-end p-8 text-center text-slate-300">
                   <p className="font-serif text-2xl text-white">Adv. Anirudha A. Sinai Borkar</p>
-                  <p className="text-sm mt-2 text-slate-400">Founder, AB & Co. Legal</p>
+                  <p className="text-sm mt-1 text-slate-300">Founder, AB & Co. Legal</p>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-xl border border-slate-100">
+              <div className="absolute -bottom-6 right-4 md:-right-6 bg-white p-6 rounded-xl shadow-xl border border-slate-100 z-10">
                 <p className="text-4xl font-bold font-serif text-slate-900">20+</p>
                 <p className="text-sm text-slate-500 font-medium">Years of Legal Excellence</p>
               </div>
