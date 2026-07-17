@@ -87,14 +87,14 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/20 to-transparent rounded-full blur-3xl" />
             
             {/* Large Circular 3D Component */}
-            <div className="relative w-80 h-80 rounded-full border border-white/20 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-md flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
+            <div className="relative w-[24rem] h-[24rem] lg:w-[28rem] lg:h-[28rem] rounded-full border border-white/20 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-md flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
               <iframe 
                 title="Lion Capital of Ashoka" 
                 frameBorder="0" 
                 allowFullScreen 
                 allow="autoplay; fullscreen; xr-spatial-tracking" 
                 src="https://sketchfab.com/models/12e2969ab0f24e759f35ed92efd51a00/embed?autostart=1&autospin=0.1&transparent=1&ui_infos=0&ui_watermark_link=0&ui_watermark=0&ui_hint=0&ui_theme=dark"
-                className="w-[150%] h-[150%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+                className="w-[180%] h-[180%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
               />
             </div>
           </div>
