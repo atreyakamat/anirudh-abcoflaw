@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
+import { PageHeader } from '@/components/page-header';
 
 const practiceAreas = ['Corporate Law', 'Family Law', 'Property Law', 'Employment Law', 'Criminal Law', 'Civil Litigation'];
 
@@ -22,15 +23,13 @@ export default function BookingPage() {
 
   return (
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900 bg-slate-50 min-h-screen pb-24">
-      {/* Header Section */}
-      <section className="relative py-16 md:py-24 bg-[#0F172A] text-center text-white overflow-hidden mb-12">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-3xl mx-auto px-4 relative z-10">
-          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Schedule</h2>
-          <h1 className="text-4xl md:text-5xl font-bold font-serif mb-4">Book a Consultation</h1>
-          <p className="text-lg md:text-xl text-slate-300 font-light">Select your practice area and preferred time.</p>
-        </div>
-      </section>
+      <div className="mb-12">
+        <PageHeader 
+          badge="Schedule" 
+          title="Book a Consultation" 
+          subtitle="Select a practice area and a convenient time to meet with our legal team." 
+        />
+      </div>
 
       <div className="max-w-3xl mx-auto px-4">
         {step < 4 && (

@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { PageHeader } from '@/components/page-header';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
@@ -20,15 +21,11 @@ export default function ContactPage() {
 
   return (
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
-      {/* Header Section */}
-      <section className="relative py-24 md:py-32 bg-[#0F172A] text-center text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-3xl mx-auto px-4 relative z-10">
-          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Get in Touch</h2>
-          <h1 className="text-5xl md:text-6xl font-bold font-serif mb-6">Contact Us</h1>
-          <p className="text-lg md:text-xl text-slate-300 font-light">We are here to provide the strategic legal counsel you need.</p>
-        </div>
-      </section>
+      <PageHeader 
+        badge="Get in Touch" 
+        title="Contact Us" 
+        subtitle="Reach out to discuss your legal requirements. We ensure strict confidentiality and prompt responses." 
+      />
 
       {/* Contact Content */}
       <section className="py-24 bg-slate-50">

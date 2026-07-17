@@ -7,6 +7,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Calendar } from 'lucide-react';
 import type { BlogPost, PaginatedResult } from '@/types';
 
+import { PageHeader } from '@/components/page-header';
+
 export default function BlogListPage() {
   const { data, isLoading } = useQuery({
     queryKey: ['public-blogs'],
@@ -15,14 +17,11 @@ export default function BlogListPage() {
 
   return (
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
-      <section className="relative py-24 md:py-32 bg-[#0F172A] text-center text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-3xl mx-auto px-4 relative z-10">
-          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Firm Insights</h2>
-          <h1 className="text-5xl md:text-6xl font-bold font-serif mb-6">Legal Blog</h1>
-          <p className="text-lg md:text-xl text-slate-300 font-light">Insights, case studies, and practical legal advice from Advocate Anirudha Sinai Borkar and the team at AB & Co. Legal.</p>
-        </div>
-      </section>
+      <PageHeader 
+        badge="Firm Insights" 
+        title="Legal Blog" 
+        subtitle="Insights, case studies, and practical legal advice from Advocate Anirudha Sinai Borkar and the team at AB & Co. Legal." 
+      />
 
       <section className="py-24 bg-slate-50">
         <div className="max-w-5xl mx-auto px-4">

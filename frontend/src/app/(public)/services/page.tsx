@@ -1,20 +1,15 @@
 import { Scale, Shield, Landmark, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { PageHeader } from '@/components/page-header';
 
 export default function ServicesPage() {
   return (
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
-      {/* Header Section */}
-      <section className="relative py-24 md:py-32 bg-[#0F172A] text-center text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-4 relative z-10">
-          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Unlimited Scope</h2>
-          <h1 className="text-5xl md:text-7xl font-bold font-serif mb-6 leading-tight">Comprehensive Legal Solutions</h1>
-          <p className="text-lg md:text-xl text-slate-300 font-light max-w-2xl mx-auto leading-relaxed">
-            The law is vast and every case is unique. Rather than limiting our practice to predefined categories, we provide holistic and adaptive legal strategies across all dimensions of the law.
-          </p>
-        </div>
-      </section>
+      <PageHeader 
+        badge="Unlimited Scope" 
+        title="Comprehensive Legal Solutions" 
+        subtitle="The law is vast and every case is unique. Rather than limiting our practice to predefined categories, we provide holistic and adaptive legal strategies across all dimensions of the law." 
+      />
 
       {/* Philosophy Section */}
       <section className="py-24 bg-white">
@@ -93,8 +88,19 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-[#0F172A] text-center text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-tr from-yellow-900/20 to-transparent pointer-events-none" />
+      <section className="py-24 text-center text-white relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="/heroimage.jpg" 
+            alt="AB & Co. Legal Office" 
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
+        <div className="absolute inset-0 bg-[#0F172A]/85 backdrop-blur-[2px] z-0" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-yellow-900/40 via-transparent to-transparent pointer-events-none z-0" />
+        
         <div className="max-w-3xl mx-auto px-4 relative z-10">
           <h2 className="text-4xl md:text-5xl font-bold font-serif mb-6">Let Us Handle the Complexity</h2>
           <p className="text-slate-300 text-lg md:text-xl mb-10 font-light leading-relaxed">

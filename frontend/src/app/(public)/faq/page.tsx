@@ -16,6 +16,8 @@ const fallbackFaqs = [
   { id: '7', question: 'What is the typical timeline for civil litigation?', answer: 'Civil litigation timelines can vary significantly based on the complexity of the case, court schedules, and the willingness of parties to settle. While we always strive for swift, amicable resolutions, we are fully prepared for long-term strategic litigation when necessary.', category: { name: 'Litigation & Dispute Resolution' } }
 ];
 
+import { PageHeader } from '@/components/page-header';
+
 export default function FaqPage() {
   const [openId, setOpenId] = useState<string | null>(null);
   const { data: faqs, isLoading } = useQuery({
@@ -35,15 +37,11 @@ export default function FaqPage() {
 
   return (
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900 bg-slate-50 min-h-screen">
-      {/* Header Section */}
-      <section className="relative py-24 md:py-32 bg-[#0F172A] text-center text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-3xl mx-auto px-4 relative z-10">
-          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Client Support</h2>
-          <h1 className="text-5xl md:text-6xl font-bold font-serif mb-6">Frequently Asked Questions</h1>
-          <p className="text-lg md:text-xl text-slate-300 font-light">Clear, transparent answers to common legal and administrative queries.</p>
-        </div>
-      </section>
+      <PageHeader 
+        badge="Client Support" 
+        title="Frequently Asked Questions" 
+        subtitle="Clear, transparent answers to common legal and administrative queries." 
+      />
 
       {/* FAQ Content */}
       <section className="py-24">
