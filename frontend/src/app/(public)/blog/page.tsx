@@ -14,26 +14,53 @@ export default function BlogListPage() {
   });
 
   return (
-    <div className="animate-in">
-      <section className="py-20 bg-gradient-to-br from-primary/10 via-background to-background text-center">
-        <div className="max-w-3xl mx-auto px-4"><h1 className="text-4xl font-bold mb-4">Blog</h1><p className="text-lg text-muted-foreground">Legal insights, updates, and practical advice from our practice.</p></div>
+    <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
+      <section className="relative py-24 md:py-32 bg-[#0F172A] text-center text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-3xl mx-auto px-4 relative z-10">
+          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Firm Insights</h2>
+          <h1 className="text-5xl md:text-6xl font-bold font-serif mb-6">Legal Blog</h1>
+          <p className="text-lg md:text-xl text-slate-300 font-light">Insights, case studies, and practical legal advice from Advocate Anirudha Sinai Borkar and the team at AB & Co. Legal.</p>
+        </div>
       </section>
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4">
-          {isLoading ? <div className="space-y-6">{[...Array(3)].map((_, i) => <div key={i} className="h-40 bg-muted rounded-xl animate-pulse" />)}</div> :
-          <div className="space-y-6">
-            {data?.items?.map((post) => (
-              <Link key={post.id} href={`/blog/${post.slug}`}>
-                <Card className="hover:shadow-md transition-shadow"><CardContent className="pt-6">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2"><Calendar className="w-4 h-4" /><span>{post.createdAt}</span></div>
-                  <h2 className="text-xl font-bold mb-2">{post.title}</h2>
-                  <p className="text-muted-foreground line-clamp-2">{post.excerpt}</p>
-                  <div className="flex gap-2 mt-3">{post.tags?.map((t) => <span key={t.tag?.id} className="px-2 py-0.5 bg-muted text-xs rounded">{t.tag?.name}</span>)}</div>
-                </CardContent></Card>
-              </Link>
-            ))}
-          </div>}
-          {data?.items?.length === 0 && <p className="text-center text-muted-foreground py-12">No blog posts available yet.</p>}
+
+      <section className="py-24 bg-slate-50">
+        <div className="max-w-5xl mx-auto px-4">
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[...Array(4)].map((_, i) => <div key={i} className="h-64 bg-slate-200 rounded-2xl animate-pulse" />)}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {data?.items?.map((post) => (
+                <Link key={post.id} href={`/blog/${post.slug}`} className="group block h-full">
+                  <div className="h-full flex flex-col p-8 rounded-2xl border border-slate-200 hover:border-yellow-600/30 hover:shadow-xl transition-all duration-300 bg-white shadow-sm">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider">
+                      <Calendar className="w-4 h-4 text-yellow-600" />
+                      <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <h2 className="text-2xl font-bold font-serif text-slate-900 mb-3 group-hover:text-yellow-600 transition-colors line-clamp-2">{post.title}</h2>
+                    <p className="text-slate-600 line-clamp-3 mb-6 flex-grow">{post.excerpt}</p>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {post.tags?.map((t) => (
+                        <span key={t.tag?.id} className="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg border border-slate-200">
+                          {t.tag?.name}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2 text-sm font-bold text-yellow-600 pt-4 border-t border-slate-100">
+                      Read Article <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+          {data?.items?.length === 0 && (
+            <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
+              <p className="text-slate-500 text-lg">No insights published yet. Check back soon.</p>
+            </div>
+          )}
         </div>
       </section>
     </div>

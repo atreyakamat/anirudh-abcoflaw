@@ -62,8 +62,13 @@ export class AuthService {
     }
 
     // Fall back to database user lookup
-    const user = await this.prisma.user.findUnique({
-      where: { username },
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { username },
+          { email: username }
+        ]
+      },
     });
 
     if (!user || !user.isActive) {

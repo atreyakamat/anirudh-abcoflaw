@@ -2,29 +2,53 @@ import { Scale, Shield, Users, Award } from 'lucide-react';
 
 export default function AboutPage() {
   return (
-    <div className="animate-in">
-      <section className="py-20 bg-gradient-to-br from-primary/10 via-background to-background text-center">
-        <div className="max-w-3xl mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">About Our Practice</h1>
-          <p className="text-lg text-muted-foreground">Dedicated to providing exceptional legal services with integrity and professionalism.</p>
+    <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
+      {/* Header Section */}
+      <section className="relative py-24 md:py-32 bg-[#0F172A] text-center text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-3xl mx-auto px-4 relative z-10">
+          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Our Legacy</h2>
+          <h1 className="text-5xl md:text-6xl font-bold font-serif mb-6">About AB & Co. Legal</h1>
+          <p className="text-lg md:text-xl text-slate-300 font-light">Dedicated to providing exceptional legal services with integrity, precision, and professionalism in Goa and beyond.</p>
         </div>
       </section>
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 space-y-8">
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Our Story</h2>
-            <p className="text-muted-foreground leading-relaxed">Founded with a mission to make quality legal representation accessible, our practice has grown from a solo endeavor to a trusted name in the legal community. With over 15 years of experience, we have successfully handled hundreds of cases across multiple practice areas.</p>
+
+      {/* Content Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-5xl mx-auto px-4 space-y-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold font-serif text-slate-900 mb-6">Our Story</h2>
+              <p className="text-slate-600 leading-relaxed text-lg mb-4">Founded with a mission to make premium legal representation accessible, AB & Co. Legal has grown from a solo endeavor into a trusted institution in the Goan legal community.</p>
+              <p className="text-slate-600 leading-relaxed text-lg">With extensive experience, we have successfully handled complex cases across multiple practice areas, from corporate tech contracts to sensitive family matters and robust government litigation.</p>
+            </div>
+            <div className="bg-slate-50 p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-600/10 rounded-full blur-3xl" />
+              <h2 className="text-3xl font-bold font-serif text-slate-900 mb-6 relative z-10">Our Mission</h2>
+              <p className="text-slate-600 leading-relaxed text-lg relative z-10">We believe everyone deserves competent, strategic legal counsel. Our approach uniquely combines deep legal expertise with genuine care for our clients&apos; wellbeing, ensuring each case receives the meticulous attention it demands.</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
-            <p className="text-muted-foreground leading-relaxed">We believe everyone deserves competent legal counsel. Our approach combines deep legal expertise with genuine care for our clients&apos; wellbeing, ensuring each case receives the attention and strategy it deserves.</p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 border-y border-slate-100">
+            {[{ i: Shield, t: 'Integrity', d: 'Ethical practice above all' }, { i: Users, t: 'Client Focus', d: 'Your interests come first' }, { i: Award, t: 'Excellence', d: 'Delivering the best outcomes' }, { i: Scale, t: 'Fairness', d: 'Justice and equal treatment' }].map((v) => (
+              <div key={v.t} className="text-center group">
+                <div className="w-16 h-16 mx-auto bg-slate-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-yellow-600/10 transition-colors">
+                  <v.i className="w-8 h-8 text-slate-900 group-hover:text-yellow-600 transition-colors" />
+                </div>
+                <h3 className="font-bold font-serif text-xl text-slate-900 mb-2">{v.t}</h3>
+                <p className="text-sm text-slate-500">{v.d}</p>
+              </div>
+            ))}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8">
-            {[{ i: Shield, t: 'Integrity', d: 'Ethical practice' }, { i: Users, t: 'Client Focus', d: 'Your interests first' }, { i: Award, t: 'Excellence', d: 'Best outcomes' }, { i: Scale, t: 'Fairness', d: 'Equal treatment' }].map((v) => (<div key={v.t} className="text-center"><v.i className="w-10 h-10 mx-auto text-primary mb-2" /><h3 className="font-medium">{v.t}</h3><p className="text-sm text-muted-foreground">{v.d}</p></div>))}
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Qualifications</h2>
-            <ul className="space-y-2 text-muted-foreground"><li>LL.B. from National Law School of India University</li><li>Admitted to the Bar Council of Maharashtra & Goa</li><li>Certified Mediator, Indian Institute of Arbitration & Mediation</li><li>Member, Bar Association of India</li></ul>
+
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold font-serif text-slate-900 mb-8">Qualifications & Memberships</h2>
+            <ul className="space-y-4 text-slate-600 text-lg">
+              <li className="flex items-center justify-center gap-3"><span className="w-2 h-2 rounded-full bg-yellow-600" /> LL.B. from V.M. Salgaocar College of Law, Goa University</li>
+              <li className="flex items-center justify-center gap-3"><span className="w-2 h-2 rounded-full bg-yellow-600" /> Admitted to the Bar Council of Maharashtra & Goa</li>
+              <li className="flex items-center justify-center gap-3"><span className="w-2 h-2 rounded-full bg-yellow-600" /> Extensive practice in Civil, Corporate, and Criminal Litigation</li>
+              <li className="flex items-center justify-center gap-3"><span className="w-2 h-2 rounded-full bg-yellow-600" /> Specialized expertise in Medical Device Tech Transfer Contracts</li>
+            </ul>
           </div>
         </div>
       </section>
