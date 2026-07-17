@@ -26,12 +26,11 @@ export default function HomePage() {
   const { data: rssNews } = useQuery({
     queryKey: ['rss-news'],
     queryFn: async () => {
-      // Using a free RSS to JSON converter to bypass CORS and parse XML easily
-      const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://lawtrend.in/feed/&api_key=');
+      // Fetching from our internal next.js API route that parses multiple English legal RSS feeds
+      const res = await fetch('/api/news');
       if (!res.ok) throw new Error('Network response was not ok');
       const data = await res.json();
-      // Fetch up to 20 items for the marquee
-      return data.items.slice(0, 20) as any[];
+      return data.items as any[];
     },
   });
 
@@ -233,11 +232,20 @@ export default function HomePage() {
             <div className="flex animate-marquee min-w-max gap-6 px-3">
               {[...rssNews, ...rssNews].map((news: any, idx: number) => (
                 <a key={idx} href={news.link} target="_blank" rel="noopener noreferrer" className="block w-80 md:w-96 flex-shrink-0">
-                  <div className="h-full flex flex-col p-6 rounded-2xl border border-slate-200 hover:border-yellow-600/50 hover:shadow-xl transition-all duration-300 bg-white shadow-sm">
-                    <p className="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider">{new Date(news.pubDate).toLocaleDateString()}</p>
-                    <h4 className="font-bold font-serif text-lg text-slate-900 mb-3 group-hover:text-yellow-600 transition-colors line-clamp-3" dangerouslySetInnerHTML={{__html: news.title}}></h4>
-                    <div className="mt-auto flex items-center gap-2 text-sm font-bold text-yellow-600 pt-4 border-t border-slate-100">
-                      Read Full Story <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <div className="h-full flex flex-col rounded-2xl border border-slate-200 hover:border-yellow-600/50 hover:shadow-xl transition-all duration-300 bg-white shadow-sm overflow-hidden">
+                    {news.imageUrl && (
+                      <div className="w-full h-48 bg-slate-100 relative overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={news.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      </div>
+                    )}
+                    <div className="p-6 flex flex-col flex-grow">
+                      <p className="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider">{new Date(news.pubDate).toLocaleDateString()}</p>
+                      <h4 className="font-bold font-serif text-lg text-slate-900 mb-3 group-hover:text-yellow-600 transition-colors line-clamp-3" dangerouslySetInnerHTML={{__html: news.title}}></h4>
+                      <div className="mt-auto flex items-center justify-between gap-2 text-sm font-bold text-yellow-600 pt-4 border-t border-slate-100">
+                        <span>Read Full Story</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
                     </div>
                   </div>
                 </a>
