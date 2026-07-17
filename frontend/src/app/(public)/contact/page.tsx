@@ -37,14 +37,14 @@ export default function ContactPage() {
           <div className="space-y-12">
             <div>
               <h2 className="text-3xl font-bold font-serif text-slate-900 mb-6">Office Information</h2>
-              <p className="text-slate-600 leading-relaxed text-lg mb-8">Located in the heart of Goa, our doors are always open to clients seeking reliable, premium legal representation. Reach out to schedule a consultation.</p>
+              <p className="text-slate-600 leading-relaxed text-lg mb-8">Located in Porvorim, Goa, our doors are always open to clients seeking reliable, premium legal representation. Reach out to schedule a consultation.</p>
             </div>
             <div className="space-y-8">
               {[
-                { i: MapPin, t: 'Office Address', d: 'AB & Co. Legal, Ground Floor, Panaji, Goa, India' }, 
-                { i: Phone, t: 'Direct Phone', d: '+91-9876543210' }, 
-                { i: Mail, t: 'Email Address', d: 'contact@lawpractice.local' }, 
-                { i: Clock, t: 'Working Hours', d: 'Mon-Sat: 9:00 AM - 6:00 PM' }
+                { i: MapPin, t: 'Office Address', d: 'FF1, Krishna Kunj, Chogm Rd, Porvorim, Goa 403501' }, 
+                { i: Phone, t: 'Direct Phone', d: '+91-94224 45340' }, 
+                { i: Mail, t: 'Email Address', d: 'hello@abcoflaw.in' }, 
+                { i: Clock, t: 'Working Hours', d: 'Mon-Fri: 10:30am - 6:30pm | Sat: 10:30am - 1pm' }
               ].map((c) => (
                 <div key={c.t} className="flex items-start gap-4 group">
                   <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center shrink-0 group-hover:border-yellow-600/50 group-hover:shadow-md transition-all">
@@ -86,6 +86,51 @@ export default function ContactPage() {
                 {submitting ? 'Transmitting...' : 'Send Message'}
               </button>
             </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Google Reviews Section */}
+      <section className="py-24 bg-white border-y border-slate-200">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Client Testimonials</h2>
+            <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6">Trusted by Our Clients</h3>
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="flex gap-1 text-yellow-500">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-8 h-8 fill-current" viewBox="0 0 24 24">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-3xl font-bold text-slate-900">5.0</p>
+            </div>
+            <p className="text-slate-600 font-medium uppercase tracking-wider">Based on 65 Google Reviews</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              "I would definately recommend considering my personal experience..",
+              "He will always give genuine advice and great service.",
+              "Excellent and approachable Lawyer and very professional with his legal services"
+            ].map((review, i) => (
+              <div key={i} className="bg-slate-50 p-8 rounded-2xl border border-slate-200 shadow-sm relative">
+                <div className="absolute top-6 right-6 opacity-10">
+                  <svg className="w-12 h-12 text-slate-900" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </div>
+                <div className="flex gap-1 text-yellow-500 mb-6">
+                  {[...Array(5)].map((_, j) => (
+                    <svg key={j} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-slate-700 leading-relaxed italic relative z-10 font-medium">"{review}"</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
