@@ -14,7 +14,6 @@ export async function GET() {
     
     // We can fetch from multiple legal feeds to ensure we get 20 articles in English.
     const feeds = [
-      'https://www.livelaw.in/rss',
       'https://news.google.com/rss/search?q=india+supreme+court+legal+news&hl=en-IN&gl=IN&ceid=IN:en'
     ];
     
