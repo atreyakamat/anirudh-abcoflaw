@@ -33,8 +33,13 @@ export default function ContactPage() {
       {/* Contact Content */}
       <section className="py-24 bg-slate-50">
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Contact Details */}
-          <div className="space-y-12">
+          {/* Contact Details & Image */}
+          <div className="space-y-12 flex flex-col h-full">
+            <div className="w-full relative aspect-square md:aspect-[4/3] lg:aspect-square xl:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/contactuspage.png" alt="Law Office Entrance" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+            </div>
+            
             <div>
               <h2 className="text-3xl font-bold font-serif text-slate-900 mb-6">Office Information</h2>
               <p className="text-slate-600 leading-relaxed text-lg mb-8">Located in Porvorim, Goa, our doors are always open to clients seeking reliable, premium legal representation. Reach out to schedule a consultation.</p>
