@@ -39,12 +39,28 @@ export default function HomePage() {
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
       
       {/* Premium Hero Section */}
-      <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 bg-[#0F172A] text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
+      <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden">
+        {/* Full-width Hero Background Image */}
+        <div className="absolute inset-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="/hero-bg.jpg" 
+            alt="Hero Background" 
+            className="w-full h-full object-cover" 
+            onError={(e) => {
+              // Fallback to a dark color if the user hasn't uploaded hero-bg.jpg yet
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
+        {/* Semi-transparent blue overlay */}
+        <div className="absolute inset-0 bg-[#0F172A]/85 backdrop-blur-[2px]" />
         
-        <div className="max-w-6xl mx-auto px-4 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
+        
+        <div className="max-w-6xl mx-auto px-4 relative z-10 grid md:grid-cols-2 gap-12 items-center text-white">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm font-medium mb-6 text-yellow-500">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm font-medium mb-6 text-yellow-500 backdrop-blur-sm">
               <Scale className="w-4 h-4" />
               <span>AB & Co. Legal</span>
             </div>
@@ -61,7 +77,7 @@ export default function HomePage() {
               <Link href="/book" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-yellow-600 text-white rounded-lg font-medium hover:bg-yellow-500 transition-colors shadow-lg shadow-yellow-600/20">
                 Book a Consultation <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="#profile" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg font-medium transition-colors">
+              <Link href="#profile" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg font-medium transition-colors backdrop-blur-sm">
                 Meet the Advocate
               </Link>
             </div>
@@ -69,27 +85,15 @@ export default function HomePage() {
           
           <div className="hidden md:block relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/20 to-transparent rounded-full blur-3xl" />
-            
-            <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl border border-slate-700/50">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=1200&auto=format&fit=crop" 
-                alt="Legal Scales of Justice" 
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-[#0F172A]/20" /> {/* Subtle darkening overlay */}
-              
-              {/* Floating Badge */}
-              <div className="absolute bottom-6 left-6 right-6 bg-[#0F172A]/80 backdrop-blur-md border border-white/10 p-6 rounded-xl shadow-2xl">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-yellow-600/20 flex items-center justify-center shrink-0">
-                    <Scale className="w-6 h-6 text-yellow-500" />
-                  </div>
-                  <div>
-                    <p className="text-xl font-serif text-white font-bold">Central Government Notary</p>
-                    <p className="text-sm text-slate-300">Appointed by the Government of India</p>
-                  </div>
-                </div>
+            <div className="relative bg-white/10 border border-white/20 p-12 rounded-3xl backdrop-blur-md shadow-2xl flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-500">
+              {/* 3D-like glassmorphic Weighing Scale Component */}
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-yellow-400/20 to-yellow-600/5 border border-yellow-500/30 flex items-center justify-center mb-8 shadow-inner">
+                <Scale className="w-16 h-16 text-yellow-500 drop-shadow-lg" />
+              </div>
+              <div className="space-y-4 text-center">
+                <p className="text-2xl font-serif text-white font-bold tracking-wide">Central Government Notary</p>
+                <div className="h-px w-24 bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent mx-auto" />
+                <p className="text-slate-300 font-medium">Appointed by the Government of India</p>
               </div>
             </div>
           </div>
