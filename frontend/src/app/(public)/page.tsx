@@ -123,13 +123,17 @@ export default function HomePage() {
           <div className="grid md:grid-cols-12 gap-16 items-center">
             
             <div className="md:col-span-5">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-slate-100 shadow-xl border border-slate-200">
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-[#0F172A] relative border border-slate-200 shadow-xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="/lawyer1.png" 
                   alt="Adv. Anirudha A. Sinai Borkar" 
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-transparent to-transparent flex flex-col justify-end p-8 text-center text-slate-300">
+                  <p className="font-serif text-2xl text-white">Adv. Anirudha A. Sinai Borkar</p>
+                  <p className="text-sm mt-1 text-slate-300">Founder, AB & Co. Legal</p>
+                </div>
               </div>
             </div>
             
