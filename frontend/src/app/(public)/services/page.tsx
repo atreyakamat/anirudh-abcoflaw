@@ -1,14 +1,5 @@
-import { Scale, Shield, Users, Briefcase, Home, FileText } from 'lucide-react';
+import { Scale, Shield, Landmark, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-
-const services = [
-  { icon: Shield, title: 'Corporate Law', desc: 'Comprehensive legal support for businesses including company formation, mergers & acquisitions, joint ventures, corporate governance, compliance advisory, and contract drafting & review.', areas: ['Company Registration', 'M&A Advisory', 'Board Resolutions', 'Regulatory Compliance'] },
-  { icon: Users, title: 'Family Law', desc: 'Compassionate guidance through sensitive family matters including divorce proceedings, child custody, alimony, adoption, and domestic violence protection.', areas: ['Divorce Proceedings', 'Child Custody', 'Adoption', 'Domestic Violence'] },
-  { icon: Home, title: 'Property Law', desc: 'Expert assistance with real estate transactions, property disputes, title verification, lease agreements, and land acquisition matters.', areas: ['Property Disputes', 'Title Verification', 'Lease Agreements', 'Land Acquisition'] },
-  { icon: Briefcase, title: 'Employment Law', desc: 'Protection of workplace rights including wrongful termination, employment contracts, harassment claims, and labor dispute resolution.', areas: ['Wrongful Termination', 'Workplace Harassment', 'Employment Contracts', 'Labor Disputes'] },
-  { icon: Scale, title: 'Criminal Law', desc: 'Robust defense representation for criminal charges including bail applications, trial advocacy, appeal proceedings, and legal consultations.', areas: ['Bail Applications', 'Trial Defense', 'Appeals', 'Legal Consultations'] },
-  { icon: FileText, title: 'Civil Litigation', desc: 'Skilled representation in civil disputes including breach of contract, tort claims, injunctions, and recovery suits.', areas: ['Contract Disputes', 'Tort Claims', 'Injunctions', 'Recovery Suits'] },
-];
 
 export default function ServicesPage() {
   return (
@@ -16,48 +7,101 @@ export default function ServicesPage() {
       {/* Header Section */}
       <section className="relative py-24 md:py-32 bg-[#0F172A] text-center text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-3xl mx-auto px-4 relative z-10">
-          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Our Expertise</h2>
-          <h1 className="text-5xl md:text-6xl font-bold font-serif mb-6">Areas of Practice</h1>
-          <p className="text-lg md:text-xl text-slate-300 font-light">Comprehensive, strategic legal solutions tailored to protect your interests and drive success.</p>
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
+          <h2 className="text-sm font-bold tracking-widest text-yellow-500 uppercase mb-3">Unlimited Scope</h2>
+          <h1 className="text-5xl md:text-7xl font-bold font-serif mb-6 leading-tight">Comprehensive Legal Solutions</h1>
+          <p className="text-lg md:text-xl text-slate-300 font-light max-w-2xl mx-auto leading-relaxed">
+            The law is vast and every case is unique. Rather than limiting our practice to predefined categories, we provide holistic and adaptive legal strategies across all dimensions of the law.
+          </p>
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((s) => (
-            <div key={s.title} className="group bg-white border border-slate-200 rounded-2xl p-8 hover:border-yellow-600/50 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-slate-100 rounded-full blur-3xl group-hover:bg-yellow-600/10 transition-colors" />
-              <div className="relative z-10">
-                <s.icon className="w-12 h-12 text-slate-900 group-hover:text-yellow-600 transition-colors mb-6" />
-                <h3 className="text-2xl font-bold font-serif text-slate-900 mb-3">{s.title}</h3>
-                <p className="text-slate-600 mb-6 leading-relaxed min-h-[80px]">{s.desc}</p>
-                <div className="pt-6 border-t border-slate-100">
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Key Services</h4>
-                  <ul className="space-y-2">
-                    {s.areas.map((a) => (
-                      <li key={a} className="text-sm font-medium text-slate-700 flex items-center gap-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-yellow-600 shrink-0" />
-                        {a}
-                      </li>
-                    ))}
-                  </ul>
+      {/* Philosophy Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8">
+              <h2 className="text-4xl font-bold font-serif text-slate-900 leading-tight">
+                Curated Advice by Expert Lawyers
+              </h2>
+              <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
+                <p>
+                  At AB & Co. Legal, we believe that strict boundaries between legal domains often fail to capture the complexity of real-world problems. Whether you are navigating a high-stakes commercial tech negotiation, structuring a property transaction, or seeking an amicable resolution to a sensitive family dispute, your legal representation should be as dynamic as your needs.
+                </p>
+                <p>
+                  Our expertise spans across vital sectors of law. We do not confine our services to a rigid menu. Instead, we analyze the specific intricacies of your situation and craft a bespoke legal strategy designed to protect your interests, secure your assets, and deliver justice.
+                </p>
+              </div>
+              <ul className="space-y-4 pt-4">
+                {[
+                  'Adaptive Litigation Strategies',
+                  'Cross-Domain Legal Consultancy',
+                  'Strategic Dispute Resolution',
+                  'Comprehensive Regulatory Compliance'
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-slate-800 font-medium">
+                    <span className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center shrink-0">
+                      <Shield className="w-4 h-4" />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-6 relative">
+              <div className="absolute inset-0 bg-yellow-600/5 rounded-3xl transform translate-x-4 -translate-y-4" />
+              <div className="space-y-6 relative z-10 pt-12">
+                <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/lawyer2.png" alt="Legal Associate" className="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div className="space-y-6 relative z-10">
+                <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/lawyer1.png" alt="Advocate Anirudha" className="w-full h-full object-cover" />
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The Approach Section */}
+      <section className="py-24 bg-slate-50 border-y border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Our Methodology</h2>
+          <h3 className="text-4xl font-serif font-bold text-slate-900 mb-16">How We Protect You</h3>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: Scale, title: 'Analyze', desc: 'We take the time to thoroughly understand the nuances of your situation, examining all angles without assuming a one-size-fits-all approach.' },
+              { icon: Landmark, title: 'Strategize', desc: 'Drawing upon decades of combined experience across civil, corporate, and criminal sectors, we formulate a robust, multi-dimensional plan.' },
+              { icon: Shield, title: 'Execute', desc: 'Whether inside the courtroom or at the negotiation table, we execute our strategy with precision, aggression when necessary, and profound empathy.' }
+            ].map((step, i) => (
+              <div key={i} className="p-8 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-yellow-600/30 transition-all duration-300">
+                <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-slate-900 border border-slate-100">
+                  <step.icon className="w-8 h-8" />
+                </div>
+                <h4 className="text-2xl font-bold font-serif text-slate-900 mb-4">{step.title}</h4>
+                <p className="text-slate-600 leading-relaxed">{step.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-24 bg-[#0F172A] text-center text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-yellow-900/20 to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto px-4 relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold font-serif mb-6">Need Legal Assistance?</h2>
-          <p className="text-slate-300 text-lg md:text-xl mb-10 font-light">Schedule a confidential consultation to discuss your specific legal needs with our expert team.</p>
-          <Link href="/book" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-yellow-600 text-white rounded-none font-bold tracking-wider uppercase hover:bg-yellow-700 transition-all shadow-lg hover:shadow-yellow-600/20">
-            Book a Consultation
+          <h2 className="text-4xl md:text-5xl font-bold font-serif mb-6">Let Us Handle the Complexity</h2>
+          <p className="text-slate-300 text-lg md:text-xl mb-10 font-light leading-relaxed">
+            Do not let the confines of legal terminology dictate your approach. Bring us your problem, and we will find the legal solution.
+          </p>
+          <Link href="/book" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-yellow-600 text-white rounded-lg font-bold tracking-wide hover:bg-yellow-500 transition-all shadow-lg hover:shadow-yellow-600/20">
+            Discuss Your Case With Us <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>
