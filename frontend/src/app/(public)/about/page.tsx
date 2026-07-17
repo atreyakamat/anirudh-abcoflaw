@@ -22,7 +22,7 @@ export default function AboutPage() {
               <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-xl aspect-[4/5]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src="/lawyer1.png" 
+                  src="/profilepic.jpg" 
                   alt="Anirudha Sinai Borkar" 
                   className="w-full h-full object-cover"
                 />
