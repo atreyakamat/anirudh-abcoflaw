@@ -18,8 +18,13 @@ export default function HomePage() {
   const { data: blogs } = useQuery({
     queryKey: ['home-blogs'],
     queryFn: async () => { 
-      const res = await api.blogs.published({ limit: 3 }); 
-      return (res.data.data as PaginatedResult<BlogPost>).items; 
+      try {
+        const res = await api.blogs.published({ limit: 3 }); 
+        return (res.data.data as PaginatedResult<BlogPost>).items; 
+      } catch (err) {
+        // Backend blog endpoints not yet implemented, suppressing 404
+        return [];
+      }
     },
   });
 
@@ -81,13 +86,19 @@ export default function HomePage() {
           <div className="hidden md:block relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/20 to-transparent rounded-full blur-3xl" />
             <div className="relative bg-white/10 border border-white/20 p-12 rounded-3xl backdrop-blur-md shadow-2xl flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-500">
-              {/* 3D-like glassmorphic Weighing Scale Component */}
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-yellow-400/20 to-yellow-600/5 border border-yellow-500/30 flex items-center justify-center mb-8 shadow-inner">
-                <Scale className="w-16 h-16 text-yellow-500 drop-shadow-lg" />
+              {/* 3D-like glassmorphic Component containing the Lions Emblem */}
+              <div className="w-36 h-36 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mb-8 shadow-inner overflow-hidden p-4 backdrop-blur-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/512px-Emblem_of_India.svg.png" 
+                  alt="State Emblem of India" 
+                  className="w-full h-full object-contain drop-shadow-2xl"
+                  style={{ filter: "brightness(0) invert(1)" }} // Makes it white to fit the dark aesthetic
+                />
               </div>
               <div className="space-y-4 text-center">
                 <p className="text-2xl font-serif text-white font-bold tracking-wide">Central Government Notary</p>
-                <div className="h-px w-24 bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent mx-auto" />
+                <div className="h-px w-24 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto" />
                 <p className="text-slate-300 font-medium">Appointed by the Government of India</p>
               </div>
             </div>
