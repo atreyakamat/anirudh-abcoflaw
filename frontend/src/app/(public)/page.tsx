@@ -94,7 +94,7 @@ export default function HomePage() {
                 allowFullScreen 
                 allow="autoplay; fullscreen; xr-spatial-tracking" 
                 src="https://sketchfab.com/models/12e2969ab0f24e759f35ed92efd51a00/embed?autostart=1&autospin=0.1&transparent=1&ui_infos=0&ui_watermark_link=0&ui_watermark=0&ui_hint=0&ui_theme=dark"
-                className="w-[180%] h-[180%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+                className="w-[120%] h-[120%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
               />
             </div>
           </div>
