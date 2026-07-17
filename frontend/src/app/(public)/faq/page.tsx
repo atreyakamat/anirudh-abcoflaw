@@ -14,7 +14,7 @@ const fallbackFaqs = [
   { id: '5', question: 'How do you handle property title verifications in Goa?', answer: 'Property transactions in Goa are subject to unique local laws. We conduct rigorous title searches, verify mutation records, draft sale deeds, and ensure the property is free from encumbrances before you proceed with a purchase.', category: { name: 'Real Estate & Property' } },
   { id: '6', question: 'Do you handle cheque bouncing (Section 138) cases?', answer: 'Yes, cheque bouncing is a criminal offense under Section 138 of the Negotiable Instruments Act. We aggressively represent clients in issuing legal notices, filing complaints, and recovering dues through the court system.', category: { name: 'Litigation & Dispute Resolution' } },
   { id: '7', question: 'What is the typical timeline for civil litigation?', answer: 'Civil litigation timelines can vary significantly based on the complexity of the case, court schedules, and the willingness of parties to settle. While we always strive for swift, amicable resolutions, we are fully prepared for long-term strategic litigation when necessary.', category: { name: 'Litigation & Dispute Resolution' } }
-];
+] as Faq[];
 
 import { PageHeader } from '@/components/page-header';
 
