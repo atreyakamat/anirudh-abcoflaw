@@ -264,16 +264,32 @@ export default function HomePage() {
       </section>
 
       {/* Philosophy / Values Quote */}
-      <section className="py-24 bg-[#0F172A] text-center px-4 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
+      <section className="py-32 text-center px-4 relative overflow-hidden border-y border-slate-700">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="/philovaluequote.png" 
+            alt="Philosophy Background" 
+            className="w-full h-full object-cover" 
+          />
+        </div>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-[#0F172A]/85 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-900/40 via-transparent to-transparent pointer-events-none" />
+        
         <div className="max-w-4xl mx-auto relative z-10">
-          <BookOpen className="w-12 h-12 text-yellow-600 mx-auto mb-8 opacity-80" />
-          <blockquote className="text-3xl md:text-4xl font-serif text-white leading-tight mb-8">
+          <BookOpen className="w-12 h-12 text-yellow-500 mx-auto mb-8 opacity-90 drop-shadow-lg" />
+          <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif text-white leading-tight mb-10 drop-shadow-lg">
             "The justice system can be improved not by putting more pressure on the judiciary, but by reducing their workload through amicable resolutions and efficient practice."
           </blockquote>
-          <p className="text-yellow-500 font-medium tracking-wide uppercase text-sm">
-            — Advocate Anirudha Sinai Borkar
-          </p>
+          <div className="flex items-center justify-center gap-4">
+            <div className="h-px w-12 bg-yellow-500/50" />
+            <p className="text-yellow-500 font-bold tracking-widest uppercase text-sm drop-shadow-md">
+              Advocate Anirudha Sinai Borkar
+            </p>
+            <div className="h-px w-12 bg-yellow-500/50" />
+          </div>
         </div>
       </section>
 
