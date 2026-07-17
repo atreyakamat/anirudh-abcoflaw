@@ -43,13 +43,9 @@ export default function HomePage() {
         <div className="absolute inset-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="/hero-bg.jpg" 
+            src="/heroimage.jpg" 
             alt="Hero Background" 
             className="w-full h-full object-cover" 
-            onError={(e) => {
-              // Fallback to a dark color if the user hasn't uploaded hero-bg.jpg yet
-              e.currentTarget.style.display = 'none';
-            }}
           />
         </div>
         {/* Semi-transparent blue overlay */}
