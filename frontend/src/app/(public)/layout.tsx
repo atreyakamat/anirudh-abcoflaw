@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Scale, Menu, X, Sun, Moon, MapPin, Mail } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
+import { FloatingChatbot } from '@/components/floating-chatbot';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -126,6 +127,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </div>
         </div>
       </footer>
+      <FloatingChatbot />
     </div>
   );
 }

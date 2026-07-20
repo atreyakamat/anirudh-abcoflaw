@@ -133,25 +133,25 @@ export default function BookingPage() {
           <div className="flex items-center justify-center gap-4 mb-12">
             {[1, 2, 3].map((s, idx) => (
               <div key={s} className="flex items-center gap-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${step >= s ? 'bg-yellow-600 text-white shadow-lg shadow-yellow-600/20' : 'bg-white text-slate-400 border border-slate-200'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500 ${step >= s ? 'bg-yellow-600 text-white shadow-[0_0_15px_rgba(202,138,4,0.4)] scale-110' : 'bg-white/60 text-slate-400 border border-slate-200/50 backdrop-blur-sm'}`}>
                   {s}
                 </div>
-                {idx < 2 && <div className={`w-12 h-1 rounded-full transition-colors ${step > s ? 'bg-yellow-600' : 'bg-slate-200'}`} />}
+                {idx < 2 && <div className={`w-12 h-1 rounded-full transition-all duration-500 ${step > s ? 'bg-yellow-600 shadow-[0_0_10px_rgba(202,138,4,0.3)]' : 'bg-slate-200/50'}`} />}
               </div>
             ))}
           </div>
         )}
 
         {step === 4 ? (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-xl p-12 text-center">
-            <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+          <div className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-2xl rounded-3xl p-12 text-center animate-in zoom-in-95 duration-500">
+            <div className="w-24 h-24 bg-gradient-to-br from-green-100 to-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner border border-green-200/50">
+              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
             </div>
-            <h2 className="text-3xl font-bold font-serif text-slate-900 mb-4">Booking Submitted!</h2>
-            <p className="text-slate-600 text-lg">Your consultation request has been successfully received. The lawyer will review your details and you will receive a confirmation email within 24 hours.</p>
+            <h2 className="text-4xl font-bold font-serif text-slate-900 mb-4 tracking-tight">Booking Submitted!</h2>
+            <p className="text-slate-600 text-lg leading-relaxed max-w-md mx-auto">Your consultation request has been successfully received. The lawyer will review your details and you will receive a confirmation email within 24 hours.</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 shadow-xl p-8 md:p-10 relative overflow-hidden">
+          <form onSubmit={handleSubmit} className="bg-white/70 backdrop-blur-xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-8 md:p-12 relative overflow-hidden transition-all duration-300">
             <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-600/10 rounded-full blur-3xl pointer-events-none" />
 
             {step === 1 && (
@@ -198,10 +198,12 @@ export default function BookingPage() {
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
-                    className="w-full py-4 border-2 border-dashed border-slate-300 rounded-xl hover:border-yellow-600/50 hover:bg-yellow-50/50 transition-colors flex items-center justify-center gap-2 text-slate-600"
+                    className="w-full py-8 border-2 border-dashed border-slate-300/70 rounded-2xl hover:border-yellow-600/50 hover:bg-yellow-50/30 transition-all duration-200 flex flex-col items-center justify-center gap-3 text-slate-600 cursor-pointer group bg-white/40"
                   >
-                    <Upload className="w-5 h-5" />
-                    {uploading ? 'Uploading...' : 'Click to upload documents'}
+                    <div className="p-3 bg-white shadow-sm rounded-full group-hover:scale-110 transition-transform duration-300">
+                      <Upload className="w-6 h-6 text-slate-400 group-hover:text-yellow-600 transition-colors" />
+                    </div>
+                    <span className="font-medium">{uploading ? 'Uploading...' : 'Click to browse files'}</span>
                   </button>
 
                   {files.length > 0 && (
@@ -266,18 +268,18 @@ export default function BookingPage() {
 
             <div className="flex justify-between items-center mt-8 pt-8 border-t border-slate-100 relative z-10">
               {step > 1 ? (
-                <button type="button" onClick={() => setStep((s) => s - 1)} className="px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50 transition-colors uppercase tracking-wider text-sm">
+                <button type="button" onClick={() => setStep((s) => s - 1)} className="px-6 py-3 border border-slate-200/70 text-slate-600 font-bold rounded-xl hover:bg-slate-50/80 transition-all duration-200 hover:-translate-y-0.5 uppercase tracking-wider text-sm cursor-pointer shadow-sm">
                   Back
                 </button>
               ) : <div />}
 
               <div>
                 {step < 3 ? (
-                  <button type="button" onClick={() => setStep((s) => s + 1)} className="px-8 py-3 bg-[#0F172A] text-white font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-md uppercase tracking-wider text-sm">
+                  <button type="button" onClick={() => setStep((s) => s + 1)} className="px-8 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/20 uppercase tracking-wider text-sm cursor-pointer">
                     Next Step
                   </button>
                 ) : (
-                  <button type="submit" disabled={submitting} className="px-8 py-3 bg-yellow-600 text-white font-bold rounded-xl hover:bg-yellow-700 transition-colors shadow-md shadow-yellow-600/20 disabled:opacity-50 uppercase tracking-wider text-sm">
+                  <button type="submit" disabled={submitting} className="px-8 py-3 bg-yellow-600 text-white font-bold rounded-xl hover:bg-yellow-500 transition-all duration-200 hover:-translate-y-0.5 shadow-[0_4px_14px_0_rgba(202,138,4,0.39)] hover:shadow-[0_6px_20px_rgba(202,138,4,0.23)] disabled:opacity-50 disabled:hover:translate-y-0 uppercase tracking-wider text-sm cursor-pointer">
                     {submitting ? 'Submitting...' : 'Confirm Booking'}
                   </button>
                 )}
