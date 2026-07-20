@@ -150,6 +150,7 @@ export class AppointmentsService {
       preferredDate: Date;
       preferredTime: string;
       source?: BookingSource;
+      documentIds?: string[];
     },
     userId?: string,
   ): Promise<Appointment> {
@@ -196,6 +197,14 @@ export class AppointmentsService {
         client: true,
       },
     });
+
+    // Link uploaded documents to this appointment
+    if (data.documentIds && data.documentIds.length > 0) {
+      await this.prisma.document.updateMany({
+        where: { id: { in: data.documentIds } },
+        data: { appointmentId: appointment.id, clientId },
+      });
+    }
 
     // Create history entry
     await this.createHistoryEntry(appointment.id, null, null, AppointmentStatus.PENDING_REVIEW, 'Appointment created');

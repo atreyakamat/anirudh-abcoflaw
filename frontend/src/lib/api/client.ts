@@ -31,6 +31,12 @@ apiClient.interceptors.response.use(
   },
 );
 
+// Separate client for multipart form data (file uploads)
+const uploadClient = axios.create({
+  baseURL,
+  withCredentials: true,
+});
+
 export default apiClient;
 
 export const api = {
@@ -112,5 +118,14 @@ export const api = {
   calendar: {
     getAppointments: (startDate: string, endDate: string) => apiClient.get('/calendar/appointments', { params: { startDate, endDate } }),
     getSlots: (date: string) => apiClient.get('/calendar/slots', { params: { date } }),
+  },
+  documents: {
+    uploadPublic: (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      return uploadClient.post('/documents/upload/public', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    },
   },
 };

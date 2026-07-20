@@ -48,6 +48,16 @@ export class DocumentsController {
     return this.documentsService.upload(file, clientId, appointmentId, userId);
   }
 
+  @Public()
+  @Post('upload/public')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Upload document (public - for booking form)' })
+  uploadPublic(@UploadedFile() file: Express.Multer.File) {
+    return this.documentsService.upload(file, undefined, undefined, undefined);
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.RECEPTIONIST)

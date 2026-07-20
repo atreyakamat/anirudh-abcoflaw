@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum, IsDateString, MinLength } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsDateString, MinLength, IsArray } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { BookingSource } from '@prisma/client';
@@ -47,4 +47,10 @@ export class CreateAppointmentDto {
   @IsString()
   @IsOptional()
   phone?: string;
+
+  @ApiPropertyOptional({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  documentIds?: string[];
 }
