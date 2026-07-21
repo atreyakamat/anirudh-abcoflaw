@@ -75,8 +75,8 @@ export default function ServicesPage() {
               { icon: Landmark, title: 'Strategize', desc: 'Drawing upon decades of combined experience across civil, corporate, and criminal sectors, we formulate a robust, multi-dimensional plan.' },
               { icon: Shield, title: 'Execute', desc: 'Whether inside the courtroom or at the negotiation table, we execute our strategy with precision, aggression when necessary, and profound empathy.' }
             ].map((step, i) => (
-              <div key={i} className="p-8 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-yellow-600/30 transition-all duration-300">
-                <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-slate-900 border border-slate-100">
+              <div key={i} className="p-8 bg-white/70 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:border-yellow-600/30 hover:-translate-y-1 transition-all duration-300">
+                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-slate-700 border border-slate-200/60 shadow-sm group-hover:text-yellow-600 transition-colors">
                   <step.icon className="w-8 h-8" />
                 </div>
                 <h4 className="text-2xl font-bold font-serif text-slate-900 mb-4">{step.title}</h4>

@@ -19,6 +19,7 @@ import { ChatbotModule } from './modules/chatbot/chatbot.module.js';
 import { SearchModule } from './modules/search/search.module.js';
 import { WebhooksModule } from './modules/webhooks/webhooks.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { HealthModule } from './health/health.module.js';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { PrismaModule } from './prisma/prisma.module.js';
     ChatbotModule,
     SearchModule,
     WebhooksModule,
+    HealthModule,
   ],
   providers: [
     {

@@ -1,0 +1,77 @@
+{
+  "name": "Appointment Created Notification",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "appointment-created",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "appointment-created"
+    },
+    {
+      "parameters": {
+        "functionCode": "const data = $input.item.json;\n\nconst appointment = data.appointment;\nconst client = appointment.client;\n\nconst message = {\n  to: process.env.LAWYER_PHONE || '+919876543210',\n  message: `New appointment request from ${client.firstName} ${client.lastName} for ${new Date(appointment.preferredDate).toLocaleDateString()} at ${appointment.preferredTime}. Description: ${appointment.description.substring(0, 100)}...`
+};\n\nreturn { json: message };"
+      },
+      "name": "Format WhatsApp Message",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "resource": "message",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "sessionName": "default"
+        }
+      },
+      "name": "Send WhatsApp via WAHA",
+      "type": "n8n-nodes-base.waha",
+      "typeVersion": 1,
+      "position": [750, 300],
+      "credentials": {
+        "wahaApi": "waha"
+      }
+    },
+    {
+      "parameters": {
+        "subject": "New Appointment Request",
+        "emailHtml": "<h2>New Appointment Request</h2><p>A new appointment has been requested.</p><p><strong>Client:</strong> {{ $json.appointment.client.firstName }} {{ $json.appointment.client.lastName }}</p><p><strong>Date:</strong> {{ $json.appointment.preferredDate }}</p><p><strong>Time:</strong> {{ $json.appointment.preferredTime }}</p><p><strong>Description:</strong> {{ $json.appointment.description }}</p>",
+        "toEmail": "contact@lawpractice.com",
+        "fromName": "Law Practice CRM"
+      },
+      "name": "Send Email Notification",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [750, 500]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [{ "node": "Format WhatsApp Message", "type": "main", "index": 0 }]
+      ]
+    },
+    "Format WhatsApp Message": {
+      "main": [
+        [
+          { "node": "Send WhatsApp via WAHA", "type": "main", "index": 0 },
+          { "node": "Send Email Notification", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["appointments", "notifications"]
+}

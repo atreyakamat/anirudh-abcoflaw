@@ -56,11 +56,11 @@ export default function AboutPage() {
               { title: 'Central Government Notary', desc: 'Appointed Notary for the Govt. of India' },
               { title: '20+ Years Experience', desc: 'Est. AB & Co. Legal' }
             ].map((stat, i) => (
-              <div key={i} className="bg-slate-50 p-8 rounded-2xl border border-slate-200 text-center group hover:border-yellow-600/30 transition-colors">
+              <div key={i} className="bg-white/70 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] text-center group hover:border-yellow-600/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <h3 className="font-bold font-serif text-xl text-slate-900 mb-3 group-hover:text-yellow-600 transition-colors">
                   {stat.title}
                 </h3>
-                <p className="text-slate-600 text-sm">{stat.desc}</p>
+                <p className="text-slate-600 text-sm leading-relaxed">{stat.desc}</p>
               </div>
             ))}
           </div>
@@ -76,11 +76,11 @@ export default function AboutPage() {
                 { i: Scale, t: 'Fairness', d: 'Justice and equal treatment' }
               ].map((v) => (
                 <div key={v.t} className="text-center group">
-                  <div className="w-16 h-16 mx-auto bg-slate-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-yellow-600/10 border border-slate-100 transition-all">
-                    <v.i className="w-8 h-8 text-slate-900 group-hover:text-yellow-600 transition-colors" />
+                  <div className="w-16 h-16 mx-auto bg-white rounded-2xl flex items-center justify-center mb-6 group-hover:bg-yellow-50 border border-slate-200/60 shadow-sm group-hover:shadow-md group-hover:border-yellow-200 group-hover:-translate-y-1 transition-all duration-300">
+                    <v.i className="w-8 h-8 text-slate-700 group-hover:text-yellow-600 transition-colors duration-300" />
                   </div>
-                  <h3 className="font-bold font-serif text-lg text-slate-900 mb-1">{v.t}</h3>
-                  <p className="text-xs text-slate-500 uppercase tracking-wider">{v.d}</p>
+                  <h3 className="font-bold font-serif text-lg text-slate-900 mb-2 group-hover:text-yellow-600 transition-colors">{v.t}</h3>
+                  <p className="text-xs text-slate-500 uppercase tracking-wider font-medium">{v.d}</p>
                 </div>
               ))}
             </div>

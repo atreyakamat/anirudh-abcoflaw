@@ -1,0 +1,100 @@
+{
+  "name": "Appointment Status Update Notification",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "appointment-status",
+        "responseMode": "lastNode"
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "appointment-status"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "status-check",
+              "leftValue": "={{ $json.newStatus }}",
+              "rightValue": "CONFIRMED",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Status Check",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const data = $input.item.json;\nconst appointment = data.appointment;\nconst client = appointment.client;\n\nlet message = '';\nswitch(data.newStatus) {\n  case 'CONFIRMED':\n    message = `Great news! Your appointment at AB & Co. Legal has been confirmed for ${new Date(appointment.preferredDate).toLocaleDateString()} at ${appointment.preferredTime}. Please arrive 10 minutes early.`;\n    break;\n  case 'REJECTED':\n    message = `We regret to inform you that your appointment request for ${new Date(appointment.preferredDate).toLocaleDateString()} has been declined. Please contact us to reschedule.`;\n    break;\n  case 'CANCELLED':\n    message = `Your appointment for ${new Date(appointment.preferredDate).toLocaleDateString()} has been cancelled. Please contact us if you need to reschedule.`;\n    break;\n  default:\n    message = `Your appointment status has been updated to ${data.newStatus}.`;\n}\n\nreturn { json: { to: client.email, message } };"
+      },
+      "name": "Format Client Message",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "subject": "={{ $json.message.includes('confirmed') ? 'Appointment Confirmed' : $json.message.includes('cancelled') ? 'Appointment Cancelled' : 'Appointment Update' }}",
+        "emailHtml": "<p>{{ $json.message }}</p><p>Reference: {{ $input.item.json.appointment.referenceNumber }}</p>",
+        "toEmail": "={{ $json.to }}",
+        "fromName": "AB & Co. Legal"
+      },
+      "name": "Send Email to Client",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "text": "={{ $json.message }}",
+        "session": "default"
+      },
+      "name": "Send WhatsApp to Client",
+      "type": "n8n-nodes-base.waha",
+      "typeVersion": 1,
+      "position": [1000, 500],
+      "credentials": {
+        "wahaApi": "waha"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Status Check", "type": "main", "index": 0 }]]
+    },
+    "Status Check": {
+      "main": [
+        [{ "node": "Format Client Message", "type": "main", "index": 0 }]
+      ]
+    },
+    "Format Client Message": {
+      "main": [
+        [
+          { "node": "Send Email to Client", "type": "main", "index": 0 },
+          { "node": "Send WhatsApp to Client", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": ["appointments", "notifications", "client"]
+}

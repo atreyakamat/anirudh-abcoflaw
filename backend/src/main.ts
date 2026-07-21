@@ -61,10 +61,6 @@ async function bootstrap() {
     },
   });
 
-  // Health check
-  app.getHttpAdapter().get('/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
-  });
 
   await app.listen(port);
   console.log(`🚀 Application running on http://localhost:${port}`);

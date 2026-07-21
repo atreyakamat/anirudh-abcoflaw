@@ -1,0 +1,66 @@
+{
+  "name": "Appointment Reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cron",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule Daily Check",
+      "type": "n8n-nodes-base.trigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=http://backend:3001/api/v1/appointments/upcoming?limit=50",
+        "options": {}
+      },
+      "name": "Fetch Upcoming Appointments",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const appointments = $input.item.json.data.items || [];\nconst tomorrow = new Date();\ntomorrow.setDate(tomorrow.getDate() + 1);\ntomorrow.setHours(0, 0, 0, 0);\n\nconst endOfTomorrow = new Date(tomorrow);\nendOfTomorrow.setHours(23, 59, 59, 999);\n\nconst reminders = appointments.filter(apt => {\n  const aptDate = new Date(apt.preferredDate);\n  return aptDate >= tomorrow && aptDate <= endOfTomorrow && apt.status === 'CONFIRMED';\n});\n\nreturn reminders.map(apt => ({\n  json: {\n    appointmentId: apt.id,\n    clientEmail: apt.client.email,\n    clientName: `${apt.client.firstName} ${apt.client.lastName}`,\n    date: apt.preferredDate,\n    time: apt.preferredTime,\n    referenceNumber: apt.referenceNumber\n  }\n}));"
+      },
+      "name": "Filter Tomorrow Appointments",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "subject": "Reminder: Appointment Tomorrow",
+        "emailHtml": "<h2>Appointment Reminder</h2><p>Dear {{ $json.clientName }},</p><p>This is a reminder that you have an appointment scheduled for tomorrow.</p><p><strong>Date:</strong> {{ $json.date }}</p><p><strong>Time:</strong> {{ $json.time }}</p><p><strong>Reference:</strong> {{ $json.referenceNumber }}</p><p>Please arrive 10 minutes early.</p><p>Best regards,<br>AB & Co. Legal</p>",
+        "toEmail": "={{ $json.clientEmail }}",
+        "fromName": "AB & Co. Legal"
+      },
+      "name": "Send Reminder Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1000, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Daily Check": {
+      "main": [[{ "node": "Fetch Upcoming Appointments", "type": "main", "index": 0 }]]
+    },
+    "Fetch Upcoming Appointments": {
+      "main": [[{ "node": "Filter Tomorrow Appointments", "type": "main", "index": 0 }]]
+    },
+    "Filter Tomorrow Appointments": {
+      "main": [[{ "node": "Send Reminder Email", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": ["appointments", "reminders", "automation"]
+}
