@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { Scale, Loader2 } from 'lucide-react';
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase/config';
 import Image from 'next/image';
 
 export default function LoginPage() {
@@ -21,7 +19,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || 'Authentication failed');
+      setError(err.message || 'Authentication failed');
     } finally {
       setIsLoading(false);
     }
@@ -31,17 +29,11 @@ export default function LoginPage() {
     setError('');
     setIsLoading(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const idToken = await result.user.getIdToken();
-      await loginWithGoogle(idToken);
+      // Using Supabase Auth
+      await loginWithGoogle('');
     } catch (err: any) {
       console.error(err);
-      if (err.code === 'auth/popup-closed-by-user') {
-        setError('Sign-in cancelled.');
-      } else {
-        setError(err.response?.data?.message || err.message || 'Authentication failed');
-      }
-    } finally {
+      setError(err.message || 'Authentication failed');
       setIsLoading(false);
     }
   };
@@ -64,13 +56,13 @@ export default function LoginPage() {
 
           <form onSubmit={handleStaticLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5 text-foreground">Username or Email</label>
+              <label className="block text-sm font-medium mb-1.5 text-foreground">Email</label>
               <input
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background text-foreground"
-                placeholder="e.g. admin or admin@lawpractice.local"
+                placeholder="e.g. admin@lawpractice.local"
                 required
               />
             </div>

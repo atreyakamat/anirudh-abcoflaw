@@ -3,7 +3,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../../prisma/prisma.service.js';
-import { JwtPayload } from '../../../common/guards/jwt-auth.guard.js';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -17,25 +16,47 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         ExtractJwt.fromHeader('authorization'),
       ]),
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_SECRET'),
+      secretOrKey: configService.get<string>('SUPABASE_JWT_SECRET') || configService.get<string>('JWT_SECRET'),
     });
   }
 
-  async validate(payload: JwtPayload) {
-    if (payload.type !== 'access') {
+  async validate(payload: any) {
+    // Legacy tokens had type='access', Supabase tokens have aud='authenticated'
+    if (payload.type && payload.type !== 'access') {
       throw new UnauthorizedException('Invalid token type');
     }
 
-    // For client portal users
-    if (payload.role === 'CLIENT') {
-      const client = await this.prisma.clientPortalUser.findUnique({
-        where: { id: payload.sub },
-      });
+    const email = payload.email;
 
-      if (!client || !client.isActive) {
-        throw new UnauthorizedException('User not found or inactive');
+    if (!email) {
+      throw new UnauthorizedException('Invalid token payload');
+    }
+
+    // Try finding an admin/lawyer/staff user first
+    const user = await this.prisma.user.findFirst({
+      where: { email },
+    });
+
+    if (user) {
+      if (!user.isActive) {
+        throw new UnauthorizedException('User inactive');
       }
+      return {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      };
+    }
 
+    // Fallback to client portal user
+    const client = await this.prisma.clientPortalUser.findUnique({
+      where: { email },
+    });
+
+    if (client) {
+      if (!client.isActive) {
+        throw new UnauthorizedException('Client inactive');
+      }
       return {
         id: client.id,
         email: client.email,
@@ -43,19 +64,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       };
     }
 
-    // For admin/receptionist/lawyer users
-    const user = await this.prisma.user.findUnique({
-      where: { id: payload.sub },
-    });
-
-    if (!user || !user.isActive) {
-      throw new UnauthorizedException('User not found or inactive');
-    }
-
-    return {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    };
+    throw new UnauthorizedException('User not found');
   }
 }

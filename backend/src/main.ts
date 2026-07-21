@@ -42,6 +42,11 @@ async function bootstrap() {
   // Global interceptors
   app.useGlobalInterceptors(new TransformInterceptor());
 
+  // Root-level health check (no prefix)
+  app.getHttpAdapter().get('/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+
   // API prefix
   app.setGlobalPrefix(apiPrefix);
 

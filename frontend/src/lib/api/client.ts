@@ -14,6 +14,20 @@ const apiClient = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Add Supabase Token interceptor
+apiClient.interceptors.request.use(async (config) => {
+  if (typeof window !== 'undefined') {
+    // We are on the browser, we can get the token from supabase
+    const { createClient } = await import('@/lib/supabase/client');
+    const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      config.headers.Authorization = `Bearer ${session.access_token}`;
+    }
+  }
+  return config;
+});
+
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -21,8 +35,15 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        await apiClient.post('/auth/refresh');
-        return apiClient(originalRequest);
+        if (typeof window !== 'undefined') {
+            const { createClient } = await import('@/lib/supabase/client');
+            const supabase = createClient();
+            const { data: { session }, error: refreshError } = await supabase.auth.refreshSession();
+            if (refreshError || !session) throw refreshError;
+            
+            originalRequest.headers.Authorization = `Bearer ${session.access_token}`;
+            return apiClient(originalRequest);
+        }
       } catch {
         if (typeof window !== 'undefined') window.location.href = '/login';
       }

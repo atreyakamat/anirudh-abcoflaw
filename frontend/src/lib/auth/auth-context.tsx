@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import { api } from '@/lib/api/client';
 import type { User } from '@/types';
 
@@ -9,7 +10,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   loginWithGoogle: (token: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -27,46 +28,66 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const supabase = createClient();
 
   const checkAuth = useCallback(async () => {
     try {
-      const res = await api.auth.me();
-      setUser(res.data.data || res.data);
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (session) {
+        // You could fetch extended profile from your nest backend here if needed
+        const res = await api.auth.me();
+        setUser(res.data.data || res.data);
+      } else {
+        setUser(null);
+      }
     } catch {
       setUser(null);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+    
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        setUser(null);
+      } else {
+        checkAuth();
+      }
+    });
 
-  const login = async (username: string, password: string) => {
-    const res = await api.auth.login({ username, password });
-    setUser(res.data.data?.user || res.data.user);
-    // Hard redirect so the browser commits the Set-Cookie header before
-    // Next.js middleware checks for access_token on the next request.
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [checkAuth, supabase]);
+
+  const login = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    
+    if (error) {
+      throw error;
+    }
+    
+    // Refresh page or push to dashboard so middleware runs
     window.location.href = '/dashboard';
   };
 
-  const loginWithGoogle = async (token: string) => {
-    const res = await api.auth.googleLogin(token);
-    const loggedUser = res.data.data?.user || res.data.user;
-    setUser(loggedUser);
-    
-    // Redirect based on role
-    if (loggedUser.role === 'CLIENT') {
-      window.location.href = '/portal';
-    } else {
-      window.location.href = '/dashboard';
-    }
+  const loginWithGoogle = async () => {
+    // Left empty for static migration to Supabase Auth Google Provider
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+    if (error) throw error;
   };
 
   const logout = async () => {
     try {
-      await api.auth.logout();
+      await supabase.auth.signOut();
     } finally {
       setUser(null);
       router.push('/login');
