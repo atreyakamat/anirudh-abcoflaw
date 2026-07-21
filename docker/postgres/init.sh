@@ -1,26 +1,16 @@
 #!/bin/bash
 set -e
 
-echo "Waiting for database to be ready..."
-until pg_isready -h db -U "${POSTGRES_USER:-postgres}" -d "${POSTGRES_DB:-law_practice_crm}"; do
-  echo "Postgres is unavailable - sleeping"
-  sleep 1
-done
+# This script runs only when the Postgres volume is empty (first boot).
+# It can be used to set up initial databases, extensions, or roles.
+# Note: Prisma migrations and seeding are handled automatically by the 
+# backend container's start.sh script upon connecting to the database.
 
-echo "Postgres is up - running migrations..."
+echo "Initializing PostgreSQL database..."
 
-cd /app
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    -- Add any other raw SQL initialization here
+EOSQL
 
-# Run Prisma migrations
-echo "Running Prisma migrations..."
-npx prisma migrate deploy
-
-# Generate Prisma client if needed
-echo "Generating Prisma client..."
-npx prisma generate
-
-# Seed the database if not already seeded
-echo "Seeding database..."
-npm run db:seed || echo "Seed completed or already seeded"
-
-echo "Database initialization complete!"
+echo "PostgreSQL initialization complete."

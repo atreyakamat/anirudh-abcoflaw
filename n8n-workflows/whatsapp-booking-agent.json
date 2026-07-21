@@ -1,0 +1,118 @@
+{
+  "name": "WhatsApp Booking Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "waha-webhook",
+        "options": {}
+      },
+      "id": "1",
+      "name": "Webhook (WAHA)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [ 250, 300 ],
+      "webhookId": "whatsapp-booking-agent-waha"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"body\"][\"payload\"][\"body\"]}}",
+              "operation": "contains",
+              "value2": "book"
+            }
+          ]
+        }
+      },
+      "id": "2",
+      "name": "Intent Router",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [ 450, 300 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://waha:3000/api/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"session\": \"default\",\n  \"chatId\": \"{{$json[\"body\"][\"payload\"][\"from\"]}}\",\n  \"text\": \"Welcome to AB & Co. Legal! I see you want to book a consultation. Please visit our booking page here: http://localhost:3000/book or reply with 'talk to human'.\"\n}",
+        "options": {}
+      },
+      "id": "3",
+      "name": "Send Booking Link",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [ 700, 200 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://waha:3000/api/sendText",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"session\": \"default\",\n  \"chatId\": \"{{$json[\"body\"][\"payload\"][\"from\"]}}\",\n  \"text\": \"Hello from AB & Co. Legal. How can we assist you today? To book a consultation, simply reply with 'book'.\"\n}",
+        "options": {}
+      },
+      "id": "4",
+      "name": "Send Greeting",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [ 700, 400 ]
+    }
+  ],
+  "connections": {
+    "Webhook (WAHA)": {
+      "main": [
+        [
+          {
+            "node": "Intent Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intent Router": {
+      "main": [
+        [
+          {
+            "node": "Send Booking Link",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Greeting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -1,50 +1,51 @@
-FROM node:20-alpine AS base
+FROM node:20-alpine AS builder
 
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# Create app directory
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
+# Copy root package files
+COPY package.json package-lock.json ./
+
+# Copy workspace package files
+COPY backend/package.json ./backend/
+COPY frontend/package.json ./frontend/
+COPY shared/package.json ./shared/
+
+# Install dependencies for all workspaces
 RUN npm ci
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+# Copy source code
+COPY backend ./backend
+COPY shared ./shared
 
-# Generate Prisma Client
-RUN npx prisma generate
+# Build shared and backend
+RUN cd backend && npm run build
 
-# Build the application
-RUN npm run build
+FROM node:20-alpine AS runner
 
-# Production image, copy all the files and run next
-FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+# Copy root package files
+COPY package.json package-lock.json ./
+COPY backend/package.json ./backend/
+COPY shared/package.json ./shared/
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nestjs
+# Install production dependencies only (using npm ci without --omit=dev because prisma needs typescript for seeding)
+RUN npm ci
 
-# Create uploads directory
-RUN mkdir -p /app/uploads && chown -R nestjs:nodejs /app/uploads
+# Copy built code and prisma schema
+COPY --from=builder /app/backend/dist ./backend/dist
+COPY --from=builder /app/backend/prisma ./backend/prisma
+COPY --from=builder /app/shared ./shared
+COPY backend/package.json ./backend/
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/package.json ./package.json
+# Create a startup script
+RUN echo '#!/bin/sh' > /app/start.sh && \
+    echo 'cd /app/backend' >> /app/start.sh && \
+    echo 'npx prisma generate' >> /app/start.sh && \
+    echo 'npx prisma migrate deploy' >> /app/start.sh && \
+    echo 'npx tsx prisma/seed.ts || echo "Seed complete or skipped"' >> /app/start.sh && \
+    echo 'npm run start:prod' >> /app/start.sh && \
+    chmod +x /app/start.sh
 
-# Copy environment file if exists
-COPY --from=builder /app/.env .env 2>/dev/null || true
-
-USER nestjs
-
-EXPOSE 3001
-
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3001/health || exit 1
-
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run start:prod"]
+CMD ["/app/start.sh"]
