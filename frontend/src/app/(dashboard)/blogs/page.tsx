@@ -18,9 +18,9 @@ export default function BlogsPage() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold font-serif text-slate-900 tracking-tight">Blog CMS</h1>
-          <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-medium hover:bg-slate-800 transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5">
+          <Link href="/blogs/new" className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-medium hover:bg-slate-800 transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5">
             <Plus className="w-4 h-4" /> New Post
-          </button>
+          </Link>
         </div>
         <p className="text-slate-500">Manage your firm's publications, articles, and legal insights.</p>
       </div>
