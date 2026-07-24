@@ -1,0 +1,1160 @@
+anirudh-abcoflaw/
+├── .claude/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .codebuddy/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .codex/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .continue/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .cursor/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .env.example
+├── .firebaserc
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   └── feature_request.md
+│   ├── prompts/
+│   │   └── ui-ux-pro-max/
+│   │       ├── PROMPT.md
+│   │       ├── data/
+│   │       │   ├── charts.csv
+│   │       │   ├── colors.csv
+│   │       │   ├── icons.csv
+│   │       │   ├── landing.csv
+│   │       │   ├── products.csv
+│   │       │   ├── react-performance.csv
+│   │       │   ├── stacks/
+│   │       │   │   ├── astro.csv
+│   │       │   │   ├── flutter.csv
+│   │       │   │   ├── html-tailwind.csv
+│   │       │   │   ├── jetpack-compose.csv
+│   │       │   │   ├── nextjs.csv
+│   │       │   │   ├── nuxt-ui.csv
+│   │       │   │   ├── nuxtjs.csv
+│   │       │   │   ├── react-native.csv
+│   │       │   │   ├── react.csv
+│   │       │   │   ├── shadcn.csv
+│   │       │   │   ├── svelte.csv
+│   │       │   │   ├── swiftui.csv
+│   │       │   │   └── vue.csv
+│   │       │   ├── styles.csv
+│   │       │   ├── typography.csv
+│   │       │   ├── ui-reasoning.csv
+│   │       │   ├── ux-guidelines.csv
+│   │       │   └── web-interface.csv
+│   │       └── scripts/
+│   │           ├── __pycache__/
+│   │           │   ├── core.cpython-314.pyc
+│   │           │   ├── design_system.cpython-314.pyc
+│   │           │   └── search.cpython-314.pyc
+│   │           ├── core.py
+│   │           ├── design_system.py
+│   │           └── search.py
+│   ├── pull_request_template.md
+│   └── workflows/
+│       ├── ci.yml
+│       └── docker-publish.yml
+├── .gitignore
+├── .husky/
+│   └── _/
+│       ├── .gitignore
+│       ├── applypatch-msg
+│       ├── commit-msg
+│       ├── h
+│       ├── husky.sh
+│       ├── post-applypatch
+│       ├── post-checkout
+│       ├── post-commit
+│       ├── post-merge
+│       ├── post-rewrite
+│       ├── pre-applypatch
+│       ├── pre-auto-gc
+│       ├── pre-commit
+│       ├── pre-merge-commit
+│       ├── pre-push
+│       ├── pre-rebase
+│       └── prepare-commit-msg
+├── .kiro/
+│   └── steering/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .opencode/
+│   ├── .gitignore
+│   ├── agent/
+│   │   ├── codebase-analyzer.md
+│   │   ├── codebase-locator.md
+│   │   ├── codebase-pattern-finder.md
+│   │   ├── thoughts-analyzer.md
+│   │   ├── thoughts-locator.md
+│   │   └── web-search-researcher.md
+│   ├── agentic.json
+│   ├── command/
+│   │   ├── commit.md
+│   │   ├── execute.md
+│   │   ├── plan.md
+│   │   ├── research.md
+│   │   ├── review.md
+│   │   └── ticket.md
+│   ├── package-lock.json
+│   ├── package.json
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .qoder/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .roo/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .trae/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── .windsurf/
+│   └── skills/
+│       └── ui-ux-pro-max/
+│           ├── SKILL.md
+│           ├── data/
+│           │   ├── charts.csv
+│           │   ├── colors.csv
+│           │   ├── icons.csv
+│           │   ├── landing.csv
+│           │   ├── products.csv
+│           │   ├── react-performance.csv
+│           │   ├── stacks/
+│           │   │   ├── astro.csv
+│           │   │   ├── flutter.csv
+│           │   │   ├── html-tailwind.csv
+│           │   │   ├── jetpack-compose.csv
+│           │   │   ├── nextjs.csv
+│           │   │   ├── nuxt-ui.csv
+│           │   │   ├── nuxtjs.csv
+│           │   │   ├── react-native.csv
+│           │   │   ├── react.csv
+│           │   │   ├── shadcn.csv
+│           │   │   ├── svelte.csv
+│           │   │   ├── swiftui.csv
+│           │   │   └── vue.csv
+│           │   ├── styles.csv
+│           │   ├── typography.csv
+│           │   ├── ui-reasoning.csv
+│           │   ├── ux-guidelines.csv
+│           │   └── web-interface.csv
+│           └── scripts/
+│               ├── __pycache__/
+│               │   ├── core.cpython-314.pyc
+│               │   ├── design_system.cpython-314.pyc
+│               │   └── search.cpython-314.pyc
+│               ├── core.py
+│               ├── design_system.py
+│               └── search.py
+├── AGENTS.md
+├── ARCHITECTURE.md
+├── README.md
+├── admin-dashboard/
+│   ├── .gitignore
+│   ├── .oxlintrc.json
+│   ├── README.md
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public/
+│   │   ├── favicon.svg
+│   │   └── icons.svg
+│   ├── src/
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── assets/
+│   │   │   ├── hero.png
+│   │   │   ├── react.svg
+│   │   │   └── vite.svg
+│   │   ├── components/
+│   │   │   ├── appointments/
+│   │   │   │   └── AppointmentsList.jsx
+│   │   │   ├── common/
+│   │   │   │   └── Modal.jsx
+│   │   │   ├── lawyers/
+│   │   │   │   └── LawyerList.jsx
+│   │   │   └── layout/
+│   │   │       └── Sidebar.jsx
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── pages/
+│   │   │   └── LoginPage.jsx
+│   │   └── services/
+│   │       ├── firebase.js
+│   │       └── lawyerService.js
+│   └── vite.config.js
+├── backend/
+│   ├── .env
+│   ├── .env.docker
+│   ├── .env.example
+│   ├── Dockerfile
+│   ├── firebase-credentials.json
+│   ├── nest-cli.json
+│   ├── package.json
+│   ├── prisma/
+│   │   ├── migrations/
+│   │   │   ├── 20260713082548_init/
+│   │   │   │   └── migration.sql
+│   │   │   └── migration_lock.toml
+│   │   ├── schema.prisma
+│   │   ├── seed-roles.ts
+│   │   ├── seed.js
+│   │   └── seed.ts
+│   ├── src/
+│   │   ├── app.module.ts
+│   │   ├── common/
+│   │   │   ├── audit/
+│   │   │   │   └── audit-context.ts
+│   │   │   ├── auth/
+│   │   │   │   ├── current-user.decorator.ts
+│   │   │   │   ├── session-token.service.ts
+│   │   │   │   ├── session.guard.ts
+│   │   │   │   └── static-credentials.provider.ts
+│   │   │   ├── crud/
+│   │   │   │   ├── crud.controller.ts
+│   │   │   │   └── crud.service.ts
+│   │   │   ├── decorators/
+│   │   │   │   ├── current-user.decorator.ts
+│   │   │   │   └── public.decorator.ts
+│   │   │   ├── dto/
+│   │   │   │   └── pagination.dto.ts
+│   │   │   ├── filters/
+│   │   │   │   ├── http-exception.filter.ts
+│   │   │   │   └── prisma-exception.filter.ts
+│   │   │   ├── guards/
+│   │   │   │   ├── jwt-auth.guard.ts
+│   │   │   │   └── roles.guard.ts
+│   │   │   ├── http-exception.filter.ts
+│   │   │   ├── index.ts
+│   │   │   ├── interceptors/
+│   │   │   │   ├── logging.interceptor.ts
+│   │   │   │   └── transform.interceptor.ts
+│   │   │   ├── middleware/
+│   │   │   │   └── audit-logging.middleware.ts
+│   │   │   ├── pagination.ts
+│   │   │   └── pipes/
+│   │   ├── config/
+│   │   │   ├── app/
+│   │   │   ├── auth/
+│   │   │   └── database/
+│   │   ├── database/
+│   │   │   ├── database.module.ts
+│   │   │   └── prisma.service.ts
+│   │   ├── generated/
+│   │   │   └── prisma/
+│   │   │       ├── default.d.ts
+│   │   │       ├── default.js
+│   │   │       ├── edge.d.ts
+│   │   │       ├── edge.js
+│   │   │       ├── index-browser.js
+│   │   │       ├── index.d.ts
+│   │   │       ├── index.js
+│   │   │       ├── package.json
+│   │   │       ├── query_engine-windows.dll.node
+│   │   │       ├── runtime/
+│   │   │       │   ├── edge-esm.js
+│   │   │       │   ├── edge.js
+│   │   │       │   ├── index-browser.d.ts
+│   │   │       │   ├── index-browser.js
+│   │   │       │   ├── library.d.ts
+│   │   │       │   ├── library.js
+│   │   │       │   ├── react-native.js
+│   │   │       │   └── wasm.js
+│   │   │       ├── schema.prisma
+│   │   │       ├── wasm.d.ts
+│   │   │       └── wasm.js
+│   │   ├── health/
+│   │   │   ├── health.controller.ts
+│   │   │   └── health.module.ts
+│   │   ├── main.ts
+│   │   ├── modules/
+│   │   │   ├── analytics/
+│   │   │   │   ├── analytics.controller.ts
+│   │   │   │   ├── analytics.module.ts
+│   │   │   │   └── analytics.service.ts
+│   │   │   ├── appointments/
+│   │   │   │   ├── appointments.controller.ts
+│   │   │   │   ├── appointments.module.ts
+│   │   │   │   ├── appointments.service.spec.ts
+│   │   │   │   ├── appointments.service.ts
+│   │   │   │   └── dto/
+│   │   │   │       ├── add-note.dto.ts
+│   │   │   │       ├── appointment.dto.ts
+│   │   │   │       ├── create-appointment.dto.ts
+│   │   │   │       ├── update-appointment.dto.ts
+│   │   │   │       └── update-status.dto.ts
+│   │   │   ├── audit-logs/
+│   │   │   │   ├── audit-logs.controller.ts
+│   │   │   │   ├── audit-logs.module.ts
+│   │   │   │   └── audit-logs.service.ts
+│   │   │   ├── auth/
+│   │   │   │   ├── auth.controller.ts
+│   │   │   │   ├── auth.module.ts
+│   │   │   │   ├── auth.service.ts
+│   │   │   │   ├── dto/
+│   │   │   │   │   ├── login.dto.ts
+│   │   │   │   │   └── register.dto.ts
+│   │   │   │   ├── firebase.service.ts
+│   │   │   │   └── strategies/
+│   │   │   │       └── jwt.strategy.ts
+│   │   │   ├── blog-categories/
+│   │   │   │   ├── blog-categories.controller.ts
+│   │   │   │   ├── blog-categories.module.ts
+│   │   │   │   └── blog-categories.service.ts
+│   │   │   ├── blogs/
+│   │   │   │   ├── blogs.controller.ts
+│   │   │   │   ├── blogs.module.ts
+│   │   │   │   ├── blogs.service.ts
+│   │   │   │   └── dto/
+│   │   │   │       ├── blog.dto.ts
+│   │   │   │       ├── create-blog.dto.ts
+│   │   │   │       └── update-blog.dto.ts
+│   │   │   ├── calendar/
+│   │   │   │   ├── calendar.controller.ts
+│   │   │   │   ├── calendar.module.ts
+│   │   │   │   └── calendar.service.ts
+│   │   │   ├── calendar-blocks/
+│   │   │   │   ├── calendar-blocks.controller.ts
+│   │   │   │   ├── calendar-blocks.module.ts
+│   │   │   │   └── calendar-blocks.service.ts
+│   │   │   ├── chatbot/
+│   │   │   │   ├── chatbot.controller.ts
+│   │   │   │   ├── chatbot.module.ts
+│   │   │   │   ├── chatbot.service.ts
+│   │   │   │   └── tests/
+│   │   │   │       └── chatbot.service.spec.ts
+│   │   │   ├── clients/
+│   │   │   │   ├── clients.controller.ts
+│   │   │   │   ├── clients.module.ts
+│   │   │   │   ├── clients.service.ts
+│   │   │   │   └── dto/
+│   │   │   │       ├── create-client.dto.ts
+│   │   │   │       └── update-client.dto.ts
+│   │   │   ├── dashboard/
+│   │   │   │   ├── dashboard.controller.ts
+│   │   │   │   ├── dashboard.module.ts
+│   │   │   │   └── dashboard.service.ts
+│   │   │   ├── documents/
+│   │   │   │   ├── documents.controller.ts
+│   │   │   │   ├── documents.module.ts
+│   │   │   │   └── documents.service.ts
+│   │   │   ├── faqs/
+│   │   │   │   ├── dto/
+│   │   │   │   │   └── faq.dto.ts
+│   │   │   │   ├── faqs.controller.ts
+│   │   │   │   ├── faqs.module.ts
+│   │   │   │   └── faqs.service.ts
+│   │   │   ├── files/
+│   │   │   │   ├── files.controller.ts
+│   │   │   │   ├── files.module.ts
+│   │   │   │   └── files.service.ts
+│   │   │   ├── inquiries/
+│   │   │   │   ├── inquiries.controller.ts
+│   │   │   │   ├── inquiries.module.ts
+│   │   │   │   └── inquiries.service.ts
+│   │   │   ├── notifications/
+│   │   │   │   ├── notifications.controller.ts
+│   │   │   │   ├── notifications.module.ts
+│   │   │   │   └── notifications.service.ts
+│   │   │   ├── payments/
+│   │   │   │   ├── dto/
+│   │   │   │   │   └── payment.dto.ts
+│   │   │   │   ├── payments.controller.ts
+│   │   │   │   ├── payments.module.ts
+│   │   │   │   ├── payments.service.spec.ts
+│   │   │   │   └── payments.service.ts
+│   │   │   ├── portal/
+│   │   │   │   ├── portal.controller.ts
+│   │   │   │   ├── portal.module.ts
+│   │   │   │   └── portal.service.ts
+│   │   │   ├── search/
+│   │   │   │   ├── search.controller.ts
+│   │   │   │   ├── search.module.ts
+│   │   │   │   └── search.service.ts
+│   │   │   ├── settings/
+│   │   │   │   ├── settings.controller.ts
+│   │   │   │   ├── settings.module.ts
+│   │   │   │   └── settings.service.ts
+│   │   │   ├── users/
+│   │   │   │   ├── dto/
+│   │   │   │   │   └── create-user.dto.ts
+│   │   │   │   ├── users.controller.ts
+│   │   │   │   ├── users.module.ts
+│   │   │   │   └── users.service.ts
+│   │   │   └── webhooks/
+│   │   │       ├── webhooks.controller.ts
+│   │   │       ├── webhooks.module.ts
+│   │   │       └── webhooks.service.ts
+│   │   └── prisma/
+│   │       ├── prisma.module.ts
+│   │       └── prisma.service.ts
+│   ├── test-users.json
+│   ├── tsconfig.build.json
+│   └── tsconfig.json
+├── bot/
+│   ├── .env.example
+│   ├── package.json
+│   └── src/
+│       ├── handlers/
+│       │   ├── bookingFlow.js
+│       │   ├── messageHandler.js
+│       │   └── webhookHandler.js
+│       ├── index.js
+│       ├── services/
+│       │   ├── availabilityService.js
+│       │   ├── firestoreService.js
+│       │   └── twilioService.js
+│       └── utils/
+│           ├── messageTemplates.js
+│           ├── stateManager.js
+│           └── timeUtils.js
+├── design-system/
+│   └── ab-&-co-legal/
+│       ├── MASTER.md
+│       └── pages/
+├── docker/
+│   ├── .env.example
+│   ├── backend/
+│   │   ├── Dockerfile
+│   │   └── Dockerfile.dev
+│   ├── docker-compose.dev.yml
+│   ├── docker-compose.prod.yml
+│   ├── docker-compose.yml
+│   ├── frontend/
+│   │   ├── Dockerfile
+│   │   └── Dockerfile.dev
+│   ├── n8n/
+│   │   └── workflows/
+│   │       ├── appointment-created.json
+│   │       ├── appointment-reminder.json
+│   │       ├── appointment-status.json
+│   │       └── payment-received.json
+│   └── postgres/
+│       ├── init.sh
+│       └── init.sql
+├── docs/
+│   ├── PROJECT_SUMMARY.md
+│   ├── README.md
+│   ├── SECRETS.md
+│   ├── api/
+│   ├── architecture/
+│   ├── architecture.md
+│   └── database/
+├── firebase.json
+├── firestore.indexes.json
+├── firestore.rules
+├── frontend/
+│   ├── .env
+│   ├── .env.docker
+│   ├── .env.example
+│   ├── .env.local
+│   ├── Dockerfile
+│   ├── components.json
+│   ├── e2e/
+│   │   └── auth.spec.ts
+│   ├── lawyerprofile.md
+│   ├── next-env.d.ts
+│   ├── next.config.ts
+│   ├── package.json
+│   ├── playwright.config.ts
+│   ├── postcss.config.js
+│   ├── postcss.config.mjs
+│   ├── public/
+│   │   ├── contactuspage.png
+│   │   ├── curatedlegaladvice.png
+│   │   ├── heroimage.jpg
+│   │   ├── lawyer1.png
+│   │   ├── lawyer2.png
+│   │   ├── lawyer3.png
+│   │   ├── philovaluequote.png
+│   │   └── profilepic.jpg
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── (auth)/
+│   │   │   │   └── login/
+│   │   │   │       └── page.tsx
+│   │   │   ├── (dashboard)/
+│   │   │   │   ├── analytics/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── appointments/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── audit-logs/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── blogs/
+│   │   │   │   │   ├── [id]/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── new/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── calendar/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── clients/
+│   │   │   │   │   ├── [id]/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── dashboard/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── faqs/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── layout/
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── notifications/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── payments/
+│   │   │   │   │   ├── new/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── settings/
+│   │   │   │       └── page.tsx
+│   │   │   ├── (portal)/
+│   │   │   │   ├── layout.tsx
+│   │   │   │   └── portal/
+│   │   │   │       ├── appointments/
+│   │   │   │       │   └── page.tsx
+│   │   │   │       └── page.tsx
+│   │   │   ├── (public)/
+│   │   │   │   ├── about/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── blog/
+│   │   │   │   │   ├── [slug]/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── book/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── contact/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── faq/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── not-found.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   ├── privacy/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── services/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── terms/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── testimonials/
+│   │   │   ├── api/
+│   │   │   │   └── news/
+│   │   │   │       └── route.ts
+│   │   │   ├── global-error.tsx
+│   │   │   ├── globals.css
+│   │   │   ├── icon.svg
+│   │   │   └── layout.tsx
+│   │   ├── components/
+│   │   │   ├── charts/
+│   │   │   ├── chatbot/
+│   │   │   │   └── chatbot-widget.tsx
+│   │   │   ├── floating-chatbot.tsx
+│   │   │   ├── forms/
+│   │   │   ├── layout/
+│   │   │   │   ├── sidebar.tsx
+│   │   │   │   └── topbar.tsx
+│   │   │   ├── page-header.tsx
+│   │   │   ├── providers/
+│   │   │   │   └── query-provider.tsx
+│   │   │   └── ui/
+│   │   │       ├── badge.tsx
+│   │   │       ├── button.tsx
+│   │   │       ├── card.tsx
+│   │   │       ├── dialog.tsx
+│   │   │       ├── input.tsx
+│   │   │       ├── select.tsx
+│   │   │       └── tabs.tsx
+│   │   ├── lib/
+│   │   │   ├── api/
+│   │   │   │   └── client.ts
+│   │   │   ├── auth/
+│   │   │   │   └── auth-context.tsx
+│   │   │   ├── client.ts
+│   │   │   ├── firebase/
+│   │   │   │   └── config.ts
+│   │   │   ├── middleware.ts
+│   │   │   ├── server.ts
+│   │   │   ├── supabase/
+│   │   │   │   └── client.ts
+│   │   │   ├── utils/
+│   │   │   ├── utils.ts
+│   │   │   └── validations/
+│   │   │       ├── auth.ts
+│   │   │       ├── booking.ts
+│   │   │       └── index.ts
+│   │   ├── middleware.ts
+│   │   ├── styles/
+│   │   └── types/
+│   │       └── index.ts
+│   ├── tsconfig.json
+│   └── tsconfig.tsbuildinfo
+├── functions/
+│   ├── p
+│   └── src/
+│       ├── bookingTriggers.js
+│       └── index.js
+├── lawyer-crm-docs/
+│   ├── 01-Product/
+│   │   ├── Assumptions.md
+│   │   ├── Business-Goals.md
+│   │   ├── Constraints.md
+│   │   ├── PRD.md
+│   │   ├── Personas.md
+│   │   ├── Risks.md
+│   │   ├── Roadmap.md
+│   │   ├── Scope.md
+│   │   ├── Stakeholders.md
+│   │   ├── Success-Metrics.md
+│   │   ├── User-Journeys.md
+│   │   └── Vision.md
+│   ├── 02-Requirements/
+│   │   ├── Acceptance-Criteria.md
+│   │   ├── Business-Rules.md
+│   │   ├── Edge-Cases.md
+│   │   ├── Functional-Requirements.md
+│   │   ├── NonFunctional-Requirements.md
+│   │   ├── State-Machines.md
+│   │   └── User-Stories.md
+│   ├── 03-Architecture/
+│   │   ├── Deployment.md
+│   │   ├── Disaster-Recovery.md
+│   │   ├── Docker.md
+│   │   ├── Infrastructure.md
+│   │   ├── Networking.md
+│   │   ├── Security.md
+│   │   ├── Solution-Architecture.md
+│   │   └── System-Architecture.md
+│   ├── 04-Database/
+│   │   ├── Activity-Timeline.md
+│   │   ├── Analytics.md
+│   │   ├── Audit-Logs.md
+│   │   ├── Data-Lifecycle.md
+│   │   ├── Database-Overview.md
+│   │   ├── ERD.md
+│   │   ├── Prisma-Schema.md
+│   │   └── Settings.md
+│   ├── 05-Backend/
+│   │   ├── APIs.md
+│   │   ├── Authentication.md
+│   │   ├── Authorization.md
+│   │   ├── Backend-Architecture.md
+│   │   ├── Background-Jobs.md
+│   │   ├── Error-Handling.md
+│   │   ├── Modules.md
+│   │   └── Validation.md
+│   ├── 06-Frontend/
+│   │   ├── Client-Portal.md
+│   │   ├── Components.md
+│   │   ├── Dashboard.md
+│   │   ├── Design-System.md
+│   │   ├── Forms.md
+│   │   ├── Navigation.md
+│   │   ├── Responsive.md
+│   │   └── Website.md
+│   ├── 07-Modules/
+│   │   ├── Appointment-System.md
+│   │   ├── Blog-CMS.md
+│   │   ├── Calendar.md
+│   │   ├── FAQ.md
+│   │   ├── Notifications.md
+│   │   ├── Payments.md
+│   │   ├── Reports.md
+│   │   ├── Search.md
+│   │   └── Settings.md
+│   ├── 08-Automation/
+│   │   ├── Automation-Architecture.md
+│   │   ├── Failure-Recovery.md
+│   │   ├── Reminder-System.md
+│   │   ├── Retry-System.md
+│   │   ├── Scheduler.md
+│   │   ├── Telegram.md
+│   │   ├── WAHA.md
+│   │   ├── Webhooks.md
+│   │   └── n8n.md
+│   ├── 09-Chatbot/
+│   │   ├── Booking-Flow.md
+│   │   ├── Chatbot-Overview.md
+│   │   ├── Conversation-Flows.md
+│   │   ├── FAQ.md
+│   │   ├── Future-NVIDIA-NIM.md
+│   │   ├── Prompting.md
+│   │   └── Qualifying-Questions.md
+│   ├── 10-API/
+│   │   ├── Analytics.md
+│   │   ├── Auth.md
+│   │   ├── Blog.md
+│   │   ├── Booking.md
+│   │   ├── Files.md
+│   │   ├── Notifications.md
+│   │   ├── REST.md
+│   │   └── Webhooks.md
+│   ├── 11-UIUX/
+│   │   ├── Accessibility.md
+│   │   ├── Components.md
+│   │   ├── Empty-States.md
+│   │   ├── Error-States.md
+│   │   ├── Information-Architecture.md
+│   │   ├── Loading-States.md
+│   │   ├── Pages.md
+│   │   └── Wireframes.md
+│   ├── 12-Testing/
+│   │   ├── Automation.md
+│   │   ├── Integration.md
+│   │   ├── Performance.md
+│   │   ├── QA-Plan.md
+│   │   ├── Security.md
+│   │   ├── UAT.md
+│   │   └── Unit.md
+│   ├── 13-Operations/
+│   │   ├── Backups.md
+│   │   ├── Incident-Response.md
+│   │   ├── Logging.md
+│   │   ├── Maintenance.md
+│   │   ├── Monitoring.md
+│   │   └── Releases.md
+│   ├── 14-Roadmap/
+│   │   ├── AI.md
+│   │   ├── Case-Management.md
+│   │   ├── Client-Portal.md
+│   │   ├── Mobile.md
+│   │   ├── Payments.md
+│   │   ├── Phase-1.md
+│   │   ├── Phase-2.md
+│   │   └── Phase-3.md
+│   ├── 15-Decisions/
+│   │   ├── ADR-001-Architecture.md
+│   │   ├── ADR-002-Authentication.md
+│   │   ├── ADR-003-Automation.md
+│   │   ├── ADR-004-Database.md
+│   │   └── ADR-005-Deployment.md
+│   ├── 16-Assets/
+│   ├── 17-Templates/
+│   │   ├── API-Template.md
+│   │   ├── Database-Template.md
+│   │   ├── Feature-Template.md
+│   │   ├── Page-Template.md
+│   │   ├── Test-Case-Template.md
+│   │   └── Workflow-Template.md
+│   ├── 18-Research/
+│   │   ├── AI-Research.md
+│   │   ├── Competitor-Analysis.md
+│   │   ├── Security-Research.md
+│   │   └── Technology-Evaluation.md
+│   ├── 19-Meeting-Notes/
+│   │   ├── Client-Meetings.md
+│   │   ├── Kickoff.md
+│   │   └── Sprint-Notes.md
+│   ├── CHANGELOG.md
+│   ├── CONTRIBUTING.md
+│   ├── GLOSSARY.md
+│   ├── PROJECT_CONTEXT.md
+│   ├── README.md
+│   ├── REQUIREMENTS_TRACEABILITY.md
+│   └── diagrams/
+│       ├── architecture.mmd
+│       ├── automation.mmd
+│       ├── booking-flow.mmd
+│       ├── chatbot.mmd
+│       ├── deployment.mmd
+│       ├── erd.mmd
+│       ├── network.mmd
+│       ├── sequence-booking.mmd
+│       ├── sequence-payment.mmd
+│       └── state-machine.mmd
+├── n8n-workflows/
+│   └── whatsapp-booking-agent.json
+├── package-lock.json
+├── package.json
+├── project_tree.txt
+├── scripts/
+│   ├── db/
+│   │   └── migrate.sh
+│   ├── db-backup.ps1
+│   ├── db.ps1
+│   ├── deploy/
+│   │   └── deploy.sh
+│   ├── dev/
+│   │   └── setup.sh
+│   ├── dev.ps1
+│   └── start-local.ps1
+├── shared/
+│   ├── constants.js
+│   ├── firestoreSchema.js
+│   ├── package.json
+│   ├── src/
+│   │   ├── constants/
+│   │   ├── domain.ts
+│   │   ├── index.ts
+│   │   ├── pagination/
+│   │   ├── pagination.ts
+│   │   ├── types/
+│   │   └── validations/
+│   └── tsconfig.json
+├── skills-lock.json
+├── start-all.bat
+├── start-docker.bat
+├── start-local.bat
+├── thoughts/
+│   ├── README.md
+│   ├── architecture/
+│   ├── plans/
+│   ├── research/
+│   ├── reviews/
+│   └── tickets/
+└── tsconfig.base.json
