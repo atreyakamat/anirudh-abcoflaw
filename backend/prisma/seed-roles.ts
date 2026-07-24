@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from '@prisma/client';
+import { PrismaClient, UserRole } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -15,9 +15,9 @@ async function main() {
   const emails = JSON.parse(fileContent);
 
   const roles = {
-    admin: Role.ADMIN,
-    receptionist: Role.RECEPTIONIST,
-    lawyer: Role.LAWYER,
+    admin: UserRole.ADMIN,
+    receptionist: UserRole.RECEPTIONIST,
+    lawyer: UserRole.LAWYER,
   };
 
   for (const [key, email] of Object.entries(emails)) {
@@ -40,6 +40,7 @@ async function main() {
       await prisma.user.create({
         data: {
           email: email as string,
+          username: key,
           password: 'google-auth-placeholder',
           firstName: key.charAt(0).toUpperCase() + key.slice(1),
           lastName: 'User',

@@ -150,4 +150,16 @@ export const api = {
       });
     },
   },
+  portal: {
+    sendOtp: (phone: string, email?: string) => apiClient.post('/portal/send-otp', { phone, email }),
+    verifyOtp: (phone: string, code: string) => apiClient.post('/portal/verify-otp', { phone, code }),
+    login: (phone: string, email?: string) => apiClient.post('/portal/login', { phone, email }),
+    logout: () => apiClient.post('/portal/logout'),
+    me: () => apiClient.get('/portal/me'),
+    summary: () => apiClient.get('/portal/summary'),
+    documents: () => apiClient.get('/portal/documents'),
+    uploadDocument: (data: any) => apiClient.post('/portal/documents/upload', data),
+    reschedule: (data: { appointmentId: string; preferredDate: string; preferredTime: string; reason?: string }) =>
+      apiClient.post('/portal/appointments/reschedule', data),
+  },
 };
