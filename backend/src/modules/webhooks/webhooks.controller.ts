@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, HttpCode, HttpStatus, Headers } from '@nestjs/common';
+import { Controller, Post, Body, Param, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { WebhooksService } from './webhooks.service.js';
 import { Public } from '../../common/decorators/public.decorator.js';

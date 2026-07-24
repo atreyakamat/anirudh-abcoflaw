@@ -8,8 +8,6 @@ import { Appointment, AppointmentStatus, BookingSource } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { PaginationDto, PaginatedResultDto, SortableDto, FilterableDto } from '../../common/dto/pagination.dto.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
-import { CreateAppointmentDto } from './dto/create-appointment.dto.js';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto.js';
 
 @Injectable()
 export class AppointmentsService {

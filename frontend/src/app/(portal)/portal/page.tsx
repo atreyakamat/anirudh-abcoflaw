@@ -14,10 +14,7 @@ import {
   Upload,
   RefreshCw,
   Clock,
-  CheckCircle,
-  AlertCircle,
   FileUp,
-  Download,
   Calendar,
 } from 'lucide-react';
 
@@ -68,7 +65,7 @@ export default function PortalDashboard() {
       });
       setUploadFile(null);
       await loadData();
-    } catch (err) {
+    } catch {
       alert('Upload failed. Please try again.');
     } finally {
       setUploading(false);
@@ -88,7 +85,7 @@ export default function PortalDashboard() {
       });
       setRescheduleAppt(null);
       await loadData();
-    } catch (err) {
+    } catch {
       alert('Reschedule request failed.');
     }
   };

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, CalendarDays, Users, FileText, HelpCircle,
   CreditCard, Bell, BarChart3, ClipboardList, Settings, LogOut,
-  Scale, X, FileSearch,
+  Scale, X,
 } from 'lucide-react';
 
 const navItems = [

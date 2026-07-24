@@ -1,6 +1,5 @@
 'use client';
 
-import { useAuth } from '@/lib/auth/auth-context';
 import { useTheme } from 'next-themes';
 import { Menu, Sun, Moon, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -10,7 +9,6 @@ interface TopbarProps {
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
-  const { user } = useAuth();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { FaqsService } from './faqs.service.js';
-import { CreateFaqDto, UpdateFaqDto, ReorderFaqDto } from './dto/faq.dto.js';
+import { CreateFaqDto, UpdateFaqDto } from './dto/faq.dto.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { RolesGuard, Roles } from '../../common/guards/roles.guard.js';
 import { UserRole } from '@prisma/client';

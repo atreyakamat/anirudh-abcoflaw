@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service.js';
-import { AppointmentStatus, PaymentStatus, BookingSource } from '@prisma/client';
+import { AppointmentStatus, PaymentStatus } from '@prisma/client';
 
 @Injectable()
 export class AnalyticsService {

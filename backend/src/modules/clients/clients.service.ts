@@ -136,7 +136,7 @@ export class ClientsService {
   }
 
   async getTimeline(id: string, limit = 20): Promise<any[]> {
-    const client = await this.findOne(id);
+    await this.findOne(id);
 
     const appointments = await this.prisma.appointment.findMany({
       where: { clientId: id, deletedAt: null },

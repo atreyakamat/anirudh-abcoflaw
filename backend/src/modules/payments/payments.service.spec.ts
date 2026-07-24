@@ -6,7 +6,7 @@ import { PaymentStatus, PaymentMethod } from '@prisma/client';
 
 describe('PaymentsService', () => {
   let service: PaymentsService;
-  let prisma: PrismaService;
+  let _prisma: PrismaService;
 
   const mockPrismaService = {
     payment: {
@@ -31,7 +31,7 @@ describe('PaymentsService', () => {
     }).compile();
 
     service = module.get<PaymentsService>(PaymentsService);
-    prisma = module.get<PrismaService>(PrismaService);
+    _prisma = module.get<PrismaService>(PrismaService);
   });
 
   afterEach(() => {

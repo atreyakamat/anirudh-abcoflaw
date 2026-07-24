@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppointmentsService } from './appointments.service.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
-import { NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
-import { AppointmentStatus, BookingSource } from '@prisma/client';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
+import { AppointmentStatus } from '@prisma/client';
 
 describe('AppointmentsService', () => {
   let service: AppointmentsService;
-  let prisma: PrismaService;
-  let notificationsService: NotificationsService;
+  let _prisma: PrismaService;
+  let _notificationsService: NotificationsService;
 
   const mockPrismaService = {
     appointment: {
@@ -49,8 +49,8 @@ describe('AppointmentsService', () => {
     }).compile();
 
     service = module.get<AppointmentsService>(AppointmentsService);
-    prisma = module.get<PrismaService>(PrismaService);
-    notificationsService = module.get<NotificationsService>(NotificationsService);
+    _prisma = module.get<PrismaService>(PrismaService);
+    _notificationsService = module.get<NotificationsService>(NotificationsService);
   });
 
   afterEach(() => {

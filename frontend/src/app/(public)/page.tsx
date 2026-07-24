@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
-import { Card, CardContent } from '@/components/ui/card';
 import { Scale, Shield, Users, ArrowRight, Star, FileText, Briefcase, Landmark, BookOpen, Globe, Activity } from 'lucide-react';
 import type { BlogPost, PaginatedResult } from '@/types';
 
@@ -21,7 +20,7 @@ export default function HomePage() {
       try {
         const res = await api.blogs.published({ limit: 3 }); 
         return (res.data.data as PaginatedResult<BlogPost>).items; 
-      } catch (err) {
+      } catch {
         // Backend blog endpoints not yet implemented, suppressing 404
         return [];
       }

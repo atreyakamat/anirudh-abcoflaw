@@ -713,7 +713,6 @@ Need legal help understanding your rights? Schedule a consultation.`,
   // ============================================
   // 15. Create Availability Slots
   // ============================================
-  const availabilitySlots = [];
   for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
     const slotDate = new Date(today.getTime() + dayOffset * 24 * 60 * 60 * 1000);
     const dayOfWeek = slotDate.getDay();

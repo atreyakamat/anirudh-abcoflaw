@@ -168,7 +168,7 @@ export class ChatbotService {
     return bestMatch;
   }
 
-  private generateIntentResponse(intent: { name: string; confidence: number }, session?: ChatbotSession | null): string {
+  private generateIntentResponse(intent: { name: string; confidence: number }, _session?: ChatbotSession | null): string {
     if (intent.confidence < 0.3) {
       return this.fallbackResponses[Math.floor(Math.random() * this.fallbackResponses.length)];
     }

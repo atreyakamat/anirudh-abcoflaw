@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/page-header';
 import { api } from '@/lib/api/client';
-import { Upload, X, FileText, Image, File } from 'lucide-react';
+import { Upload, X, FileText, Image as ImageIcon, File } from 'lucide-react';
 
 const practiceAreas = ['Corporate Law', 'Family Law', 'Property Law', 'Employment Law', 'Criminal Law', 'Civil Litigation'];
 
@@ -83,7 +83,7 @@ export default function BookingPage() {
 
   const getFileIcon = (type: string) => {
     if (type === 'application/pdf') return <FileText className="w-5 h-5 text-red-500" />;
-    if (type.startsWith('image/')) return <Image className="w-5 h-5 text-blue-500" />;
+    if (type.startsWith('image/')) return <ImageIcon className="w-5 h-5 text-blue-500" />;
     return <File className="w-5 h-5 text-gray-500" />;
   };
 

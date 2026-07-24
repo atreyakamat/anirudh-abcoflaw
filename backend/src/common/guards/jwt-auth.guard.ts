@@ -27,7 +27,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: any, user: any, info: any) {
+  handleRequest(err: any, user: any, _info: any) {
     if (err || !user) {
       // Allow through for public routes (handled by reflector above)
       // For protected routes, throw UnauthorizedException instead of generic Error
