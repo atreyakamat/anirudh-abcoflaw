@@ -96,6 +96,7 @@ export const api = {
     get: (id: string) => apiClient.get(`/blogs/${id}`),
     bySlug: (slug: string) => apiClient.get(`/blogs/slug/${slug}`),
     getBySlug: (slug: string) => apiClient.get(`/blogs/slug/${slug}`),
+    categories: () => apiClient.get('/blogs/categories'),
     create: (data: any) => apiClient.post('/blogs', data),
     update: (id: string, data: any) => apiClient.put(`/blogs/${id}`, data),
     publish: (id: string) => apiClient.post(`/blogs/${id}/publish`),

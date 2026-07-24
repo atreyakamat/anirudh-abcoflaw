@@ -55,7 +55,7 @@ export default function NewBlogPage() {
     queryFn: async () => {
       // Mock categories for now if no endpoint exists, or try to fetch
       try {
-        const res = await api.get('/blogs/categories'); // Adjust endpoint if needed
+        const res = await api.blogs.categories(); // Adjust endpoint if needed
         return res.data.data;
       } catch (e) {
         return [{ id: '1', name: 'Legal News' }, { id: '2', name: 'Firm Updates' }];
@@ -65,7 +65,7 @@ export default function NewBlogPage() {
 
   const createPost = useMutation({
     mutationFn: async (data: BlogFormValues) => {
-      return api.post('/blogs', data);
+      return api.blogs.create(data);
     },
     onSuccess: () => {
       toast.success('Blog post created successfully!');

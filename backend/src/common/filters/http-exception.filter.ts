@@ -50,7 +50,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message = 'Internal server error';
       error = 'InternalServerError';
 
-      this.logger.error(`Unhandled exception: ${exception.message}`, exception.stack);
+      this.logger.error(`[Unhandled Exception] ${request.method} ${request.url} - ${exception.message}`, exception.stack);
+
+      // Sentry Monitoring Hook Integration
+      if (process.env.SENTRY_DSN) {
+        try {
+          // If @sentry/node is installed and SENTRY_DSN is set, log to Sentry
+          const Sentry = require('@sentry/node');
+          Sentry.captureException(exception, {
+            extra: { path: request.url, method: request.method, body: request.body },
+          });
+        } catch {
+          // Fallback if @sentry/node is not loaded
+        }
+      }
     } else {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
       message = 'Internal server error';

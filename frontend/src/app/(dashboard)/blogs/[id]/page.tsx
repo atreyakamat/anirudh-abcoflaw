@@ -34,7 +34,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
   const { data: blog, isLoading: isBlogLoading } = useQuery({
     queryKey: ['blog', id],
     queryFn: async () => {
-      const res = await api.get(`/blogs/${id}`);
+      const res = await api.blogs.get(id);
       return res.data.data;
     }
   });
@@ -77,7 +77,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
     queryKey: ['blog-categories'],
     queryFn: async () => {
       try {
-        const res = await api.get('/blogs/categories');
+        const res = await api.blogs.categories();
         return res.data.data;
       } catch (e) {
         return [{ id: '1', name: 'Legal News' }, { id: '2', name: 'Firm Updates' }];
@@ -87,7 +87,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
 
   const updatePost = useMutation({
     mutationFn: async (data: BlogFormValues) => {
-      return api.put(`/blogs/${id}`, data);
+      return api.blogs.update(id, data);
     },
     onSuccess: () => {
       toast.success('Blog post updated successfully!');
