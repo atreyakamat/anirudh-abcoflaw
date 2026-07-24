@@ -89,6 +89,7 @@ export default function HomePage() {
             <div className="relative w-[24rem] h-[24rem] lg:w-[28rem] lg:h-[28rem] rounded-full border border-white/20 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-md flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
               <iframe 
                 title="Lion Capital of Ashoka" 
+                loading="lazy"
                 frameBorder="0" 
                 allowFullScreen 
                 allow="autoplay; fullscreen; xr-spatial-tracking" 

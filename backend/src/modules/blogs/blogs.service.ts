@@ -37,12 +37,28 @@ export class BlogsService {
 
     const [items, total] = await Promise.all([
       this.prisma.blogPost.findMany({
-        where, orderBy: { publishedAt: 'desc' }, skip: (page - 1) * limit, take: limit,
-        include: { author: { select: { firstName: true, lastName: true } }, category: true, tags: { include: { tag: true } } },
+        where,
+        orderBy: { publishedAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          featuredImage: true,
+          publishedAt: true,
+          viewCount: true,
+          status: true,
+          createdAt: true,
+          author: { select: { firstName: true, lastName: true } },
+          category: { select: { id: true, name: true, slug: true } },
+          tags: { include: { tag: true } },
+        },
       }),
       this.prisma.blogPost.count({ where }),
     ]);
-    return new PaginatedResultDto(items, total, page, limit);
+    return new PaginatedResultDto(items as any, total, page, limit);
   }
 
   async findBySlug(slug: string): Promise<BlogPost> {

@@ -80,7 +80,7 @@ export class AppointmentsService {
     const [items, total] = await Promise.all([
       this.prisma.appointment.findMany({
         where,
-        orderBy: { [sortBy]: sortOrder },
+        orderBy: { [sortBy]: (sortOrder || 'desc').toLowerCase() as 'asc' | 'desc' },
         skip: (page - 1) * limit,
         take: limit,
         include: {

@@ -9,13 +9,15 @@ import './globals.css';
 const lato = Lato({ 
   weight: ['300', '400', '700'],
   subsets: ['latin'], 
-  variable: '--font-lato' 
+  variable: '--font-lato',
+  display: 'swap',
 });
 
 const ebGaramond = EB_Garamond({ 
   weight: ['400', '500', '600', '700'],
   subsets: ['latin'], 
-  variable: '--font-eb-garamond' 
+  variable: '--font-eb-garamond',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
