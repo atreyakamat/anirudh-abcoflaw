@@ -108,7 +108,7 @@ export default function HomePage() {
             <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Our Legacy & Values</h2>
             <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6">A Practice Built on Morality and Access to Justice</h3>
             <p className="text-slate-600 text-lg leading-relaxed">
-              Established in 2013, AB & Co. Legal expands across Goa with a dedicated team. Our firm's philosophy centers around a simple but powerful principle: taking up cases that are not only legally sound but morally right.
+              Established in 2013, AB & Co. Legal expands across Goa with a dedicated team. Our firm&apos;s philosophy centers around a simple but powerful principle: taking up cases that are not only legally sound but morally right.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -124,16 +124,28 @@ export default function HomePage() {
                 <Globe className="w-6 h-6" />
               </div>
               <h4 className="font-serif font-bold text-xl text-slate-900 mb-3">Bridging the Gap</h4>
-              <p className="text-slate-600">Inspired by a family legacy of community service, we launched <strong>Legal Made Simple</strong>—Goa's first online portal aimed at bridging the Access to Justice gap through technology and AI.</p>
+              <p className="text-slate-600">Inspired by a family legacy of community service, we launched <strong>Legal Made Simple</strong>—Goa&apos;s first online portal aimed at bridging the Access to Justice gap through technology and AI.</p>
             </div>
             <div className="p-8 bg-slate-50 rounded-2xl border border-slate-100">
               <div className="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center mb-6">
                 <Users className="w-6 h-6" />
               </div>
-              <h4 className="font-serif font-bold text-xl text-slate-900 mb-3">Amicable Resolutions</h4>
-              <p className="text-slate-600">Particularly in family and matrimonial matters, our central approach is continued dialogue to resolve issues amicably rather than through prolonged courtroom acrimony.</p>
+              <h4 className="font-serif font-bold text-xl text-slate-900 mb-3">Client-Centric Approach</h4>
+              <p className="text-slate-600">Whether assisting non-residents or local individuals, we aim to offer clarity, transparent guidance, and dedicated advocacy for every case.</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Quote Section */}
+      <section className="py-28 bg-[#0F172A] relative overflow-hidden text-center px-4">
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-900/40 via-transparent to-transparent pointer-events-none" />
+        
+        <div className="max-w-4xl mx-auto relative z-10">
+          <BookOpen className="w-12 h-12 text-yellow-500 mx-auto mb-8 opacity-90 drop-shadow-lg" />
+          <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif text-white leading-tight mb-10 drop-shadow-lg">
+            &quot;The justice system can be improved not by putting more pressure on the judiciary, but by reducing their workload through amicable resolutions and efficient practice.&quot;
+          </blockquote>
         </div>
       </section>
 
@@ -287,7 +299,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto relative z-10">
           <BookOpen className="w-12 h-12 text-yellow-500 mx-auto mb-8 opacity-90 drop-shadow-lg" />
           <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif text-white leading-tight mb-10 drop-shadow-lg">
-            "The justice system can be improved not by putting more pressure on the judiciary, but by reducing their workload through amicable resolutions and efficient practice."
+            &quot;The justice system can be improved not by putting more pressure on the judiciary, but by reducing their workload through amicable resolutions and efficient practice.&quot;
           </blockquote>
           <div className="flex items-center justify-center gap-4">
             <div className="h-px w-12 bg-yellow-500/50" />

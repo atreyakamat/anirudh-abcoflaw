@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
 import { useState, useMemo } from 'react';
-import { formatTime, getStatusColor, getStatusLabel } from '@/lib/utils';
+import { formatTime, getStatusColor } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Appointment } from '@/types';
 

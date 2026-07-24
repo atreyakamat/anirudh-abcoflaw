@@ -22,7 +22,7 @@ export default function BlogsPage() {
             <Plus className="w-4 h-4" /> New Post
           </Link>
         </div>
-        <p className="text-slate-500">Manage your firm's publications, articles, and legal insights.</p>
+        <p className="text-slate-500">Manage your firm&apos;s publications, articles, and legal insights.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -34,9 +34,6 @@ export default function BlogsPage() {
           data?.items?.map((post) => (
             <Link key={post.id} href={`/blogs/${post.id}`} className="block group">
               <div className="h-full bg-white/70 backdrop-blur-xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] group-hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] group-hover:-translate-y-1 transition-all duration-300 rounded-3xl p-6 relative overflow-hidden flex flex-col">
-                {/* Decorative blob */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-slate-100 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none transition-colors duration-500 group-hover:bg-slate-200/50" />
-                
                 <div className="flex items-center gap-3 mb-4 relative z-10">
                   <span className={`px-2.5 py-1 rounded-full text-xs font-bold tracking-wide uppercase ${
                     post.status === 'PUBLISHED' ? 'bg-emerald-100 text-emerald-800' : 

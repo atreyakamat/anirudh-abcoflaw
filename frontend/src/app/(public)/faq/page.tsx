@@ -27,7 +27,7 @@ export default function FaqPage() {
         const res = await api.faqs.published(); 
         const items = res.data.data as Faq[];
         return items.length > 0 ? items : fallbackFaqs;
-      } catch (err) {
+      } catch {
         return fallbackFaqs;
       }
     },

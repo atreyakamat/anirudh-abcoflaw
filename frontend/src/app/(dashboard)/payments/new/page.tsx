@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -10,7 +9,7 @@ import { api } from '@/lib/api/client';
 import { toast } from 'sonner';
 import { Loader2, ArrowLeft, Receipt, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
-import type { Client, Appointment, PaginatedResult } from '@/types';
+import type { Appointment, PaginatedResult } from '@/types';
 
 const paymentSchema = z.object({
   appointmentId: z.string().min(1, 'Please select an appointment'),
@@ -107,15 +106,15 @@ export default function RecordPaymentPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-slate-900">Amount (₹)</label>
+              <label className="text-sm font-semibold text-slate-900">Amount (INR)</label>
               <div className="relative">
-                <span className="absolute left-4 top-3 text-slate-500 font-medium">₹</span>
+                <span className="absolute left-4 top-3 text-slate-500 font-medium">INR</span>
                 <input 
                   type="number"
                   step="0.01"
                   {...register('amount')}
                   placeholder="0.00"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-8 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-600/20 focus:border-yellow-600 transition-all font-mono"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-14 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-600/20 focus:border-yellow-600 transition-all font-mono"
                 />
               </div>
               {errors.amount && <p className="text-red-500 text-xs font-medium">{errors.amount.message}</p>}

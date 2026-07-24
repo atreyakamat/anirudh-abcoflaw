@@ -5,7 +5,7 @@ import { api } from '@/lib/api/client';
 import { useState } from 'react';
 import { getStatusColor, getStatusLabel, formatDate, formatTime } from '@/lib/utils';
 import Link from 'next/link';
-import { Search, Filter, Plus } from 'lucide-react';
+import { Search, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Appointment, PaginatedResult } from '@/types';
 

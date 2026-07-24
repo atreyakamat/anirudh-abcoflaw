@@ -59,7 +59,7 @@ export default function BookingPage() {
           type: doc.mimeType,
         }]);
         toast.success(`${file.name} uploaded successfully`);
-      } catch (err: any) {
+      } catch {
         toast.error(`Failed to upload ${file.name}`);
       } finally {
         setUploading(false);
@@ -145,7 +145,7 @@ export default function BookingPage() {
         {step === 4 ? (
           <div className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-2xl rounded-3xl p-12 text-center animate-in zoom-in-95 duration-500">
             <div className="w-24 h-24 bg-gradient-to-br from-green-100 to-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner border border-green-200/50">
-              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+              <svg className="w-12 h-12" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
             </div>
             <h2 className="text-4xl font-bold font-serif text-slate-900 mb-4 tracking-tight">Booking Submitted!</h2>
             <p className="text-slate-600 text-lg leading-relaxed max-w-md mx-auto">Your consultation request has been successfully received. The lawyer will review your details and you will receive a confirmation email within 24 hours.</p>

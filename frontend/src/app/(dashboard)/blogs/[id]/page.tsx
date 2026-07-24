@@ -79,7 +79,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
       try {
         const res = await api.blogs.categories();
         return res.data.data;
-      } catch (e) {
+      } catch {
         return [{ id: '1', name: 'Legal News' }, { id: '2', name: 'Firm Updates' }];
       }
     }

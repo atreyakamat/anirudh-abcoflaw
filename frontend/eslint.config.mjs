@@ -12,7 +12,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-export default [
+const eslintConfig = [
   {
     ignores: ['.next/**', 'next-env.d.ts', 'node_modules/**'],
   },
@@ -24,3 +24,5 @@ export default [
     },
   },
 ];
+
+export default eslintConfig;

@@ -1,6 +1,5 @@
 'use client';
 
-import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -63,7 +62,6 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div className="bg-white p-8 md:p-10 rounded-2xl border border-slate-200 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-600/10 rounded-full blur-3xl" />
             <h3 className="text-2xl font-bold font-serif text-slate-900 mb-6 relative z-10">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
               <div>
@@ -113,7 +111,7 @@ export default function ContactPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              "I would definately recommend considering my personal experience..",
+              "I would definitely recommend considering my personal experience.",
               "He will always give genuine advice and great service.",
               "Excellent and approachable Lawyer and very professional with his legal services"
             ].map((review, i) => (
@@ -130,7 +128,7 @@ export default function ContactPage() {
                     </svg>
                   ))}
                 </div>
-                <p className="text-slate-700 leading-relaxed italic relative z-10 font-medium">"{review}"</p>
+                <p className="text-slate-700 leading-relaxed italic relative z-10 font-medium">&quot;{review}&quot;</p>
               </div>
             ))}
           </div>

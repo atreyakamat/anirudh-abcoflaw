@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
 import Link from 'next/link';
-import { Card, CardContent } from '@/components/ui/card';
 import { Calendar } from 'lucide-react';
 import type { BlogPost, PaginatedResult } from '@/types';
 

@@ -1,9 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { Scale, Loader2 } from 'lucide-react';
-import Image from 'next/image';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -133,7 +133,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
-          <a href="/" className="hover:underline">← Back to website</a>
+          <Link href="/" className="hover:underline">Back to website</Link>
         </p>
       </div>
     </div>

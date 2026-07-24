@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
 import { useState } from 'react';
-import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
 import type { Client, PaginatedResult } from '@/types';

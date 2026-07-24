@@ -57,7 +57,7 @@ export default function NewBlogPage() {
       try {
         const res = await api.blogs.categories(); // Adjust endpoint if needed
         return res.data.data;
-      } catch (e) {
+      } catch {
         return [{ id: '1', name: 'Legal News' }, { id: '2', name: 'Firm Updates' }];
       }
     }
