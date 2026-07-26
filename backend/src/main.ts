@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
@@ -10,11 +10,16 @@ import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter.
 import { TransformInterceptor } from './common/interceptors/transform.interceptor.js';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Bootstrap');
+  const app = await NestFactory.create(AppModule, {
+    // Use NestJS structured logger; suppress raw process.stdout console.log
+    bufferLogs: true,
+  });
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 3001);
   const apiPrefix = configService.get<string>('API_PREFIX', 'api/v1');
+  const isProduction = configService.get<string>('NODE_ENV') === 'production';
 
   // Global middleware
   app.use(helmet());
@@ -44,34 +49,37 @@ async function bootstrap() {
   // Global interceptors
   app.useGlobalInterceptors(new TransformInterceptor());
 
-  // Root-level health check (no prefix)
-  app.getHttpAdapter().get('/health', (req, res) => {
+  // Root-level health check registered before global prefix to remain accessible
+  // without authentication and without the /api/v1 namespace.
+  app.getHttpAdapter().get('/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // API prefix
+  // API prefix applied after the root health check
   app.setGlobalPrefix(apiPrefix);
 
-  // Swagger documentation
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Law Practice CRM API')
-    .setDescription('API documentation for Law Practice CRM & Consultation Automation Platform')
-    .setVersion('1.0')
-    .addCookieAuth('Authentication', { type: 'http' }, 'cookie')
-    .addBearerAuth({ type: 'http' }, 'bearer')
-    .build();
+  // Swagger API documentation — disabled in production to avoid exposing
+  // endpoint schemas and security metadata to external actors.
+  if (!isProduction) {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('Law Practice CRM API')
+      .setDescription('API documentation for Law Practice CRM & Consultation Automation Platform')
+      .setVersion('1.0')
+      .addCookieAuth('Authentication', { type: 'http' }, 'cookie')
+      .addBearerAuth({ type: 'http' }, 'bearer')
+      .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, document, {
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
-  });
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('docs', app, document, {
+      swaggerOptions: { persistAuthorization: true },
+    });
 
+    logger.log(`API documentation available at http://localhost:${port}/docs`);
+  }
 
   await app.listen(port);
-  console.log(`Application running on http://localhost:${port}/${apiPrefix}`);
-  console.log(`API documentation running on http://localhost:${port}/docs`);
+  logger.log(`Application running on http://localhost:${port}/${apiPrefix}`);
+  logger.log(`Environment: ${isProduction ? 'production' : 'development'}`);
 }
 
 bootstrap();

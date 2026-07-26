@@ -33,10 +33,16 @@ services:
     restart: unless-stopped
     ports:
       - "3001:3001"
+    # IMPORTANT: Do NOT use .env.example in production.
+    # Copy backend/.env.example to backend/.env, fill in all secrets, and
+    # this service will automatically load backend/.env at runtime.
+    # The env_file directive intentionally references .env (not .env.example).
     env_file:
-      - ./backend/.env.example
+      - ./backend/.env
     environment:
-      NODE_ENV: ${NODE_ENV:-development}
+      NODE_ENV: ${NODE_ENV:-production}
+      # Override DATABASE_URL to use the Docker internal hostname 'db' so the
+      # backend container can reach Postgres without exposing it on the host.
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres123}@db:5432/${POSTGRES_DB:-law_practice_crm}?schema=public
       DIRECT_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres123}@db:5432/${POSTGRES_DB:-law_practice_crm}
     volumes:
@@ -59,17 +65,25 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
       args:
-        - NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1
-        - NEXT_PUBLIC_APP_URL=http://localhost:3000
+        # NEXT_PUBLIC_API_URL is baked into the Next.js bundle at build time and
+        # used for client-side (browser) API calls. Set this to the public-facing
+        # URL of the backend (e.g. https://api.yourdomain.com/api/v1).
+        # Do NOT use http://localhost here — it will not resolve inside Docker
+        # for server-side rendering. SSR uses BACKEND_URL (set below) instead.
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3001/api/v1}
+        - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
     container_name: law_crm_frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: ${NODE_ENV:-development}
+      NODE_ENV: ${NODE_ENV:-production}
+      # BACKEND_URL is used only by Next.js Server-Side Rendering to call the
+      # backend over the Docker internal network. Never expose this to the browser.
       BACKEND_URL: http://backend:3001
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
       interval: 30s

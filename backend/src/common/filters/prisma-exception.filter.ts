@@ -59,8 +59,10 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         break;
 
       default:
-        status = HttpStatus.BAD_REQUEST;
-        message = exception.message;
+        status = HttpStatus.INTERNAL_SERVER_ERROR;
+        // Never expose raw Prisma error messages to clients — they can leak
+        // internal DB schema details, table names, and query structures.
+        message = 'Database operation failed';
         error = 'DatabaseError';
     }
 

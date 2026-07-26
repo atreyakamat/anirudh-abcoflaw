@@ -267,25 +267,42 @@ export class AuthService {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
-    await this.prisma.refreshToken.create({
-      data: {
-        userId,
-        token,
-        expiresAt,
-      },
-    });
+    await this.prisma.$transaction([
+      // Clean up revoked and expired tokens for this user to prevent unbounded
+      // table growth. Each login cycle would otherwise leave orphaned rows.
+      this.prisma.refreshToken.deleteMany({
+        where: {
+          userId,
+          OR: [
+            { isRevoked: true },
+            { expiresAt: { lt: new Date() } },
+          ],
+        },
+      }),
+      this.prisma.refreshToken.create({
+        data: { userId, token, expiresAt },
+      }),
+    ]);
   }
 
   public async saveClientRefreshToken(clientId: string, token: string): Promise<void> {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
-    await this.prisma.refreshToken.create({
-      data: {
-        clientPortalUserId: clientId,
-        token,
-        expiresAt,
-      },
-    });
+    await this.prisma.$transaction([
+      // Clean up revoked and expired tokens for this client portal user.
+      this.prisma.refreshToken.deleteMany({
+        where: {
+          clientPortalUserId: clientId,
+          OR: [
+            { isRevoked: true },
+            { expiresAt: { lt: new Date() } },
+          ],
+        },
+      }),
+      this.prisma.refreshToken.create({
+        data: { clientPortalUserId: clientId, token, expiresAt },
+      }),
+    ]);
   }
 }

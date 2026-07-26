@@ -104,12 +104,18 @@ export class AuthController {
     // 2. Not staff. Check if existing Customer
     let clientUser = await this.prisma.clientPortalUser.findUnique({ where: { email } });
 
-    // 3. If new Customer, auto-create their account
+    // 3. If new Customer, auto-create their account.
+    // The password field is required by schema — we store a bcrypt hash of a
+    // cryptographically random value that is immediately discarded. This hash
+    // cannot be used to authenticate via password-based login.
     if (!clientUser) {
+      const { randomBytes } = await import('crypto');
+      const { hash } = await import('bcrypt');
+      const unusablePasswordHash = await hash(randomBytes(32).toString('hex'), 10);
       clientUser = await this.prisma.clientPortalUser.create({
         data: {
           email: email,
-          password: 'google-auth-no-password',
+          password: unusablePasswordHash,
           firstName: decodedToken.name?.split(' ')[0] || 'Unknown',
           lastName: decodedToken.name?.split(' ').slice(1).join(' ') || '',
         }

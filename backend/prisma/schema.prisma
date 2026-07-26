@@ -247,6 +247,7 @@ model Appointment {
 
   // Indexes
   @@index([clientId])
+  @@index([bookedByUserId])
   @@index([status])
   @@index([preferredDate])
   @@index([referenceNumber])
@@ -687,4 +688,5 @@ model RefreshToken {
   @@index([clientPortalUserId])
   @@index([token])
   @@index([expiresAt])
+  @@index([isRevoked])
 }

@@ -18,6 +18,7 @@ import { SettingsModule } from './modules/settings/settings.module.js';
 import { ChatbotModule } from './modules/chatbot/chatbot.module.js';
 import { SearchModule } from './modules/search/search.module.js';
 import { WebhooksModule } from './modules/webhooks/webhooks.module.js';
+import { PortalModule } from './modules/portal/portal.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { HealthModule } from './health/health.module.js';
 
@@ -61,6 +62,7 @@ import { HealthModule } from './health/health.module.js';
     ChatbotModule,
     SearchModule,
     WebhooksModule,
+    PortalModule,
     HealthModule,
   ],
   providers: [
