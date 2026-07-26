@@ -45,6 +45,7 @@ services:
       # backend container can reach Postgres without exposing it on the host.
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres123}@db:5432/${POSTGRES_DB:-law_practice_crm}?schema=public
       DIRECT_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres123}@db:5432/${POSTGRES_DB:-law_practice_crm}
+      UPLOAD_DESTINATION: /app/uploads
     volumes:
       - uploads:/app/uploads
     healthcheck:
@@ -81,6 +82,8 @@ services:
       # BACKEND_URL is used only by Next.js Server-Side Rendering to call the
       # backend over the Docker internal network. Never expose this to the browser.
       BACKEND_URL: http://backend:3001
+      # Used by the API client for server-side rendering (SSR) to call the backend.
+      NEXT_PUBLIC_API_URL_INTERNAL: http://backend:3001/api/v1
     depends_on:
       backend:
         condition: service_healthy

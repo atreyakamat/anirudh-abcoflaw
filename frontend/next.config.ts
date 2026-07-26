@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  output: (process.env.DOCKER_BUILD === 'true' || process.env.BUILD_STANDALONE === 'true') ? 'standalone' : undefined,
   reactStrictMode: true,
   compress: true,
   poweredByHeader: false,

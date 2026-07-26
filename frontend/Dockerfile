@@ -15,6 +15,7 @@ COPY shared ./shared
 
 # Build frontend
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV DOCKER_BUILD true
 RUN cd frontend && npm run build
 
 FROM node:20-alpine AS runner

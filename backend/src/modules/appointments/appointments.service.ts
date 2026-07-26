@@ -152,65 +152,75 @@ export class AppointmentsService {
     },
     userId?: string,
   ): Promise<Appointment> {
-    // Create or find client
-    let clientId = data.clientId;
+    // Execute creation, document linkage, and history tracking inside a transaction
+    return this.prisma.$transaction(async (tx) => {
+      let resolvedClientId = data.clientId;
 
-    if (!clientId && data.email) {
-      let client = await this.prisma.client.findUnique({
-        where: { email: data.email },
+      if (!resolvedClientId && data.email) {
+        let client = await tx.client.findUnique({
+          where: { email: data.email },
+        });
+
+        if (!client) {
+          client = await tx.client.create({
+            data: {
+              email: data.email,
+              phone: data.phone || '',
+              firstName: data.firstName || 'Unknown',
+              lastName: data.lastName || 'Client',
+            },
+          });
+        }
+
+        resolvedClientId = client.id;
+      }
+
+      if (!resolvedClientId) {
+        throw new BadRequestException('Client ID or email is required');
+      }
+
+      // Check for time slot conflicts
+      await this.checkConflicts(data.preferredDate, data.preferredTime, data.preferredTime, undefined, tx);
+
+      const appointment = await tx.appointment.create({
+        data: {
+          clientId: resolvedClientId,
+          bookedByUserId: userId,
+          description: data.description,
+          preferredDate: data.preferredDate,
+          preferredTime: data.preferredTime,
+          source: data.source || BookingSource.WEBSITE,
+          status: AppointmentStatus.PENDING_REVIEW,
+        },
+        include: {
+          client: true,
+        },
       });
 
-      if (!client) {
-        client = await this.prisma.client.create({
-          data: {
-            email: data.email,
-            phone: data.phone || '',
-            firstName: data.firstName || 'Unknown',
-            lastName: data.lastName || 'Client',
-          },
+      // Link uploaded documents to this appointment
+      if (data.documentIds && data.documentIds.length > 0) {
+        await tx.document.updateMany({
+          where: { id: { in: data.documentIds } },
+          data: { appointmentId: appointment.id, clientId: resolvedClientId },
         });
       }
 
-      clientId = client.id;
-    }
-
-    if (!clientId) {
-      throw new BadRequestException('Client ID or email is required');
-    }
-
-    // Check for time slot conflicts
-    await this.checkConflicts(data.preferredDate, data.preferredTime, data.preferredTime);
-
-    const appointment = await this.prisma.appointment.create({
-      data: {
-        clientId,
-        bookedByUserId: userId,
-        description: data.description,
-        preferredDate: data.preferredDate,
-        preferredTime: data.preferredTime,
-        source: data.source || BookingSource.WEBSITE,
-        status: AppointmentStatus.PENDING_REVIEW,
-      },
-      include: {
-        client: true,
-      },
-    });
-
-    // Link uploaded documents to this appointment
-    if (data.documentIds && data.documentIds.length > 0) {
-      await this.prisma.document.updateMany({
-        where: { id: { in: data.documentIds } },
-        data: { appointmentId: appointment.id, clientId },
+      // Create history entry within transaction
+      await tx.appointmentHistory.create({
+        data: {
+          appointmentId: appointment.id,
+          changedByUser: userId || null,
+          previousStatus: null,
+          newStatus: AppointmentStatus.PENDING_REVIEW,
+          reason: 'Appointment created',
+        },
       });
-    }
 
-    // Create history entry
-    await this.createHistoryEntry(appointment.id, null, null, AppointmentStatus.PENDING_REVIEW, 'Appointment created');
+      // Trigger n8n webhook (async outside transaction fail boundary)
+      this.notificationsService.sendN8nWebhook('APPOINTMENT_CREATED', { appointment }).catch(err => console.error(err));
 
-    // Trigger n8n webhook
-    this.notificationsService.sendN8nWebhook('APPOINTMENT_CREATED', { appointment }).catch(err => console.error(err));
-
-    return appointment;
+      return appointment;
+    });
   }
 
   async updateStatus(
@@ -394,7 +404,9 @@ export class AppointmentsService {
     startTime: string,
     endTime: string,
     excludeId?: string,
+    tx?: any,
   ): Promise<void> {
+    const client = tx || this.prisma;
     const dateStr = date.toISOString().split('T')[0];
 
     const where: any = {
@@ -412,7 +424,7 @@ export class AppointmentsService {
       where.id = { not: excludeId };
     }
 
-    const conflicts = await this.prisma.appointment.findMany({
+    const conflicts = await client.appointment.findMany({
       where,
       select: {
         id: true,
