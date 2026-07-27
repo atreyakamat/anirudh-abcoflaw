@@ -96,10 +96,32 @@ services:
     networks:
       - law_crm_network
 
+  # n8n Intelligent Automation Layer
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: law_crm_n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=n8n
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Asia/Kolkata
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n/workflows:/n8n/workflows:ro
+    networks:
+      - law_crm_network
+
 volumes:
   postgres_data:
     driver: local
   uploads:
+    driver: local
+  n8n_data:
     driver: local
 
 networks:

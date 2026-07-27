@@ -7,13 +7,14 @@ import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, CalendarDays, Users, FileText, HelpCircle,
   CreditCard, Bell, BarChart3, ClipboardList, Settings, LogOut,
-  Scale, X,
+  Scale, X, Bot,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/appointments', label: 'Appointments', icon: CalendarDays },
   { href: '/clients', label: 'Clients', icon: Users },
+  { href: '/automations', label: 'Automations', icon: Bot },
   { href: '/blogs', label: 'Blogs', icon: FileText },
   { href: '/faqs', label: 'FAQs', icon: HelpCircle },
   { href: '/payments', label: 'Payments', icon: CreditCard },

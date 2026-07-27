@@ -1,0 +1,89 @@
+{
+  "name": "Appointment Created - Intake & Staff Dispatch",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "appointment-created",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook Listener",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"body\"][\"status\"]}}",
+              "value2": "PENDING_REVIEW"
+            }
+          ]
+        }
+      },
+      "name": "Is Pending Review?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$env[\"TELEGRAM_RECEPTION_CHAT_ID\"]}}",
+        "text": "=📌 *NEW CONSULTATION REQUEST*\n\n*Client:* {{$json[\"body\"][\"client\"][\"firstName\"]}} {{$json[\"body\"][\"client\"][\"lastName\"]}}\n*Phone:* {{$json[\"body\"][\"client\"][\"phone\"]}}\n*Date:* {{$json[\"body\"][\"preferredDate\"]}}\n*Time:* {{$json[\"body\"][\"preferredTime\"]}}\n*Description:* {{$json[\"body\"][\"description\"]}}\n\n_Review in CRM Dashboard to approve/reschedule._",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "name": "Telegram Receptionist Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [720, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "no-reply@ablaw.com",
+        "toEmail": "={{$json[\"body\"][\"client\"][\"email\"]}}",
+        "subject": "Consultation Request Received — AB & Co. Legal",
+        "html": "=<h2>Thank you for contacting AB & Co. Legal</h2><p>Dear {{$json[\"body\"][\"client\"][\"firstName\"]}},</p><p>We have received your consultation request for <strong>{{$json[\"body\"][\"preferredDate\"]}} at {{$json[\"body\"][\"preferredTime\"]}}</strong>. Our legal team will review your request and confirm your appointment shortly.</p><br/><p>Best regards,<br/>AB & Co. Legal Team</p>"
+      },
+      "name": "Send Acknowledgement Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [720, 400]
+    }
+  ],
+  "connections": {
+    "Webhook Listener": {
+      "main": [
+        [
+          {
+            "node": "Is Pending Review?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Pending Review?": {
+      "main": [
+        [
+          {
+            "node": "Telegram Receptionist Alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Acknowledgement Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

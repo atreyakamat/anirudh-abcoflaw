@@ -7,6 +7,7 @@ import {
 import { Appointment, AppointmentStatus, BookingSource } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { PaginationDto, PaginatedResultDto, SortableDto, FilterableDto } from '../../common/dto/pagination.dto.js';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotificationsService } from '../notifications/notifications.service.js';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class AppointmentsService {
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   // Valid status transitions
@@ -216,7 +218,8 @@ export class AppointmentsService {
         },
       });
 
-      // Trigger n8n webhook (async outside transaction fail boundary)
+      // Trigger n8n webhook & event emitter
+      this.eventEmitter.emit('appointment.created', appointment);
       this.notificationsService.sendN8nWebhook('APPOINTMENT_CREATED', { appointment }).catch(err => console.error(err));
 
       return appointment;
@@ -258,6 +261,13 @@ export class AppointmentsService {
 
     // Create history entry
     await this.createHistoryEntry(id, userId, currentStatus, newStatus, reason);
+
+    // Trigger domain events
+    if (newStatus === AppointmentStatus.CONFIRMED) {
+      this.eventEmitter.emit('appointment.confirmed', updated);
+    } else if (newStatus === AppointmentStatus.COMPLETED) {
+      this.eventEmitter.emit('appointment.completed', updated);
+    }
 
     // Trigger n8n webhook
     this.notificationsService.sendN8nWebhook('APPOINTMENT_STATUS_UPDATED', { appointment: updated, previousStatus: currentStatus, newStatus, reason }).catch(err => console.error(err));

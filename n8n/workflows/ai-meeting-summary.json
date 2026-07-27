@@ -1,0 +1,83 @@
+{
+  "name": "AI Meeting Summary & Case Notes Extraction",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-meeting-summary",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook Listener",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a legal AI assistant. Summarize consultation notes/transcripts into: 1. Executive Summary 2. Legal Risks 3. Recommended Actions 4. Follow-up Deadlines."
+            },
+            {
+              "role": "user",
+              "content": "Consultation Notes: {{$json[\"body\"][\"lawyerNote\"] || $json[\"body\"][\"description\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "LLM Summary & Action Items",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "=http://backend:3001/api/v1/appointments/{{$json[\"body\"][\"id\"]}}/notes",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "content",
+              "value": "=[AI Briefing] {{$json[\"message\"][\"content\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Save AI Summary to CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [750, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Listener": {
+      "main": [
+        [
+          {
+            "node": "LLM Summary & Action Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Summary & Action Items": {
+      "main": [
+        [
+          {
+            "node": "Save AI Summary to CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

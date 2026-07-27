@@ -19,6 +19,8 @@ import { ChatbotModule } from './modules/chatbot/chatbot.module.js';
 import { SearchModule } from './modules/search/search.module.js';
 import { WebhooksModule } from './modules/webhooks/webhooks.module.js';
 import { PortalModule } from './modules/portal/portal.module.js';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AutomationsModule } from './modules/automations/automations.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { HealthModule } from './health/health.module.js';
 
@@ -28,6 +30,13 @@ import { HealthModule } from './health/health.module.js';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
+    }),
+
+    // Event Emitter for n8n domain events
+    EventEmitterModule.forRoot({
+      wildcard: true,
+      delimiter: '.',
+      maxListeners: 20,
     }),
 
     // Rate limiting
@@ -63,6 +72,7 @@ import { HealthModule } from './health/health.module.js';
     SearchModule,
     WebhooksModule,
     PortalModule,
+    AutomationsModule,
     HealthModule,
   ],
   providers: [

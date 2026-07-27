@@ -162,4 +162,14 @@ export const api = {
     reschedule: (data: { appointmentId: string; preferredDate: string; preferredTime: string; reason?: string }) =>
       apiClient.post('/portal/appointments/reschedule', data),
   },
+  automations: {
+    list: () => apiClient.get('/automations'),
+    logs: () => apiClient.get('/automations/logs'),
+    toggle: (id: string) => apiClient.post(`/automations/${id}/toggle`),
+    trigger: (id: string, payload?: any) => apiClient.post(`/automations/${id}/trigger`, payload),
+  },
+  get: <T = any>(url: string, config?: any) => apiClient.get<T>(url, config),
+  post: <T = any>(url: string, data?: any, config?: any) => apiClient.post<T>(url, data, config),
+  put: <T = any>(url: string, data?: any, config?: any) => apiClient.put<T>(url, data, config),
+  delete: <T = any>(url: string, config?: any) => apiClient.delete<T>(url, config),
 };

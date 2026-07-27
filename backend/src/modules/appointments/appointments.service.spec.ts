@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppointmentsService } from './appointments.service.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { AppointmentStatus } from '@prisma/client';
 
@@ -45,6 +46,7 @@ describe('AppointmentsService', () => {
         AppointmentsService,
         { provide: PrismaService, useValue: mockPrismaService },
         { provide: NotificationsService, useValue: mockNotificationsService },
+        { provide: EventEmitter2, useValue: { emit: jest.fn() } },
       ],
     }).compile();
 
