@@ -145,7 +145,7 @@ export class AppointmentsService {
       firstName?: string;
       lastName?: string;
       description: string;
-      preferredDate: Date;
+      preferredDate: string | Date;
       preferredTime: string;
       source?: BookingSource;
       documentIds?: string[];
@@ -180,7 +180,7 @@ export class AppointmentsService {
       }
 
       // Check for time slot conflicts
-      await this.checkConflicts(data.preferredDate, data.preferredTime, data.preferredTime, undefined, tx);
+      await this.checkConflicts(new Date(data.preferredDate), data.preferredTime, data.preferredTime, undefined, tx);
 
       const appointment = await tx.appointment.create({
         data: {
@@ -269,7 +269,7 @@ export class AppointmentsService {
     id: string,
     data: {
       description?: string;
-      preferredDate?: Date;
+      preferredDate?: string | Date;
       preferredTime?: string;
       lawyerNote?: string;
     },
@@ -280,7 +280,7 @@ export class AppointmentsService {
     // Check for conflicts if date/time changed
     if (data.preferredDate || data.preferredTime) {
       await this.checkConflicts(
-        data.preferredDate || appointment.preferredDate,
+        new Date(data.preferredDate || appointment.preferredDate),
         data.preferredTime || appointment.preferredTime,
         appointment.preferredTime,
         id,

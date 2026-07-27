@@ -1,6 +1,5 @@
 import { IsString, IsOptional, IsEnum, IsDateString, MinLength, IsArray } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import { BookingSource } from '@prisma/client';
 
 export class CreateAppointmentDto {
@@ -14,10 +13,9 @@ export class CreateAppointmentDto {
   @MinLength(10)
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'ISO 8601 date string e.g. 2026-08-15 or 2026-08-15T10:00:00Z' })
   @IsDateString()
-  @Type(() => Date)
-  preferredDate: Date;
+  preferredDate: string;
 
   @ApiProperty()
   @IsString()
@@ -47,6 +45,11 @@ export class CreateAppointmentDto {
   @IsString()
   @IsOptional()
   phone?: string;
+
+  @ApiPropertyOptional({ description: 'Practice area e.g. Corporate Law, Family Law' })
+  @IsString()
+  @IsOptional()
+  practiceArea?: string;
 
   @ApiPropertyOptional({ type: [String] })
   @IsArray()
