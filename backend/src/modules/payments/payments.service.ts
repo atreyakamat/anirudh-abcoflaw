@@ -17,7 +17,7 @@ export class PaymentsService {
     if (search) where.OR = [{ referenceNumber: { contains: search, mode: 'insensitive' } }, { client: { firstName: { contains: search, mode: 'insensitive' } } }];
 
     const [items, total] = await Promise.all([
-      this.prisma.payment.findMany({ where, orderBy: { [sortBy]: sortOrder }, skip: (page - 1) * limit, take: limit, include: { client: true, appointment: { select: { id: true, referenceNumber: true, description: true } } } }),
+      this.prisma.payment.findMany({ where, orderBy: { [sortBy]: sortOrder.toLowerCase() as 'asc' | 'desc' }, skip: (page - 1) * limit, take: limit, include: { client: true, appointment: { select: { id: true, referenceNumber: true, description: true } } } }),
       this.prisma.payment.count({ where }),
     ]);
     return new PaginatedResultDto(items, total, page, limit);

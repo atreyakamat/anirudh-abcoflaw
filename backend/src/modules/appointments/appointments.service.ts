@@ -187,7 +187,7 @@ export class AppointmentsService {
           clientId: resolvedClientId,
           bookedByUserId: userId,
           description: data.description,
-          preferredDate: data.preferredDate,
+          preferredDate: new Date(data.preferredDate),
           preferredTime: data.preferredTime,
           source: data.source || BookingSource.WEBSITE,
           status: AppointmentStatus.PENDING_REVIEW,
@@ -291,7 +291,7 @@ export class AppointmentsService {
       where: { id },
       data: {
         description: data.description,
-        preferredDate: data.preferredDate,
+        preferredDate: data.preferredDate ? new Date(data.preferredDate) : undefined,
         preferredTime: data.preferredTime,
         lawyerNote: data.lawyerNote,
       },

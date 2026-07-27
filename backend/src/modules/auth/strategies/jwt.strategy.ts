@@ -13,6 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: any) => request?.cookies?.access_token,
+        (request: any) => request?.cookies?.session,
         ExtractJwt.fromHeader('authorization'),
       ]),
       ignoreExpiration: false,
@@ -48,20 +49,23 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       };
     }
 
-    // Fallback to client portal user
-    const client = await this.prisma.clientPortalUser.findUnique({
-      where: { email },
-    });
+    // Fallback: client portal user (Client model — issued by portal OTP flow)
+    // Token payload includes role='CLIENT' when issued by PortalService.verifyOtp
+    if (payload.role === 'CLIENT' && payload.sub) {
+      const client = await this.prisma.client.findUnique({
+        where: { id: payload.sub },
+      });
 
-    if (client) {
-      if (!client.isActive) {
-        throw new UnauthorizedException('Client inactive');
+      if (client) {
+        if (client.deletedAt) {
+          throw new UnauthorizedException('Client account inactive');
+        }
+        return {
+          id: client.id,
+          email: client.email,
+          role: 'CLIENT',
+        };
       }
-      return {
-        id: client.id,
-        email: client.email,
-        role: 'CLIENT',
-      };
     }
 
     throw new UnauthorizedException('User not found');
