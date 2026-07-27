@@ -58,6 +58,10 @@ export class DocumentsService {
     appointmentId?: string,
     userId?: string,
   ): Promise<PrismaDocument> {
+    if (!file) {
+      throw new BadRequestException('No file provided in request payload');
+    }
+
     if (file.size > MAX_SIZE) {
       throw new BadRequestException('File exceeds 10MB limit');
     }

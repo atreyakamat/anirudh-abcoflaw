@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service.js';
-import { CreateUserDto } from './dto/create-user.dto.js';
+import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { RolesGuard, Roles } from '../../common/guards/roles.guard.js';
 import { UserRole } from '@prisma/client';
@@ -36,7 +36,7 @@ export class UsersController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update user' })
-  update(@Param('id') id: string, @Body() dto: Partial<CreateUserDto>) {
+  update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
     return this.usersService.update(id, dto);
   }
 

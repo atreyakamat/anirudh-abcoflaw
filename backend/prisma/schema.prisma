@@ -253,6 +253,7 @@ model Appointment {
   @@index([referenceNumber])
   @@index([deletedAt])
   @@index([createdAt])
+  @@index([preferredDate, status, deletedAt])
 }
 
 // ============================================
@@ -505,6 +506,8 @@ model Payment {
   @@index([clientId])
   @@index([status])
   @@index([paidAt])
+  @@index([createdAt])
+  @@index([clientId, status])
 }
 
 // ============================================
