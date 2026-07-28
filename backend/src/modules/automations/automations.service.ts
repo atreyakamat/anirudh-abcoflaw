@@ -270,7 +270,7 @@ export class AutomationsService {
       .update(JSON.stringify(payload))
       .digest('hex');
 
-    this.logger.log(`Triggering automation ${wf.name} (${n8nUrl}${wf.webhookPath})`);
+    this.logger.log(`Triggering automation ${wf.name} (${n8nUrl}${wf.webhookPath}) [sig: ${signature.slice(0, 8)}]`);
 
     const duration = Date.now() - startTime + Math.floor(Math.random() * 80 + 50);
     wf.successCount += 1;

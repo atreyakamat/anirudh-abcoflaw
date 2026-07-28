@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api/client';
 import { Card } from '@/components/ui/card';
 import {
-  Bot, Play, CheckCircle2, AlertCircle, RefreshCw, Zap,
-  Clock, Activity, Sparkles, Filter, ChevronRight, ShieldCheck,
+  Bot, Play, CheckCircle2, RefreshCw, Zap,
+  Activity, Sparkles, ShieldCheck,
 } from 'lucide-react';
 
 interface Workflow {
