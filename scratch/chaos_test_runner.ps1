@@ -46,15 +46,16 @@ Test-Endpoint -Name "Phase 1: Empty Auth Payload" -Url "$BASE/auth/login" -Metho
 $badBooking = @{ firstName = ""; email = "not-an-email" } | ConvertTo-Json
 Test-Endpoint -Name "Phase 2: Invalid Booking Payload" -Url "$BASE/appointments" -Method POST -Body $badBooking -ExpectedStatus 400
 
-# 4. Valid Appointment Booking Payload Test
+# 4. Valid Appointment Booking Payload Test (with unique date slot & credentials)
+$ts = Get-Date -Format "yyyyMMddHHmmss"
 $bookingObj = @{
     firstName = "ChaosClient"
     lastName = "Tester"
-    email = "chaos.test@example.com"
-    phone = "+919999222333"
+    email = "chaos.$ts@example.com"
+    phone = "+9199$($ts.Substring(6))"
     description = "Legal request test payload"
-    preferredDate = "2026-09-15"
-    preferredTime = "11:00"
+    preferredDate = (Get-Date).AddDays((Get-Random -Minimum 10 -Maximum 90)).ToString("yyyy-MM-dd")
+    preferredTime = "$((Get-Random -Minimum 9 -Maximum 17)):00"
     practiceArea = "Corporate Law"
 } | ConvertTo-Json
 Test-Endpoint -Name "Phase 2 & 3: Valid Booking & Client Creation" -Url "$BASE/appointments" -Method POST -Body $bookingObj -ExpectedStatus 201
