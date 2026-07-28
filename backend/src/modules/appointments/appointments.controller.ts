@@ -74,111 +74,56 @@ export class AppointmentsController {
     return this.appointmentsService.findOne(id);
   }
 
-  @Post()
   @Public()
-  @ApiOperation({ summary: 'Create new appointment (public booking)' })
-  create(
-    @Body() createAppointmentDto: CreateAppointmentDto,
-    @CurrentUser('id') userId?: string,
-  ) {
-    return this.appointmentsService.create(createAppointmentDto, userId);
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Create a new appointment (public booking or staff)' })
+  create(@Body() dto: CreateAppointmentDto, @CurrentUser('id') userId?: string) {
+    return this.appointmentsService.create(dto, userId);
   }
 
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.LAWYER, UserRole.RECEPTIONIST)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update appointment' })
+  @ApiOperation({ summary: 'Update appointment details' })
   update(
     @Param('id') id: string,
-    @Body() updateAppointmentDto: UpdateAppointmentDto,
-    @CurrentUser('id') userId?: string,
+    @Body() dto: UpdateAppointmentDto,
+    @CurrentUser('id') userId: string,
   ) {
-    return this.appointmentsService.update(id, updateAppointmentDto, userId);
+    return this.appointmentsService.update(id, dto, userId);
   }
 
-  @Post(':id/status')
+  @Put(':id/status')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.LAWYER, UserRole.RECEPTIONIST)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update appointment status' })
   updateStatus(
     @Param('id') id: string,
-    @Body() updateStatusDto: UpdateStatusDto,
-    @CurrentUser('id') userId?: string,
+    @Body() dto: UpdateStatusDto,
+    @CurrentUser('id') userId: string,
   ) {
-    return this.appointmentsService.updateStatus(id, updateStatusDto.status, userId, updateStatusDto.reason);
-  }
-
-  @Post(':id/confirm')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.LAWYER)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Confirm appointment' })
-  confirm(
-    @Param('id') id: string,
-    @CurrentUser('id') userId?: string,
-    @Body('reason') reason?: string,
-  ) {
-    return this.appointmentsService.updateStatus(id, AppointmentStatus.CONFIRMED, userId, reason);
-  }
-
-  @Post(':id/reject')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.LAWYER)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Reject appointment' })
-  reject(
-    @Param('id') id: string,
-    @CurrentUser('id') userId?: string,
-    @Body('reason') reason?: string,
-  ) {
-    return this.appointmentsService.updateStatus(id, AppointmentStatus.REJECTED, userId, reason);
-  }
-
-  @Post(':id/cancel')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.LAWYER, UserRole.RECEPTIONIST)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Cancel appointment' })
-  cancel(
-    @Param('id') id: string,
-    @CurrentUser('id') userId?: string,
-    @Body('reason') reason?: string,
-  ) {
-    return this.appointmentsService.updateStatus(id, AppointmentStatus.CANCELLED, userId, reason);
-  }
-
-  @Post(':id/complete')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.LAWYER)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Mark appointment as completed' })
-  complete(
-    @Param('id') id: string,
-    @CurrentUser('id') userId?: string,
-    @Body('reason') reason?: string,
-  ) {
-    return this.appointmentsService.updateStatus(id, AppointmentStatus.COMPLETED, userId, reason);
+    return this.appointmentsService.updateStatus(id, dto.status, userId, dto.reason);
   }
 
   @Post(':id/notes')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.LAWYER, UserRole.RECEPTIONIST)
+  @Roles(UserRole.ADMIN, UserRole.LAWYER)
   @ApiBearerAuth()
-  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Add note to appointment' })
   addNote(
     @Param('id') id: string,
-    @Body() addNoteDto: AddNoteDto,
-    @CurrentUser('id') userId?: string,
+    @Body() dto: AddNoteDto,
+    @CurrentUser('id') userId: string,
   ) {
-    return this.appointmentsService.addNote(id, userId!, addNoteDto.content);
+    return this.appointmentsService.addNote(id, userId, dto.content);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.RECEPTIONIST)
+  @Roles(UserRole.ADMIN)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Soft delete appointment' })

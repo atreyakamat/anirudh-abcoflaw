@@ -1,0 +1,22 @@
+version: '3.8'
+
+# Podman Rootless Compatibility Overlay
+# Usage: podman compose -f compose.yml -f compose.n8n.yml -f compose.podman.yml up -d
+
+services:
+  db:
+    userns_mode: keep-id
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:z
+      - ./docker/postgres/init.sh:/docker-entrypoint-initdb.d/init.sh:ro,z
+
+  backend:
+    userns_mode: keep-id
+    volumes:
+      - uploads:/app/uploads:z
+
+  n8n:
+    userns_mode: keep-id
+    volumes:
+      - n8n_data:/home/node/.n8n:z
+      - ./n8n/workflows:/n8n/workflows:ro,z

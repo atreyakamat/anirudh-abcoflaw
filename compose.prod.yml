@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2048M
+
+  backend:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1024M
+
+  frontend:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
