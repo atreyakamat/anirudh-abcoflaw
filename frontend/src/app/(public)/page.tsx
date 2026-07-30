@@ -3,14 +3,75 @@
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
-import { Scale, Shield, Users, ArrowRight, Star, FileText, Briefcase, Landmark, BookOpen, Globe, Activity } from 'lucide-react';
+import { Scale, Shield, ArrowRight, Star, FileText, Briefcase, Landmark, BookOpen, Globe, CheckCircle2, ShieldCheck } from 'lucide-react';
 import type { BlogPost, PaginatedResult } from '@/types';
 
 const achievements = [
-  { text: 'LLM, International Business Law', subtext: 'University of Aberdeen, UK' },
-  { text: 'Founder, Legal Made Simple', subtext: 'Goa\'s first online legal services portal' },
-  { text: 'Central Government Notary', subtext: 'Appointed Notary for the Govt. of India' },
-  { text: '20+ Years Experience', subtext: 'Est. AB & Co. Legal in 2013' },
+  { text: 'LL.M., International Business Law', subtext: 'University of Aberdeen, UK (2009)' },
+  { text: 'LL.B. (Honours)', subtext: 'Salgaonkar College of Law, Goa (2003)' },
+  { text: 'Central Government Notary', subtext: 'Appointed Notary for Govt. of India' },
+  { text: '20+ Years Bar Experience', subtext: 'Advocate – Panaji & Porvorim, Goa' },
+];
+
+const practiceAreas = [
+  {
+    icon: Landmark,
+    title: 'Civil & Criminal Litigation',
+    subtitle: 'Goa Courts & High Court',
+    desc: 'Representing clients in civil disputes (property, contracts, succession) and criminal matters. Practicing before the Bombay High Court (Panaji Bench), Goa District and Sessions Courts, and local tribunals.',
+  },
+  {
+    icon: FileText,
+    title: 'Property & Conveyancing',
+    subtitle: 'Real Estate & Title Advisory',
+    desc: 'Comprehensive real estate guidance: drafting & negotiating sale/lease agreements, development projects, RERA compliance, title/transfer disputes, stamp duty verifications, and property registrations.',
+  },
+  {
+    icon: Shield,
+    title: 'Family Law & Succession',
+    subtitle: "Goa's Unique Civil Code",
+    desc: 'Specialized assistance under Portuguese Civil Law / Goa Civil Code for matrimonial matters (divorce, custody, maintenance), succession, estate settlements, preparing wills, and probate (inventory) proceedings.',
+  },
+  {
+    icon: Briefcase,
+    title: 'Business & Commercial Advisory',
+    subtitle: 'Contracts & Corporate Compliance',
+    desc: 'Guiding entrepreneurs and Goa-based companies on commercial agreements, shareholder & partnership contracts, company formation, regulatory compliance, and resolving contractual disputes.',
+  },
+  {
+    icon: Globe,
+    title: 'Other Legal Services',
+    subtitle: 'Notary & Specialized Advisory',
+    desc: 'Central Government Notary services for official document attestation, alongside preliminary Intellectual Property guidance (collaborating with specialist Goa IP experts as needed).',
+  },
+];
+
+const trustFramework = [
+  {
+    step: '01',
+    title: 'Professional Visibility',
+    desc: 'Accurate, transparent credentials and contact details ensuring clients seeking a Goa advocate find verified professional records.',
+  },
+  {
+    step: '02',
+    title: 'Instant Credibility',
+    desc: 'Over two decades at the Goa Bar, international LL.M. qualifications, and clear professional standing.',
+  },
+  {
+    step: '03',
+    title: 'Ethical Safety',
+    desc: 'Strict adherence to Bar Council of India Rule 36 — purely informational, objective, and non-promotional content.',
+  },
+  {
+    step: '04',
+    title: 'Strategic Focus',
+    desc: 'Specialized concentration on core Goa legal domains rather than generalized, superficial legal listings.',
+  },
+  {
+    step: '05',
+    title: 'Zero-Effort Engagement',
+    desc: 'Structured administrative booking, transparent consultation fee schedule, and prompt, professional service.',
+  },
 ];
 
 export default function HomePage() {
@@ -21,306 +82,215 @@ export default function HomePage() {
         const res = await api.blogs.published({ limit: 3 }); 
         return (res.data.data as PaginatedResult<BlogPost>).items; 
       } catch {
-        // Backend blog endpoints not yet implemented, suppressing 404
         return [];
       }
-    },
-  });
-
-  const { data: rssNews } = useQuery({
-    queryKey: ['rss-news'],
-    queryFn: async () => {
-      // Fetching from our internal next.js API route that parses multiple English legal RSS feeds
-      const res = await fetch('/api/news');
-      if (!res.ok) throw new Error('Network response was not ok');
-      const data = await res.json();
-      return data.items as any[];
     },
   });
 
   return (
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
       
-      {/* Premium Hero Section */}
-      <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden">
-        {/* Full-width Hero Background Image */}
+      {/* BCI Compliance Disclaimer Header Banner */}
+      <div className="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+          <p className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-yellow-500 shrink-0" />
+            <span><strong>Bar Council Compliance Notice:</strong> This website is for informational & educational purposes only per Rule 36 of the Bar Council of India Rules (1975). No solicitation or legal advertisement.</span>
+          </p>
+          <span className="hidden md:inline-block text-slate-400 font-mono text-[10px]">Porvorim, Goa</span>
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <section className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden bg-[#0F172A]">
         <div className="absolute inset-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
             src="/heroimage.jpg" 
-            alt="Hero Background" 
+            alt="AB & Co. Legal Porvorim Office" 
             className="w-full h-full object-cover" 
           />
         </div>
-        {/* Semi-transparent blue overlay */}
-        <div className="absolute inset-0 bg-[#0F172A]/85 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-[#0F172A]/90 backdrop-blur-[2px]" />
         
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none" />
-        
-        <div className="max-w-6xl mx-auto px-4 relative z-10 grid md:grid-cols-2 gap-12 items-center text-white">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm font-medium mb-6 text-yellow-500 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-4 relative z-10 grid md:grid-cols-12 gap-12 items-center text-white">
+          <div className="md:col-span-7">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold mb-6 text-yellow-500 backdrop-blur-sm">
               <Scale className="w-4 h-4" />
-              <span>AB & Co. Legal</span>
+              <span>Advocate – Panaji & Porvorim, Goa</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold font-serif leading-tight mb-6 tracking-tight">
-              Defending Rights.<br/>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight mb-6 tracking-tight">
+              AB & Co. Legal<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-                Securing Futures.
+                Legal Made Simple
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-lg leading-relaxed font-light">
-              Led by Advocate Anirudha Sinai Borkar, we provide unwavering legal counsel in Goa, rooted in 20 years of integrity, expertise, and a commitment to justice.
+            <p className="text-base sm:text-lg text-slate-300 mb-8 max-w-xl leading-relaxed font-light">
+              Led by Advocate Anirudha Sinai Borkar with 20+ years of legal experience, providing clear, practical guidance across Goa’s courts, tribunals, and regulatory bodies.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/book" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-yellow-600 text-white rounded-lg font-medium hover:bg-yellow-500 transition-colors shadow-lg shadow-yellow-600/20">
-                Book a Consultation <ArrowRight className="w-4 h-4" />
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <Link href="/book" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-yellow-600 text-white rounded-lg font-bold hover:bg-yellow-500 transition-all shadow-lg shadow-yellow-600/20">
+                Schedule Consultation (₹2,500) <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="#profile" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg font-medium transition-colors backdrop-blur-sm">
-                Meet the Advocate
+              <Link href="#profile" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg font-medium transition-colors backdrop-blur-sm">
+                Advocate Profile
               </Link>
+            </div>
+            <div className="flex items-center gap-6 text-xs text-slate-400 border-t border-slate-800 pt-6">
+              <span>Languages: <strong>English, Konkani, Hindi, Portuguese</strong></span>
+              <span>•</span>
+              <span>Office: <strong>Porvorim (near Panaji)</strong></span>
             </div>
           </div>
           
-          <div className="hidden md:flex relative items-center justify-center">
-            <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/20 to-transparent rounded-full blur-3xl" />
-            
-            {/* Large Circular 3D Component */}
-            <div className="relative w-[24rem] h-[24rem] lg:w-[28rem] lg:h-[28rem] rounded-full border border-white/20 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-md flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
-              <iframe 
-                title="Lion Capital of Ashoka" 
-                loading="lazy"
-                frameBorder="0" 
-                allowFullScreen 
-                allow="autoplay; fullscreen; xr-spatial-tracking" 
-                src="https://sketchfab.com/models/12e2969ab0f24e759f35ed92efd51a00/embed?autostart=1&autospin=0.1&transparent=1&ui_infos=0&ui_watermark_link=0&ui_watermark=0&ui_hint=0&ui_theme=dark"
-                className="w-[120%] h-[120%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
-              />
+          <div className="md:col-span-5 hidden md:flex justify-center">
+            <div className="relative w-full max-w-sm rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-white/10 backdrop-blur-md p-6">
+              <div className="aspect-[4/5] rounded-xl overflow-hidden mb-4 relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/lawyer1.png" alt="Advocate Anirudha Sinai Borkar" className="w-full h-full object-cover" />
+              </div>
+              <p className="font-serif font-bold text-xl text-white text-center">Adv. Anirudha S. Borkar</p>
+              <p className="text-xs text-yellow-500 text-center font-medium mt-1">LL.B. (Goa) • LL.M. (Aberdeen, UK)</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* The Firm's Legacy (Business Section) */}
-      <section className="py-24 bg-white">
+      {/* Practice Areas Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Our Legacy & Values</h2>
-            <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6">A Practice Built on Morality and Access to Justice</h3>
-            <p className="text-slate-600 text-lg leading-relaxed">
-              Established in 2013, AB & Co. Legal expands across Goa with a dedicated team. Our firm&apos;s philosophy centers around a simple but powerful principle: taking up cases that are not only legally sound but morally right.
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <h2 className="text-xs font-bold tracking-widest text-yellow-600 uppercase mb-2">Strategic Focus</h2>
+            <h3 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-4">Core Legal Practice Areas</h3>
+            <p className="text-slate-600 leading-relaxed">
+              We concentrate on specialized core areas relevant to individuals and businesses in Goa. Each field is handled with focus, integrity, and depth.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 bg-slate-50 rounded-2xl border border-slate-100">
-              <div className="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center mb-6">
-                <Shield className="w-6 h-6" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {practiceAreas.map((area, idx) => (
+              <div key={idx} className="p-8 bg-slate-50 rounded-2xl border border-slate-200/80 hover:border-yellow-600/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 bg-yellow-100 text-yellow-700 rounded-xl flex items-center justify-center mb-6">
+                    <area.icon className="w-6 h-6" />
+                  </div>
+                  <h4 className="font-serif font-bold text-xl text-slate-900 mb-1">{area.title}</h4>
+                  <p className="text-xs font-semibold text-yellow-600 uppercase tracking-wider mb-4">{area.subtitle}</p>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-6">{area.desc}</p>
+                </div>
+                <Link href="/book" className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-yellow-600 transition-colors pt-4 border-t border-slate-200">
+                  <span>Schedule Consultation</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
-              <h4 className="font-serif font-bold text-xl text-slate-900 mb-3">Integrity Above All</h4>
-              <p className="text-slate-600">We firmly believe that proper legal representation combats fraudulent practices. We stand with clients from India and abroad to protect their assets and rights against unscrupulous actors.</p>
-            </div>
-            <div className="p-8 bg-slate-50 rounded-2xl border border-slate-100">
-              <div className="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center mb-6">
-                <Globe className="w-6 h-6" />
-              </div>
-              <h4 className="font-serif font-bold text-xl text-slate-900 mb-3">Bridging the Gap</h4>
-              <p className="text-slate-600">Inspired by a family legacy of community service, we launched <strong>Legal Made Simple</strong>—Goa&apos;s first online portal aimed at bridging the Access to Justice gap through technology and AI.</p>
-            </div>
-            <div className="p-8 bg-slate-50 rounded-2xl border border-slate-100">
-              <div className="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center mb-6">
-                <Users className="w-6 h-6" />
-              </div>
-              <h4 className="font-serif font-bold text-xl text-slate-900 mb-3">Client-Centric Approach</h4>
-              <p className="text-slate-600">Whether assisting non-residents or local individuals, we aim to offer clarity, transparent guidance, and dedicated advocacy for every case.</p>
-            </div>
+            ))}
           </div>
-        </div>
-      </section>
-
-      {/* Quote Section */}
-      <section className="py-28 bg-[#0F172A] relative overflow-hidden text-center px-4">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-900/40 via-transparent to-transparent pointer-events-none" />
-        
-        <div className="max-w-4xl mx-auto relative z-10">
-          <BookOpen className="w-12 h-12 text-yellow-500 mx-auto mb-8 opacity-90 drop-shadow-lg" />
-          <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif text-white leading-tight mb-10 drop-shadow-lg">
-            &quot;The justice system can be improved not by putting more pressure on the judiciary, but by reducing their workload through amicable resolutions and efficient practice.&quot;
-          </blockquote>
         </div>
       </section>
 
       {/* Advocate Profile Section */}
-      <section id="profile" className="py-24 bg-slate-50 border-t border-slate-200">
+      <section id="profile" className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-12 gap-16 items-center">
-            
+          <div className="grid md:grid-cols-12 gap-12 items-center">
             <div className="md:col-span-5">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-[#0F172A] relative border border-slate-200 shadow-xl">
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-[#0F172A] relative border border-slate-300 shadow-xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src="/lawyer1.png" 
-                  alt="Adv. Anirudha A. Sinai Borkar" 
+                  src="/profilepic.jpg" 
+                  alt="Advocate Anirudha Sinai Borkar" 
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-transparent to-transparent flex flex-col justify-end p-8 text-center text-slate-300">
-                  <p className="font-serif text-2xl text-white">Adv. Anirudha A. Sinai Borkar</p>
-                  <p className="text-sm mt-1 text-slate-300">Founder, AB & Co. Legal</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-transparent to-transparent flex flex-col justify-end p-6 text-slate-300">
+                  <p className="font-serif text-xl font-bold text-white">Adv. Anirudha S. Borkar</p>
+                  <p className="text-xs text-yellow-400 mt-0.5">Founder, AB & Co. Legal • Advocate, Panaji & Porvorim</p>
                 </div>
               </div>
             </div>
             
             <div className="md:col-span-7">
-              <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">The Principal Advocate</h2>
-              <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6">A Career Defined by Expertise and Empathy</h3>
+              <h2 className="text-xs font-bold tracking-widest text-yellow-600 uppercase mb-2">Professional Credentials</h2>
+              <h3 className="text-3xl font-serif font-bold text-slate-900 mb-6">About Mr. Anirudha Sinai Borkar</h3>
               
-              <div className="space-y-4 text-slate-600 text-lg leading-relaxed mb-8">
+              <div className="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed mb-8">
                 <p>
-                  Anirudha Sinai Borkar graduated with an LLB (Honours) from VM Salgaocar College of Law and pursued his LLM in International Business Law from the University of Aberdeen, UK, specializing in Corporate Governance and Property Development.
+                  Mr. Anirudha Sinai Borkar is a seasoned advocate with over two decades of active legal practice at the Goa Bar. He holds a Bachelor of Laws (LL.B., Salgaonkar College of Law, Goa, 2003) and a Master of Laws in International Business Law (LL.M., University of Aberdeen, UK, 2009).
                 </p>
                 <p>
-                  Starting his career in the esteemed chambers of Sr. Adv. Sudin Usgaonkar, Borkar honed his legal acumen and strong work ethic. He has collaborated with distinguished senior advocates, contributing immensely to the emerging IT and industrial landscape in Goa—including trailblazing clinical trial agreements for surgical robots and medical devices.
+                  After years of civil litigation practice, he founded AB & Co. Legal in Porvorim, North Goa. His practice covers litigation before the Bombay High Court (Panaji Bench), Goa District and Sessions Courts, and local administrative bodies.
                 </p>
                 <p>
-                  Beyond the courtroom, he strongly believes in a healthy work-life balance and continuously mentors young lawyers, encouraging them to take ownership and lead with pride.
+                  Committed to ethical service, Mr. Borkar’s motto is <strong>“Legal Made Simple”</strong>—cutting through procedural complexity to provide clear, actionable guidance. His multilingual practice serves clients in English, Konkani, Hindi, and Portuguese.
                 </p>
               </div>
               
               <div className="grid sm:grid-cols-2 gap-4">
                 {achievements.map((achieve, i) => (
-                  <div key={i} className="flex gap-4 items-start p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-                    <div className="mt-1 p-2 bg-slate-50 rounded-lg border border-slate-100 text-yellow-600">
-                      <Star className="w-5 h-5 fill-current" />
+                  <div key={i} className="flex gap-3 items-start p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
+                    <div className="mt-0.5 p-1.5 bg-yellow-50 rounded-lg text-yellow-600">
+                      <Star className="w-4 h-4 fill-current" />
                     </div>
                     <div>
-                      <p className="font-bold text-slate-900">{achieve.text}</p>
-                      <p className="text-sm text-slate-500">{achieve.subtext}</p>
+                      <p className="font-bold text-slate-900 text-sm">{achieve.text}</p>
+                      <p className="text-xs text-slate-500">{achieve.subtext}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* Curated Legal Advice / Services */}
-      <section className="py-24 bg-white border-y border-slate-200">
+      {/* Trust Framework Section */}
+      <section className="py-20 bg-white border-t border-slate-200">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="max-w-xl">
-              <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Comprehensive Legal Solutions</h2>
-              <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6">Curated Advice by Expert Lawyers</h3>
-              <p className="text-slate-600 text-lg leading-relaxed mb-8">
-                The law is vast, and every case is unique. Rather than limiting our practice to predefined rigid categories, AB & Co. Legal provides holistic, adaptive, and highly curated legal strategies. From high-stakes commercial tech negotiations to sensitive personal family matters, our decades of litigation and consultancy experience ensure you are protected across all sectors of the law.
-              </p>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-6 text-sm font-bold text-slate-700">
-                <span className="flex items-center gap-2"><Shield className="w-5 h-5 text-yellow-600" /> Strategic Litigation</span>
-                <span className="flex items-center gap-2"><Landmark className="w-5 h-5 text-yellow-600" /> Dispute Resolution</span>
-                <span className="flex items-center gap-2"><Briefcase className="w-5 h-5 text-yellow-600" /> Advisory</span>
-              </div>
-            </div>
-            
-            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src="/curatedlegaladvice.png" 
-                alt="Curated Legal Advice" 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Latest Legal News (RSS Feed Marquee) */}
-      <section className="py-24 bg-slate-50 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3 flex items-center gap-2">
-                <Activity className="w-4 h-4" /> Live Updates
-              </h2>
-              <h3 className="text-3xl font-serif font-bold text-slate-900">Catch Up With The Latest Legal News</h3>
-            </div>
-          </div>
-        </div>
-        
-        {!rssNews ? (
-          <div className="text-center text-slate-500 py-12">Loading latest news...</div>
-        ) : (
-          <div className="relative w-full flex overflow-hidden group">
-            {/* Fade effect edges */}
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
-            
-            <div className="flex animate-marquee min-w-max gap-6 px-3">
-              {[...rssNews, ...rssNews].map((news: any, idx: number) => (
-                <a key={idx} href={news.link} target="_blank" rel="noopener noreferrer" className="block w-80 md:w-96 flex-shrink-0">
-                  <div className="h-full flex flex-col rounded-2xl border border-slate-200 hover:border-yellow-600/50 hover:shadow-xl transition-all duration-300 bg-white shadow-sm overflow-hidden">
-                    {news.imageUrl && (
-                      <div className="w-full h-48 bg-slate-100 relative overflow-hidden">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={news.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      </div>
-                    )}
-                    <div className="p-6 flex flex-col flex-grow">
-                      <p className="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider">{new Date(news.pubDate).toLocaleDateString()}</p>
-                      <h4 className="font-bold font-serif text-lg text-slate-900 mb-3 group-hover:text-yellow-600 transition-colors line-clamp-3" dangerouslySetInnerHTML={{__html: news.title}}></h4>
-                      <div className="mt-auto flex items-center justify-between gap-2 text-sm font-bold text-yellow-600 pt-4 border-t border-slate-100">
-                        <span>Read Full Story</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* Philosophy / Values Quote */}
-      <section className="py-32 text-center px-4 relative overflow-hidden border-y border-slate-700">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img 
-            src="/philovaluequote.png" 
-            alt="Philosophy Background" 
-            className="w-full h-full object-cover" 
-          />
-        </div>
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-[#0F172A]/85 backdrop-blur-[2px]" />
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-900/40 via-transparent to-transparent pointer-events-none" />
-        
-        <div className="max-w-4xl mx-auto relative z-10">
-          <BookOpen className="w-12 h-12 text-yellow-500 mx-auto mb-8 opacity-90 drop-shadow-lg" />
-          <blockquote className="text-3xl md:text-4xl lg:text-5xl font-serif text-white leading-tight mb-10 drop-shadow-lg">
-            &quot;The justice system can be improved not by putting more pressure on the judiciary, but by reducing their workload through amicable resolutions and efficient practice.&quot;
-          </blockquote>
-          <div className="flex items-center justify-center gap-4">
-            <div className="h-px w-12 bg-yellow-500/50" />
-            <p className="text-yellow-500 font-bold tracking-widest uppercase text-sm drop-shadow-md">
-              Advocate Anirudha Sinai Borkar
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <h2 className="text-xs font-bold tracking-widest text-yellow-600 uppercase mb-2">Practice Standard</h2>
+            <h3 className="text-3xl font-serif font-bold text-slate-900 mb-4">The AB & Co. 5-Step Trust Framework</h3>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              We operate under a transparent 5-point operational framework focused on professional integrity and straightforward legal access.
             </p>
-            <div className="h-px w-12 bg-yellow-500/50" />
+          </div>
+
+          <div className="grid md:grid-cols-5 gap-6">
+            {trustFramework.map((tf, i) => (
+              <div key={i} className="p-6 bg-slate-50 rounded-xl border border-slate-200 text-left flex flex-col justify-between">
+                <div>
+                  <span className="text-2xl font-serif font-bold text-yellow-600 block mb-3">{tf.step}</span>
+                  <h4 className="font-bold text-slate-900 text-base mb-2">{tf.title}</h4>
+                  <p className="text-slate-600 text-xs leading-relaxed">{tf.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Consultation Fee & Terms Section */}
+      <section className="py-16 bg-slate-900 text-white border-t border-slate-800">
+        <div className="max-w-5xl mx-auto px-4 text-center">
+          <BookOpen className="w-10 h-10 text-yellow-500 mx-auto mb-4" />
+          <h3 className="text-2xl sm:text-3xl font-serif font-bold mb-4">Consultation Process & Policy</h3>
+          <p className="text-slate-300 text-sm max-w-2xl mx-auto leading-relaxed mb-6">
+            All appointments require a standard consultation fee of <strong>₹2,500 for a 60-minute session</strong>, paid prior to confirmation. In accordance with BCI Rule 36, we do not offer free consultations or promotional discounts.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-yellow-500" /> Administrative Booking</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-yellow-500" /> Secure Online Payment</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-yellow-500" /> In-Person & Video Options</span>
           </div>
         </div>
       </section>
 
       {/* Internal Firm Insights (Blogs) */}
       {blogs && blogs.length > 0 && (
-        <section className="py-24 bg-white">
+        <section className="py-20 bg-white border-t border-slate-200">
           <div className="max-w-6xl mx-auto px-4">
-            <div className="flex justify-between items-end mb-12">
+            <div className="flex justify-between items-end mb-10">
               <div>
-                <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Firm Insights</h2>
-                <h3 className="text-3xl font-serif font-bold text-slate-900">Articles from AB & Co. Legal</h3>
+                <h2 className="text-xs font-bold tracking-widest text-yellow-600 uppercase mb-2">Educational Blog</h2>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900">Legal Insights & Articles</h3>
               </div>
-              <Link href="/blog" className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-yellow-600 transition-colors">
+              <Link href="/blog" className="hidden sm:inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-yellow-600 transition-colors">
                 Read All Articles <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -330,10 +300,10 @@ export default function HomePage() {
                 <Link key={b.id} href={`/blog/${b.slug}`} className="group block h-full">
                   <div className="h-full flex flex-col p-6 rounded-2xl border border-slate-200 hover:border-yellow-600/30 hover:shadow-lg transition-all duration-300 bg-slate-50/50">
                     <p className="text-xs font-bold text-slate-400 mb-4 uppercase tracking-wider">{new Date(b.createdAt).toLocaleDateString()}</p>
-                    <h4 className="font-bold font-serif text-xl text-slate-900 mb-3 group-hover:text-yellow-600 transition-colors line-clamp-2">{b.title}</h4>
-                    <p className="text-slate-600 line-clamp-3 mb-6 flex-grow">{b.excerpt}</p>
-                    <div className="flex items-center gap-2 text-sm font-bold text-yellow-600">
-                      Read Article <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <h4 className="font-bold font-serif text-lg text-slate-900 mb-3 group-hover:text-yellow-600 transition-colors line-clamp-2">{b.title}</h4>
+                    <p className="text-slate-600 text-sm line-clamp-3 mb-6 flex-grow">{b.excerpt}</p>
+                    <div className="flex items-center gap-2 text-xs font-bold text-yellow-600">
+                      Read Article <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </Link>
@@ -343,32 +313,22 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* CTA Footer */}
-      <section className="py-24 bg-yellow-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-700 to-yellow-500" />
-        <div className="max-w-4xl mx-auto px-4 text-center relative z-10 text-white">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">Need Expert Legal Counsel?</h2>
-          <p className="text-yellow-50 text-xl mb-10 max-w-2xl mx-auto font-light">
-            Whether you are navigating a complex property transaction, structuring a tech contract, or seeking an amicable family resolution, AB & Co. Legal is here to protect your interests.
+      {/* Contact & Footer CTA */}
+      <section className="py-16 bg-yellow-600 text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold mb-4">AB & Co. Legal</h2>
+          <p className="text-yellow-100 text-sm sm:text-base mb-8 max-w-xl mx-auto">
+            Adv. Anirudha S. Borkar • Porvorim, North Goa (near Panaji)
           </p>
-          <Link href="/book" className="inline-flex items-center gap-2 px-8 py-4 bg-[#0F172A] text-white rounded-lg font-bold hover:bg-slate-800 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
-            Schedule a Consultation Now
+          <Link href="/book" className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#0F172A] text-white rounded-lg font-bold hover:bg-slate-800 transition-all shadow-xl">
+            Book Consultation (₹2,500)
           </Link>
-          
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm font-medium text-yellow-100">
-            <div className="flex items-center gap-2">
-              <Landmark className="w-5 h-5" />
-              Porvorim, Goa
-            </div>
-            <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-yellow-400" />
-            <div className="flex items-center gap-2">
-              <FileText className="w-5 h-5" />
-              hello@abcoflaw.in
-            </div>
-          </div>
+          <p className="text-xs text-yellow-200 mt-6">
+            Mon–Fri: 10:00–17:00 IST | Phone/Video consultations available by appointment
+          </p>
         </div>
       </section>
       
     </div>
   );
-}
+}

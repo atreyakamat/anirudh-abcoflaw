@@ -1,116 +1,103 @@
-import { Scale, Shield, Landmark, ArrowRight } from 'lucide-react';
+import { Shield, Landmark, ArrowRight, FileText, Briefcase, Globe, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { PageHeader } from '@/components/page-header';
+
+const practiceAreasDetailed = [
+  {
+    icon: Landmark,
+    title: 'Civil & Criminal Litigation (Goa Courts)',
+    desc: 'Representing clients in civil disputes (property, contracts, succession) and criminal matters. Experienced in trial court proceedings and appellate practice before the Bombay High Court (Panaji Bench) and Goa’s District & Sessions Courts.',
+  },
+  {
+    icon: FileText,
+    title: 'Property & Conveyancing',
+    desc: 'Advising on real estate and property development in Goa. Drafting sale and lease agreements, guiding RERA compliance, title verification, stamp duty issues, and resolving property ownership or transfer disputes.',
+  },
+  {
+    icon: Shield,
+    title: 'Family Law & Succession (Goa Civil Code)',
+    desc: 'Assisting with matrimonial matters (divorce, custody, maintenance) and inheritance (succession) under Goa’s unique Civil Code (Portuguese Civil Law). Drafting wills and managing probate (inventory) proceedings.',
+  },
+  {
+    icon: Briefcase,
+    title: 'Business & Commercial Advisory',
+    desc: 'Guiding entrepreneurs and Goa-based companies on statutory requirements, drafting commercial contracts, shareholder & partnership agreements, company formation, and resolving corporate & contractual disputes.',
+  },
+  {
+    icon: Globe,
+    title: 'Other Legal Services (Notary & IP)',
+    desc: 'Central Government Notary services for official document attestation, alongside preliminary Intellectual Property guidance (collaborating with specialist Goa IP experts for complex registrations).',
+  },
+];
 
 export default function ServicesPage() {
   return (
     <div className="animate-in font-sans selection:bg-yellow-600/30 selection:text-slate-900">
-      <PageHeader 
-        badge="Unlimited Scope" 
-        title="Comprehensive Legal Solutions" 
-        subtitle="The law is vast and every case is unique. Rather than limiting our practice to predefined categories, we provide holistic and adaptive legal strategies across all dimensions of the law." 
-      />
-
-      {/* Philosophy Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <h2 className="text-4xl font-bold font-serif text-slate-900 leading-tight">
-                Curated Advice by Expert Lawyers
-              </h2>
-              <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
-                <p>
-                  At AB & Co. Legal, we believe that strict boundaries between legal domains often fail to capture the complexity of real-world problems. Whether you are navigating a high-stakes commercial tech negotiation, structuring a property transaction, or seeking an amicable resolution to a sensitive family dispute, your legal representation should be as dynamic as your needs.
-                </p>
-                <p>
-                  Our expertise spans across vital sectors of law. We do not confine our services to a rigid menu. Instead, we analyze the specific intricacies of your situation and craft a bespoke legal strategy designed to protect your interests, secure your assets, and deliver justice.
-                </p>
-              </div>
-              <ul className="space-y-4 pt-4">
-                {[
-                  'Adaptive Litigation Strategies',
-                  'Cross-Domain Legal Consultancy',
-                  'Strategic Dispute Resolution',
-                  'Comprehensive Regulatory Compliance'
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-slate-800 font-medium">
-                    <span className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center shrink-0">
-                      <Shield className="w-4 h-4" />
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-6 relative">
-              <div className="absolute inset-0 bg-yellow-600/5 rounded-3xl transform translate-x-4 -translate-y-4" />
-              <div className="space-y-6 relative z-10 pt-12">
-                <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/lawyer2.png" alt="Legal Associate" className="w-full h-full object-cover" />
-                </div>
-              </div>
-              <div className="space-y-6 relative z-10">
-                <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/lawyer1.png" alt="Advocate Anirudha" className="w-full h-full object-cover" />
-                </div>
-              </div>
-            </div>
-          </div>
+      
+      {/* BCI Compliance Disclaimer Header Banner */}
+      <div className="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+          <p className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-yellow-500 shrink-0" />
+            <span><strong>Bar Council Compliance Notice:</strong> Factual practice area descriptions per Rule 36 of Bar Council of India Rules (1975). Informational purposes only.</span>
+          </p>
+          <span className="hidden md:inline-block text-slate-400 font-mono text-[10px]">Porvorim, Goa</span>
         </div>
-      </section>
+      </div>
 
-      {/* The Approach Section */}
-      <section className="py-24 bg-slate-50 border-y border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <h2 className="text-sm font-bold tracking-widest text-yellow-600 uppercase mb-3">Our Methodology</h2>
-          <h3 className="text-4xl font-serif font-bold text-slate-900 mb-16">How We Protect You</h3>
+      <div className="pt-10">
+        <PageHeader 
+          badge="Core Areas" 
+          title="Strategic Legal Focus" 
+          subtitle="Specialized legal counsel for individuals and businesses across Goa." 
+        />
+      </div>
+
+      {/* Services List Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 space-y-12">
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { icon: Scale, title: 'Analyze', desc: 'We take the time to thoroughly understand the nuances of your situation, examining all angles without assuming a one-size-fits-all approach.' },
-              { icon: Landmark, title: 'Strategize', desc: 'Drawing upon decades of combined experience across civil, corporate, and criminal sectors, we formulate a robust, multi-dimensional plan.' },
-              { icon: Shield, title: 'Execute', desc: 'Whether inside the courtroom or at the negotiation table, we execute our strategy with precision, aggression when necessary, and profound empathy.' }
-            ].map((step, i) => (
-              <div key={i} className="p-8 bg-white/70 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl hover:border-yellow-600/30 hover:-translate-y-1 transition-all duration-300">
-                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 text-slate-700 border border-slate-200/60 shadow-sm group-hover:text-yellow-600 transition-colors">
-                  <step.icon className="w-8 h-8" />
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-xs font-bold tracking-widest text-yellow-600 uppercase mb-2">Our Areas of Practice</h2>
+            <h3 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-4">Core Legal Practice Areas</h3>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              We concentrate on core legal fields relevant to Goa residents and commercial entities. By specializing, we deliver focused, expert advocacy in each domain.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {practiceAreasDetailed.map((area, idx) => (
+              <div key={idx} className="p-8 bg-slate-50 rounded-2xl border border-slate-200 hover:border-yellow-600/40 transition-all flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 bg-yellow-100 text-yellow-700 rounded-xl flex items-center justify-center mb-6">
+                    <area.icon className="w-6 h-6" />
+                  </div>
+                  <h4 className="font-serif font-bold text-xl text-slate-900 mb-3">{area.title}</h4>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-6">{area.desc}</p>
                 </div>
-                <h4 className="text-2xl font-bold font-serif text-slate-900 mb-4">{step.title}</h4>
-                <p className="text-slate-600 leading-relaxed">{step.desc}</p>
+                <Link href="/book" className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-yellow-600 transition-colors pt-4 border-t border-slate-200">
+                  <span>Schedule Consultation</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             ))}
           </div>
+
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 text-center text-white relative overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img 
-            src="/heroimage.jpg" 
-            alt="AB & Co. Legal Office" 
-            className="w-full h-full object-cover object-center"
-          />
-        </div>
-        <div className="absolute inset-0 bg-[#0F172A]/85 backdrop-blur-[2px] z-0" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-yellow-900/40 via-transparent to-transparent pointer-events-none z-0" />
-        
-        <div className="max-w-3xl mx-auto px-4 relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold font-serif mb-6">Let Us Handle the Complexity</h2>
-          <p className="text-slate-300 text-lg md:text-xl mb-10 font-light leading-relaxed">
-            Do not let the confines of legal terminology dictate your approach. Bring us your problem, and we will find the legal solution.
+      <section className="py-16 bg-slate-900 text-white border-t border-slate-800 text-center">
+        <div className="max-w-3xl mx-auto px-4">
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold mb-4">Schedule an Administrative Consultation</h2>
+          <p className="text-slate-300 text-sm mb-8 leading-relaxed">
+            Consultations are held at our Porvorim office (near Panaji) or via video call. Standard consultation fee: <strong>₹2,500 for a 60-minute session</strong>.
           </p>
-          <Link href="/book" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-yellow-600 text-white rounded-lg font-bold tracking-wide hover:bg-yellow-500 transition-all shadow-lg hover:shadow-yellow-600/20">
-            Discuss Your Case With Us <ArrowRight className="w-5 h-5" />
+          <Link href="/book" className="inline-flex items-center justify-center gap-2 px-7 py-3 bg-yellow-600 text-white rounded-lg font-bold hover:bg-yellow-500 transition-all text-xs">
+            Schedule Appointment <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
     </div>
   );
-}
+}
