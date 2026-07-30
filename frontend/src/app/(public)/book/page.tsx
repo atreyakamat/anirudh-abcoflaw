@@ -181,13 +181,13 @@ export default function BookingPage() {
         </div>
 
         {step < 4 && (
-          <div className="flex items-center justify-center gap-4 mb-8">
+          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8">
             {[1, 2, 3].map((s, idx) => (
-              <div key={s} className="flex items-center gap-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-500 ${step >= s ? 'bg-yellow-600 text-white shadow-[0_0_15px_rgba(202,138,4,0.4)] scale-110' : 'bg-white/60 text-slate-400 border border-slate-200/50 backdrop-blur-sm'}`}>
+              <div key={s} className="flex items-center gap-2 sm:gap-4">
+                <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-500 ${step >= s ? 'bg-yellow-600 text-white shadow-[0_0_15px_rgba(202,138,4,0.4)] scale-110' : 'bg-white/60 text-slate-400 border border-slate-200/50 backdrop-blur-sm'}`}>
                   {s}
                 </div>
-                {idx < 2 && <div className={`w-12 h-1 rounded-full transition-all duration-500 ${step > s ? 'bg-yellow-600 shadow-[0_0_10px_rgba(202,138,4,0.3)]' : 'bg-slate-200/50'}`} />}
+                {idx < 2 && <div className={`w-6 sm:w-12 h-1 rounded-full transition-all duration-500 ${step > s ? 'bg-yellow-600 shadow-[0_0_10px_rgba(202,138,4,0.3)]' : 'bg-slate-200/50'}`} />}
               </div>
             ))}
           </div>

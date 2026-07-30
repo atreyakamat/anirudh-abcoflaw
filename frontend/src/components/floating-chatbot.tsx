@@ -42,15 +42,15 @@ export function FloatingChatbot() {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 p-4 rounded-full bg-slate-900 text-white shadow-xl hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center cursor-pointer border border-slate-700 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
+        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 p-3.5 sm:p-4 rounded-full bg-slate-900 text-white shadow-xl hover:scale-105 transition-all duration-300 z-50 flex items-center justify-center cursor-pointer border border-slate-700 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
         aria-label="Open Legal Information Assistant"
       >
-        <MessageSquare className="w-6 h-6 text-yellow-500" />
+        <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" />
       </button>
 
       {/* Chat Window Container */}
       <div 
-        className={`fixed bottom-6 right-6 w-[380px] h-[560px] max-h-[82vh] max-w-[calc(100vw-3rem)] flex flex-col bg-white border border-slate-200 shadow-2xl rounded-2xl z-50 transition-all duration-300 origin-bottom-right overflow-hidden ${isOpen ? 'scale-100 opacity-100 pointer-events-auto translate-y-0' : 'scale-90 opacity-0 pointer-events-none translate-y-8'}`}
+        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-[380px] h-[520px] sm:h-[560px] max-h-[80vh] flex flex-col bg-white border border-slate-200 shadow-2xl rounded-2xl z-50 transition-all duration-300 origin-bottom-right overflow-hidden ${isOpen ? 'scale-100 opacity-100 pointer-events-auto translate-y-0' : 'scale-90 opacity-0 pointer-events-none translate-y-8'}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 bg-slate-900 text-white shadow-md relative z-10">

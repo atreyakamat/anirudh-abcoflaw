@@ -67,13 +67,24 @@ export default function HomePage() {
               <Scale className="w-4 h-4" />
               <span>Advocate Practice in Goa • Porvorim & Panaji</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight mb-4 tracking-tight">
+
+            {/* Mobile Lawyer Identity Badge (<768px) */}
+            <div className="md:hidden flex items-center gap-3 p-3 mb-6 bg-white/10 border border-white/20 rounded-xl backdrop-blur-sm">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/profilepic.jpg" alt="Advocate Anirudha Sinai Borkar" className="w-12 h-12 rounded-lg object-cover border border-yellow-500/50" />
+              <div>
+                <p className="font-serif font-bold text-sm text-white">Adv. Anirudha Sinai Borkar</p>
+                <p className="text-[11px] text-yellow-400">LL.B. (Goa) • LL.M. (Aberdeen, UK) • 20+ Yrs</p>
+              </div>
+            </div>
+
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight mb-4 tracking-tight">
               {SITE_CONFIG.firmName}<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
                 {SITE_CONFIG.tagline}
               </span>
             </h1>
-            <p className="text-base sm:text-lg text-slate-300 mb-8 max-w-xl leading-relaxed font-light">
+            <p className="text-sm sm:text-base text-slate-300 mb-8 max-w-xl leading-relaxed font-light">
               Founded by Advocate Anirudha Sinai Borkar with over two decades of legal practice. Providing structured legal representation, property conveyancing, succession advisory, and business documentation across Goa.
             </p>
             <div className="flex flex-wrap gap-3 mb-8">
@@ -118,9 +129,9 @@ export default function HomePage() {
               We concentrate on core legal fields relevant to individuals, families, and businesses in Goa. Descriptive guidance is provided to clarify the scope of legal work handled.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {SITE_CONFIG.practiceAreas.map((area, idx) => (
-              <div key={idx} className="p-8 bg-slate-50 rounded-2xl border border-slate-200/80 hover:border-yellow-600/40 transition-all duration-300 flex flex-col justify-between">
+              <div key={idx} className="p-6 sm:p-8 bg-slate-50 rounded-2xl border border-slate-200/80 hover:border-yellow-600/40 transition-all duration-300 flex flex-col justify-between">
                 <div>
                   <div className="w-12 h-12 bg-yellow-100 text-yellow-700 rounded-xl flex items-center justify-center mb-6">
                     {idx === 0 && <Landmark className="w-6 h-6" />}
@@ -147,7 +158,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-12 gap-12 items-center">
             <div className="md:col-span-5">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-[#0F172A] relative border border-slate-300 shadow-xl">
+              <div className="aspect-[4/3] sm:aspect-[4/5] rounded-2xl overflow-hidden bg-[#0F172A] relative border border-slate-300 shadow-xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="/profilepic.jpg" 
@@ -204,7 +215,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
             {trustFramework.map((tf, i) => (
               <div key={i} className="p-6 bg-slate-50 rounded-xl border border-slate-200 text-left flex flex-col justify-between">
                 <div>

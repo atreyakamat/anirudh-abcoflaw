@@ -73,9 +73,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border shadow-sm">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4">
-          <Link href="/" className="flex items-center gap-3 font-bold text-xl font-serif text-primary group">
-            <div className="p-2 rounded-lg bg-yellow-600/10 text-yellow-600 group-hover:bg-yellow-600 group-hover:text-white transition-colors">
-              <Scale className="w-6 h-6" />
+          <Link href="/" className="flex items-center gap-3 font-bold text-lg sm:text-xl font-serif text-primary group shrink-0">
+            <div className="p-2 rounded-lg bg-yellow-600/10 text-yellow-600 group-hover:bg-yellow-600 group-hover:text-white transition-colors shrink-0">
+              <Scale className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div className="flex flex-col">
               <span className="leading-tight">{SITE_CONFIG.firmName}</span>
@@ -83,46 +83,52 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1">
             {navLinks.map((l) => (
-              <Link key={l.href} href={l.href} className="px-3.5 py-2 text-xs font-semibold uppercase tracking-wider rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300">
+              <Link key={l.href} href={l.href} className="px-2.5 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-slate-300">
                 {l.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {mounted && (
               <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" aria-label="Toggle theme">
                 {theme === 'dark' ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5 text-slate-600" />}
               </button>
             )}
             
-            <Link href="/portal" className="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-slate-900 dark:bg-slate-800 text-white rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors shadow-sm">
+            <Link href="/portal" className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 dark:bg-slate-800 text-white rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors shadow-sm">
               <Lock className="w-3.5 h-3.5 text-yellow-500" />
               <span>Portal</span>
             </Link>
 
-            <Link href="/book" className="hidden sm:flex px-5 py-2.5 bg-yellow-600 text-white rounded-lg text-xs font-bold hover:bg-yellow-500 transition-colors shadow-sm uppercase tracking-wider">
+            <Link href="/book" className="hidden md:flex px-4 py-2 bg-yellow-600 text-white rounded-lg text-xs font-bold hover:bg-yellow-500 transition-colors shadow-sm uppercase tracking-wider">
               Request Appointment
             </Link>
             
-            <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" aria-label="Toggle Navigation Menu">
+            <button onClick={() => setMenuOpen(!menuOpen)} className="xl:hidden p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer" aria-label="Toggle Navigation Menu">
               {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
 
         {menuOpen && (
-          <div className="lg:hidden border-t bg-background px-4 py-4 space-y-1 shadow-lg absolute w-full z-50">
+          <div className="xl:hidden border-t bg-background px-4 py-4 space-y-1 shadow-2xl absolute top-full left-0 right-0 w-full z-50 max-h-[85vh] overflow-y-auto">
             {navLinks.map((l) => (
-              <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block py-2.5 text-sm font-semibold uppercase tracking-wider hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg px-4 text-slate-800 dark:text-slate-200">
+              <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg px-4 text-slate-800 dark:text-slate-200">
                 {l.label}
               </Link>
             ))}
-            <Link href="/book" onClick={() => setMenuOpen(false)} className="block mt-4 text-center w-full py-3 bg-yellow-600 text-white rounded-lg font-bold text-xs uppercase tracking-wider">
-              Request Appointment
-            </Link>
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-2">
+              <Link href="/portal" onClick={() => setMenuOpen(false)} className="flex items-center justify-center gap-2 w-full py-2.5 bg-slate-900 text-white rounded-lg font-bold text-xs uppercase tracking-wider">
+                <Lock className="w-3.5 h-3.5 text-yellow-500" />
+                <span>Client Portal</span>
+              </Link>
+              <Link href="/book" onClick={() => setMenuOpen(false)} className="block text-center w-full py-2.5 bg-yellow-600 text-white rounded-lg font-bold text-xs uppercase tracking-wider">
+                Request Appointment
+              </Link>
+            </div>
           </div>
         )}
       </header>

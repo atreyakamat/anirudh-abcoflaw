@@ -28,9 +28,9 @@ export default function AboutPage() {
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 space-y-20">
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-xl aspect-[4/5] bg-slate-900">
+              <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-xl aspect-[4/3] sm:aspect-[4/5] bg-slate-900">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="/profilepic.jpg" 
@@ -63,7 +63,7 @@ export default function AboutPage() {
           </div>
 
           {/* Key Credentials Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-12 border-y border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 py-12 border-y border-slate-200">
             {[
               { title: 'LL.M., International Business Law', desc: 'University of Aberdeen, UK (2009)' },
               { title: 'LL.B. (Honours)', desc: 'Salgaonkar College of Law, Goa (2003)' },
@@ -80,7 +80,7 @@ export default function AboutPage() {
           </div>
 
           {/* Multilingual & Location Access */}
-          <div className="grid md:grid-cols-2 gap-8 bg-slate-900 text-white p-10 rounded-3xl">
+          <div className="grid md:grid-cols-2 gap-8 bg-slate-900 text-white p-6 sm:p-8 md:p-10 rounded-3xl">
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <Globe className="w-6 h-6 text-yellow-500" />

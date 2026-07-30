@@ -65,9 +65,9 @@ export default function ServicesPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
             {practiceAreasDetailed.map((area, idx) => (
-              <div key={idx} className="p-8 bg-slate-50 rounded-2xl border border-slate-200 hover:border-yellow-600/40 transition-all flex flex-col justify-between">
+              <div key={idx} className="p-6 sm:p-8 bg-slate-50 rounded-2xl border border-slate-200 hover:border-yellow-600/40 transition-all flex flex-col justify-between">
                 <div>
                   <div className="w-12 h-12 bg-yellow-100 text-yellow-700 rounded-xl flex items-center justify-center mb-6">
                     <area.icon className="w-6 h-6" />

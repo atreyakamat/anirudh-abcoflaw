@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Visitor Consultation Booking E2E', () => {
   test('should render public consultation booking form', async ({ page }) => {
     await page.goto('/book');
-    await expect(page).toHaveTitle(/Book Consultation|AB & Co\./i);
-    await expect(page.getByRole('heading', { name: /Book a Consultation|Schedule Consultation/i })).toBeVisible();
+    await expect(page).toHaveTitle(/Schedule a Consultation|Book Consultation|AB & Co\./i);
+    await expect(page.getByRole('heading', { name: /Schedule a Consultation|Schedule Consultation|Book a Consultation/i })).toBeVisible();
   });
 
   test('should validate required fields on booking submission', async ({ page }) => {
