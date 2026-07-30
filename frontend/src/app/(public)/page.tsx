@@ -3,75 +3,23 @@
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
-import { Scale, Shield, ArrowRight, Star, FileText, Briefcase, Landmark, BookOpen, Globe, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Scale, Shield, ArrowRight, FileText, Briefcase, Landmark, Globe, CheckCircle2, ShieldCheck, Lock, BookOpen } from 'lucide-react';
 import type { BlogPost, PaginatedResult } from '@/types';
+import { SITE_CONFIG } from '@/lib/config/site-config';
 
 const achievements = [
   { text: 'LL.M., International Business Law', subtext: 'University of Aberdeen, UK (2009)' },
   { text: 'LL.B. (Honours)', subtext: 'Salgaonkar College of Law, Goa (2003)' },
-  { text: 'Central Government Notary', subtext: 'Appointed Notary for Govt. of India' },
+  { text: 'Central Govt. Notary', subtext: 'Appointed Notary for Govt. of India' },
   { text: '20+ Years Bar Experience', subtext: 'Advocate – Panaji & Porvorim, Goa' },
 ];
 
-const practiceAreas = [
-  {
-    icon: Landmark,
-    title: 'Civil & Criminal Litigation',
-    subtitle: 'Goa Courts & High Court',
-    desc: 'Representing clients in civil disputes (property, contracts, succession) and criminal matters. Practicing before the Bombay High Court (Panaji Bench), Goa District and Sessions Courts, and local tribunals.',
-  },
-  {
-    icon: FileText,
-    title: 'Property & Conveyancing',
-    subtitle: 'Real Estate & Title Advisory',
-    desc: 'Comprehensive real estate guidance: drafting & negotiating sale/lease agreements, development projects, RERA compliance, title/transfer disputes, stamp duty verifications, and property registrations.',
-  },
-  {
-    icon: Shield,
-    title: 'Family Law & Succession',
-    subtitle: "Goa's Unique Civil Code",
-    desc: 'Specialized assistance under Portuguese Civil Law / Goa Civil Code for matrimonial matters (divorce, custody, maintenance), succession, estate settlements, preparing wills, and probate (inventory) proceedings.',
-  },
-  {
-    icon: Briefcase,
-    title: 'Business & Commercial Advisory',
-    subtitle: 'Contracts & Corporate Compliance',
-    desc: 'Guiding entrepreneurs and Goa-based companies on commercial agreements, shareholder & partnership contracts, company formation, regulatory compliance, and resolving contractual disputes.',
-  },
-  {
-    icon: Globe,
-    title: 'Other Legal Services',
-    subtitle: 'Notary & Specialized Advisory',
-    desc: 'Central Government Notary services for official document attestation, alongside preliminary Intellectual Property guidance (collaborating with specialist Goa IP experts as needed).',
-  },
-];
-
 const trustFramework = [
-  {
-    step: '01',
-    title: 'Professional Visibility',
-    desc: 'Accurate, transparent credentials and contact details ensuring clients seeking a Goa advocate find verified professional records.',
-  },
-  {
-    step: '02',
-    title: 'Instant Credibility',
-    desc: 'Over two decades at the Goa Bar, international LL.M. qualifications, and clear professional standing.',
-  },
-  {
-    step: '03',
-    title: 'Ethical Safety',
-    desc: 'Strict adherence to Bar Council of India Rule 36 — purely informational, objective, and non-promotional content.',
-  },
-  {
-    step: '04',
-    title: 'Strategic Focus',
-    desc: 'Specialized concentration on core Goa legal domains rather than generalized, superficial legal listings.',
-  },
-  {
-    step: '05',
-    title: 'Zero-Effort Engagement',
-    desc: 'Structured administrative booking, transparent consultation fee schedule, and prompt, professional service.',
-  },
+  { step: '01', title: 'Professional Visibility', desc: 'Verified professional identity, credentials, and practice information.' },
+  { step: '02', title: 'Informational Standing', desc: 'Substantive legal notes and clear practice area guidance.' },
+  { step: '03', title: 'Ethical Restraint', desc: 'Strict Rule 36 compliance without solicitation or promotional claims.' },
+  { step: '04', title: 'Practice Clarity', desc: 'Specialized focus on core Goa legal fields.' },
+  { step: '05', title: 'Administrative Ease', desc: 'Structured appointment requests, transparent fees, and client portal.' },
 ];
 
 export default function HomePage() {
@@ -95,14 +43,14 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           <p className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-yellow-500 shrink-0" />
-            <span><strong>Bar Council Compliance Notice:</strong> This website is for informational & educational purposes only per Rule 36 of the Bar Council of India Rules (1975). No solicitation or legal advertisement.</span>
+            <span><strong>Bar Council Compliance Notice:</strong> {SITE_CONFIG.bciDisclaimer.headerBanner}</span>
           </p>
           <span className="hidden md:inline-block text-slate-400 font-mono text-[10px]">Porvorim, Goa</span>
         </div>
       </div>
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-20 md:pt-32 md:pb-28 overflow-hidden bg-[#0F172A]">
+      <section className="relative pt-20 pb-20 md:pt-28 md:pb-24 overflow-hidden bg-[#0F172A]">
         <div className="absolute inset-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
@@ -115,41 +63,45 @@ export default function HomePage() {
         
         <div className="max-w-6xl mx-auto px-4 relative z-10 grid md:grid-cols-12 gap-12 items-center text-white">
           <div className="md:col-span-7">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold mb-6 text-yellow-500 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold mb-6 text-yellow-500 backdrop-blur-sm">
               <Scale className="w-4 h-4" />
-              <span>Advocate – Panaji & Porvorim, Goa</span>
+              <span>Advocate Practice in Goa • Porvorim & Panaji</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight mb-6 tracking-tight">
-              AB & Co. Legal<br/>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight mb-4 tracking-tight">
+              {SITE_CONFIG.firmName}<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">
-                Legal Made Simple
+                {SITE_CONFIG.tagline}
               </span>
             </h1>
             <p className="text-base sm:text-lg text-slate-300 mb-8 max-w-xl leading-relaxed font-light">
-              Led by Advocate Anirudha Sinai Borkar with 20+ years of legal experience, providing clear, practical guidance across Goa’s courts, tribunals, and regulatory bodies.
+              Founded by Advocate Anirudha Sinai Borkar with over two decades of legal practice. Providing structured legal representation, property conveyancing, succession advisory, and business documentation across Goa.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Link href="/book" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-yellow-600 text-white rounded-lg font-bold hover:bg-yellow-500 transition-all shadow-lg shadow-yellow-600/20">
-                Schedule Consultation (₹2,500) <ArrowRight className="w-4 h-4" />
+            <div className="flex flex-wrap gap-3 mb-8">
+              <Link href="/book" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-yellow-600 text-white rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-yellow-500 transition-all shadow-lg">
+                Request an Appointment <ArrowRight className="w-4 h-4" />
               </Link>
-              <Link href="#profile" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg font-medium transition-colors backdrop-blur-sm">
-                Advocate Profile
+              <Link href="/services" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg font-bold text-xs uppercase tracking-wider transition-colors backdrop-blur-sm">
+                View Practice Areas
+              </Link>
+              <Link href="/portal" className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-bold text-xs uppercase tracking-wider transition-colors">
+                <Lock className="w-3.5 h-3.5 text-yellow-500" />
+                Client Portal
               </Link>
             </div>
-            <div className="flex items-center gap-6 text-xs text-slate-400 border-t border-slate-800 pt-6">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 border-t border-slate-800/80 pt-6">
               <span>Languages: <strong>English, Konkani, Hindi, Portuguese</strong></span>
               <span>•</span>
-              <span>Office: <strong>Porvorim (near Panaji)</strong></span>
+              <span>Location: <strong>Porvorim (near Panaji)</strong></span>
             </div>
           </div>
           
           <div className="md:col-span-5 hidden md:flex justify-center">
             <div className="relative w-full max-w-sm rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-white/10 backdrop-blur-md p-6">
-              <div className="aspect-[4/5] rounded-xl overflow-hidden mb-4 relative">
+              <div className="aspect-[4/5] rounded-xl overflow-hidden mb-4 relative bg-slate-900">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/lawyer1.png" alt="Advocate Anirudha Sinai Borkar" className="w-full h-full object-cover" />
               </div>
-              <p className="font-serif font-bold text-xl text-white text-center">Adv. Anirudha S. Borkar</p>
+              <p className="font-serif font-bold text-xl text-white text-center">{SITE_CONFIG.lawyerName}</p>
               <p className="text-xs text-yellow-500 text-center font-medium mt-1">LL.B. (Goa) • LL.M. (Aberdeen, UK)</p>
             </div>
           </div>
@@ -160,25 +112,28 @@ export default function HomePage() {
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <h2 className="text-xs font-bold tracking-widest text-yellow-600 uppercase mb-2">Strategic Focus</h2>
-            <h3 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-4">Core Legal Practice Areas</h3>
-            <p className="text-slate-600 leading-relaxed">
-              We concentrate on specialized core areas relevant to individuals and businesses in Goa. Each field is handled with focus, integrity, and depth.
+            <h2 className="text-xs font-bold tracking-widest text-yellow-600 uppercase mb-2">Practice Areas</h2>
+            <h3 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-4">Strategic Legal Focus</h3>
+            <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
+              We concentrate on core legal fields relevant to individuals, families, and businesses in Goa. Descriptive guidance is provided to clarify the scope of legal work handled.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {practiceAreas.map((area, idx) => (
-              <div key={idx} className="p-8 bg-slate-50 rounded-2xl border border-slate-200/80 hover:border-yellow-600/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between">
+            {SITE_CONFIG.practiceAreas.map((area, idx) => (
+              <div key={idx} className="p-8 bg-slate-50 rounded-2xl border border-slate-200/80 hover:border-yellow-600/40 transition-all duration-300 flex flex-col justify-between">
                 <div>
                   <div className="w-12 h-12 bg-yellow-100 text-yellow-700 rounded-xl flex items-center justify-center mb-6">
-                    <area.icon className="w-6 h-6" />
+                    {idx === 0 && <Landmark className="w-6 h-6" />}
+                    {idx === 1 && <FileText className="w-6 h-6" />}
+                    {idx === 2 && <Shield className="w-6 h-6" />}
+                    {idx === 3 && <Briefcase className="w-6 h-6" />}
+                    {idx === 4 && <Globe className="w-6 h-6" />}
                   </div>
-                  <h4 className="font-serif font-bold text-xl text-slate-900 mb-1">{area.title}</h4>
-                  <p className="text-xs font-semibold text-yellow-600 uppercase tracking-wider mb-4">{area.subtitle}</p>
-                  <p className="text-slate-600 text-sm leading-relaxed mb-6">{area.desc}</p>
+                  <h4 className="font-serif font-bold text-xl text-slate-900 mb-2">{area.title}</h4>
+                  <p className="text-slate-600 text-xs leading-relaxed mb-6">{area.shortDesc}</p>
                 </div>
-                <Link href="/book" className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-yellow-600 transition-colors pt-4 border-t border-slate-200">
-                  <span>Schedule Consultation</span>
+                <Link href="/services" className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-yellow-600 transition-colors pt-4 border-t border-slate-200">
+                  <span>View Details</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -187,7 +142,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Advocate Profile Section */}
+      {/* Advocate Biography Section */}
       <section id="profile" className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-12 gap-12 items-center">
@@ -225,12 +180,10 @@ export default function HomePage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 {achievements.map((achieve, i) => (
                   <div key={i} className="flex gap-3 items-start p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-                    <div className="mt-0.5 p-1.5 bg-yellow-50 rounded-lg text-yellow-600">
-                      <Star className="w-4 h-4 fill-current" />
-                    </div>
+                    <CheckCircle2 className="w-5 h-5 text-yellow-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-bold text-slate-900 text-sm">{achieve.text}</p>
-                      <p className="text-xs text-slate-500">{achieve.subtext}</p>
+                      <p className="font-bold text-slate-900 text-xs">{achieve.text}</p>
+                      <p className="text-[11px] text-slate-500">{achieve.subtext}</p>
                     </div>
                   </div>
                 ))}
