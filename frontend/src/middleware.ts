@@ -56,6 +56,11 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
+  // Portal login page - allow unauthenticated access
+  if (pathname === '/portal/login') {
+    return supabaseResponse;
+  }
+
   // Portal routes - require authentication
   if (portalRoutes.some((route) => pathname.startsWith(route))) {
     if (!user) {

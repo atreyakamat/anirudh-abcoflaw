@@ -13,10 +13,12 @@ test.describe('Authentication & Dashboard Navigation E2E', () => {
     await expect(page).toHaveTitle(/AB & Co\. Legal|Law Practice/i);
     
     // Check consultation booking link or button
-    const bookButton = page.getByRole('link', { name: /Request Appointment|Book Consultation|Schedule/i }).first();
-    if (await bookButton.isVisible()) {
-      await bookButton.click();
-      await expect(page.url()).toContain('/book');
-    }
+    const bookLink = page.locator('a[href="/book"]').first();
+    await expect(bookLink).toBeVisible();
+    await Promise.all([
+      page.waitForURL('**/book'),
+      bookLink.click(),
+    ]);
+    expect(page.url()).toContain('/book');
   });
 });

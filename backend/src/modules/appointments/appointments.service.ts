@@ -223,7 +223,7 @@ export class AppointmentsService {
       this.notificationsService.sendN8nWebhook('APPOINTMENT_CREATED', { appointment }).catch(err => console.error(err));
 
       return appointment;
-    });
+    }, { timeout: 20000 });
   }
 
   async updateStatus(
@@ -368,6 +368,7 @@ export class AppointmentsService {
   }
 
   async getUpcomingAppointments(limit = 10): Promise<Appointment[]> {
+    const numLimit = Number(limit) || 10;
     const now = new Date();
     now.setHours(0, 0, 0, 0);
 
@@ -383,7 +384,7 @@ export class AppointmentsService {
         client: true,
       },
       orderBy: [{ preferredDate: 'asc' }, { preferredTime: 'asc' }],
-      take: limit,
+      take: numLimit,
     });
   }
 

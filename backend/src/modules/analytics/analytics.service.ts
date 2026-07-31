@@ -34,14 +34,15 @@ export class AnalyticsService {
   }
 
   async getAppointmentTrends(days = 30) {
+    const numDays = Number(days) || 30;
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
+    startDate.setDate(startDate.getDate() - numDays);
     const appointments = await this.prisma.appointment.findMany({
       where: { createdAt: { gte: startDate }, deletedAt: null },
       select: { createdAt: true, status: true },
     });
     const grouped: Record<string, { total: number; completed: number; cancelled: number }> = {};
-    for (let i = 0; i < days; i++) {
+    for (let i = 0; i < numDays; i++) {
       const d = new Date(startDate);
       d.setDate(d.getDate() + i);
       grouped[d.toISOString().split('T')[0]] = { total: 0, completed: 0, cancelled: 0 };
@@ -57,14 +58,15 @@ export class AnalyticsService {
   }
 
   async getRevenueByMonth(months = 6) {
+    const numMonths = Number(months) || 6;
     const startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - months);
+    startDate.setMonth(startDate.getMonth() - numMonths);
     const payments = await this.prisma.payment.findMany({
       where: { status: PaymentStatus.PAID, paidAt: { gte: startDate } },
       select: { amount: true, paidAt: true },
     });
     const grouped: Record<string, number> = {};
-    for (let i = 0; i < months; i++) {
+    for (let i = 0; i < numMonths; i++) {
       const d = new Date(startDate);
       d.setMonth(d.getMonth() + i);
       grouped[d.toISOString().slice(0, 7)] = 0;
