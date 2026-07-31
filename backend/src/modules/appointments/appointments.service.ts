@@ -218,9 +218,36 @@ export class AppointmentsService {
         },
       });
 
-      // Trigger n8n webhook & event emitter
-      this.eventEmitter.emit('appointment.created', appointment);
-      this.notificationsService.sendN8nWebhook('APPOINTMENT_CREATED', { appointment }).catch(err => console.error(err));
+      // Persist durable Transactional Outbox event atomically with appointment
+      const eventId = `evt_${crypto.randomUUID()}`;
+      await tx.automationEvent.create({
+        data: {
+          eventId,
+          eventType: 'appointment.created',
+          aggregateType: 'APPOINTMENT',
+          aggregateId: appointment.id,
+          payload: {
+            eventId,
+            appointmentId: appointment.id,
+            referenceNumber: appointment.referenceNumber,
+            description: appointment.description,
+            preferredDate: appointment.preferredDate,
+            preferredTime: appointment.preferredTime,
+            client: appointment.client ? {
+              id: appointment.client.id,
+              firstName: appointment.client.firstName,
+              lastName: appointment.client.lastName,
+              email: appointment.client.email,
+              phone: appointment.client.phone,
+            } : null,
+          },
+          status: 'PENDING',
+          nextAttemptAt: new Date(),
+        },
+      });
+
+      // Emit domain event asynchronously for background outbox processing
+      this.eventEmitter.emit('appointment.created', { ...appointment, eventId });
 
       return appointment;
     }, { timeout: 20000 });

@@ -21,6 +21,16 @@ async function bootstrap() {
   const apiPrefix = configService.get<string>('API_PREFIX', 'api/v1');
   const isProduction = configService.get<string>('NODE_ENV') === 'production';
 
+  // Production Secret Validation Guard
+  if (isProduction) {
+    const jwtSecret = configService.get<string>('JWT_SECRET');
+    const insecureSecrets = ['secret', 'changeme', 'admin123', 'test', '123456', 'your-super-secret-jwt-key-min-32-chars-here'];
+    if (!jwtSecret || insecureSecrets.includes(jwtSecret.toLowerCase())) {
+      logger.error('FATAL: Insecure or missing JWT_SECRET in production mode! Application startup aborted.');
+      process.exit(1);
+    }
+  }
+
   // Global middleware
   app.use(helmet());
   app.use(cookieParser());

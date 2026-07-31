@@ -1,6 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OnEvent } from '@nestjs/event-emitter';
+import { HttpService } from '@nestjs/axios';
+import { PrismaService } from '../../prisma/prisma.service.js';
+import { OutboxStatus } from '@prisma/client';
+import { firstValueFrom } from 'rxjs';
 import * as crypto from 'crypto';
 
 export interface AutomationWorkflow {
@@ -30,8 +34,10 @@ export interface AutomationLog {
 }
 
 @Injectable()
-export class AutomationsService {
+export class AutomationsService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(AutomationsService.name);
+  private pollingTimer: NodeJS.Timeout | null = null;
+  private isProcessing = false;
 
   private workflows: Map<string, AutomationWorkflow> = new Map([
     [
@@ -82,157 +88,28 @@ export class AutomationsService {
         webhookPath: '/webhook/appointment-reminder',
       },
     ],
-    [
-      'wf-lawyer-assigned',
-      {
-        id: 'wf-lawyer-assigned',
-        name: 'Lawyer Case Assignment & Briefing',
-        category: 'CLIENTS',
-        triggerEvent: 'lawyer.assigned',
-        status: 'ACTIVE',
-        successCount: 29,
-        failureCount: 0,
-        lastRunAt: new Date(Date.now() - 180 * 60000).toISOString(),
-        avgDurationMs: 180,
-        n8nWorkflowId: 'lawyer-assigned',
-        webhookPath: '/webhook/lawyer-assigned',
-      },
-    ],
-    [
-      'wf-consultation-completed',
-      {
-        id: 'wf-consultation-completed',
-        name: 'Consultation Complete & AI Brief Dispatch',
-        category: 'APPOINTMENTS',
-        triggerEvent: 'appointment.completed',
-        status: 'ACTIVE',
-        successCount: 24,
-        failureCount: 0,
-        lastRunAt: new Date(Date.now() - 240 * 60000).toISOString(),
-        avgDurationMs: 340,
-        n8nWorkflowId: 'consultation-completed',
-        webhookPath: '/webhook/consultation-completed',
-      },
-    ],
-    [
-      'wf-feedback-request',
-      {
-        id: 'wf-feedback-request',
-        name: 'Automated Post-Consultation Feedback Request',
-        category: 'CLIENTS',
-        triggerEvent: 'feedback.request',
-        status: 'ACTIVE',
-        successCount: 20,
-        failureCount: 0,
-        lastRunAt: new Date(Date.now() - 360 * 60000).toISOString(),
-        avgDurationMs: 110,
-        n8nWorkflowId: 'feedback-request',
-        webhookPath: '/webhook/feedback-request',
-      },
-    ],
-    [
-      'wf-invoice-created',
-      {
-        id: 'wf-invoice-created',
-        name: 'Invoice Generation & Payment Link Dispatch',
-        category: 'BILLING',
-        triggerEvent: 'invoice.created',
-        status: 'ACTIVE',
-        successCount: 19,
-        failureCount: 0,
-        lastRunAt: new Date(Date.now() - 400 * 60000).toISOString(),
-        avgDurationMs: 280,
-        n8nWorkflowId: 'invoice-created',
-        webhookPath: '/webhook/invoice-created',
-      },
-    ],
-    [
-      'wf-ai-case-classification',
-      {
-        id: 'wf-ai-case-classification',
-        name: 'AI Case Practice Area & Priority Classifier',
-        category: 'AI',
-        triggerEvent: 'appointment.created',
-        status: 'ACTIVE',
-        successCount: 42,
-        failureCount: 0,
-        lastRunAt: new Date(Date.now() - 15 * 60000).toISOString(),
-        avgDurationMs: 820,
-        n8nWorkflowId: 'ai-case-classification',
-        webhookPath: '/webhook/ai-case-classification',
-      },
-    ],
-    [
-      'wf-ai-draft-email',
-      {
-        id: 'wf-ai-draft-email',
-        name: 'AI Personalized Cancellation Response Draft',
-        category: 'AI',
-        triggerEvent: 'appointment.cancelled',
-        status: 'ACTIVE',
-        successCount: 8,
-        failureCount: 0,
-        lastRunAt: new Date(Date.now() - 500 * 60000).toISOString(),
-        avgDurationMs: 950,
-        n8nWorkflowId: 'ai-draft-email',
-        webhookPath: '/webhook/ai-draft-email',
-      },
-    ],
-    [
-      'wf-ai-meeting-summary',
-      {
-        id: 'wf-ai-meeting-summary',
-        name: 'AI Consultation Transcript & Action Item Summary',
-        category: 'AI',
-        triggerEvent: 'appointment.completed',
-        status: 'ACTIVE',
-        successCount: 24,
-        failureCount: 0,
-        lastRunAt: new Date(Date.now() - 240 * 60000).toISOString(),
-        avgDurationMs: 1250,
-        n8nWorkflowId: 'ai-meeting-summary',
-        webhookPath: '/webhook/ai-meeting-summary',
-      },
-    ],
   ]);
 
-  private logs: AutomationLog[] = [
-    {
-      id: 'log-101',
-      workflowId: 'wf-booking-created',
-      workflowName: 'Appointment Created Notification & Intake',
-      event: 'appointment.created',
-      status: 'SUCCESS',
-      durationMs: 142,
-      responseCode: 200,
-      timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
-      payloadPreview: '{"appointmentId":"cms2hz33n0006pfd3a5ig2zwb","client":"ValidTest Booking"}',
-    },
-    {
-      id: 'log-102',
-      workflowId: 'wf-ai-case-classification',
-      workflowName: 'AI Case Practice Area & Priority Classifier',
-      event: 'appointment.created',
-      status: 'SUCCESS',
-      durationMs: 815,
-      responseCode: 200,
-      timestamp: new Date(Date.now() - 15 * 60000).toISOString(),
-      payloadPreview: '{"practiceArea":"Corporate Law","priority":"HIGH","confidence":0.96}',
-    },
-    {
-      id: 'log-103',
-      workflowId: 'wf-appointment-confirmed',
-      workflowName: 'Appointment Confirmation & Calendar Dispatch',
-      event: 'appointment.confirmed',
-      status: 'SUCCESS',
-      durationMs: 205,
-      responseCode: 200,
-      timestamp: new Date(Date.now() - 45 * 60000).toISOString(),
-      payloadPreview: '{"appointmentId":"cms2hz33n0006pfd3a5ig2zwb","status":"CONFIRMED"}',
-    },
-  ];
+  private logs: AutomationLog[] = [];
 
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private prisma: PrismaService,
+    private httpService: HttpService,
+    private configService: ConfigService,
+  ) {}
+
+  onModuleInit() {
+    // Start background outbox polling every 10 seconds
+    this.pollingTimer = setInterval(() => {
+      this.processOutbox().catch(err => this.logger.error(`Outbox polling error: ${err.message}`));
+    }, 10000);
+  }
+
+  onModuleDestroy() {
+    if (this.pollingTimer) {
+      clearInterval(this.pollingTimer);
+    }
+  }
 
   getWorkflows(): AutomationWorkflow[] {
     return Array.from(this.workflows.values());
@@ -251,6 +128,177 @@ export class AutomationsService {
     return wf;
   }
 
+  async getOutboxEvents(page = 1, limit = 20) {
+    const skip = (page - 1) * limit;
+    const [items, total] = await Promise.all([
+      this.prisma.automationEvent.findMany({
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      this.prisma.automationEvent.count(),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }
+
+  async retryOutboxEvent(id: string) {
+    const event = await this.prisma.automationEvent.findUnique({ where: { id } });
+    if (!event) throw new Error('Outbox event not found');
+
+    const updated = await this.prisma.automationEvent.update({
+      where: { id },
+      data: {
+        status: OutboxStatus.RETRY_PENDING,
+        nextAttemptAt: new Date(),
+        attemptCount: 0,
+        lastError: null,
+      },
+    });
+
+    // Trigger immediate outbox processing run
+    this.processOutbox().catch(err => this.logger.error(`Immediate outbox error: ${err.message}`));
+    return updated;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Transactional Outbox Dispatcher with Backoff, HMAC & Idempotency
+  // ---------------------------------------------------------------------------
+
+  async processOutbox(): Promise<void> {
+    if (this.isProcessing) return;
+    this.isProcessing = true;
+
+    try {
+      const pendingEvents = await this.prisma.automationEvent.findMany({
+        where: {
+          status: { in: [OutboxStatus.PENDING, OutboxStatus.RETRY_PENDING] },
+          nextAttemptAt: { lte: new Date() },
+        },
+        orderBy: { createdAt: 'asc' },
+        take: 10,
+      });
+
+      if (pendingEvents.length === 0) {
+        this.isProcessing = false;
+        return;
+      }
+
+      const n8nBaseUrl = this.configService.get<string>('N8N_WEBHOOK_URL') || 'http://localhost:5678/webhook/appointment-created';
+      const webhookSecret = this.configService.get<string>('N8N_WEBHOOK_SECRET', 'dev-webhook-secret');
+
+      for (const event of pendingEvents) {
+        await this.dispatchSingleEvent(event, n8nBaseUrl, webhookSecret);
+      }
+    } catch (err: any) {
+      this.logger.error(`Error processing transactional outbox: ${err.message}`);
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
+  private async dispatchSingleEvent(event: any, webhookUrl: string, webhookSecret: string) {
+    const attempts = event.attemptCount + 1;
+    const timestamp = new Date().toISOString();
+
+    // Mark as PROCESSING
+    await this.prisma.automationEvent.update({
+      where: { id: event.id },
+      data: { status: OutboxStatus.PROCESSING, lastAttemptAt: new Date() },
+    });
+
+    const payloadObj = typeof event.payload === 'string' ? JSON.parse(event.payload) : event.payload;
+    const bodyString = JSON.stringify(payloadObj);
+
+    // Compute HMAC-SHA256 signature over payload
+    const signature = crypto
+      .createHmac('sha256', webhookSecret)
+      .update(bodyString)
+      .digest('hex');
+
+    try {
+      this.logger.log(`Dispatching Outbox Event [${event.eventId}] (${event.eventType}) to n8n (attempt ${attempts})...`);
+      
+      const response = await firstValueFrom(
+        this.httpService.post(
+          webhookUrl,
+          bodyString,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Event-Id': event.eventId,
+              'X-Webhook-Signature': signature,
+              'X-Webhook-Timestamp': timestamp,
+            },
+            timeout: 5000,
+          },
+        ),
+      );
+
+      // On Success: Set status = COMPLETED
+      await this.prisma.automationEvent.update({
+        where: { id: event.id },
+        data: {
+          status: OutboxStatus.COMPLETED,
+          attemptCount: attempts,
+          processedAt: new Date(),
+          lastError: null,
+        },
+      });
+
+      this.logger.log(`Successfully delivered Outbox Event [${event.eventId}] to n8n. Status: COMPLETED`);
+
+      // Log in memory audit preview
+      this.logs.unshift({
+        id: `log-${event.id}`,
+        workflowId: 'wf-booking-created',
+        workflowName: 'Appointment Created Notification & Intake',
+        event: event.eventType,
+        status: 'SUCCESS',
+        durationMs: 120,
+        responseCode: response.status || 200,
+        timestamp,
+        payloadPreview: bodyString.slice(0, 120),
+      });
+
+    } catch (error: any) {
+      const errMsg = error?.response?.data?.message || error.message || 'Webhook dispatch failed';
+      this.logger.warn(`Failed to deliver Outbox Event [${event.eventId}] (attempt ${attempts}/${event.maxAttempts}): ${errMsg}`);
+
+      if (attempts >= event.maxAttempts) {
+        // DEAD_LETTER after max attempts reached
+        await this.prisma.automationEvent.update({
+          where: { id: event.id },
+          data: {
+            status: OutboxStatus.DEAD_LETTER,
+            attemptCount: attempts,
+            lastError: `Max attempts reached (${event.maxAttempts}). Last error: ${errMsg}`,
+          },
+        });
+      } else {
+        // Calculate backoff delay: Attempt 1 -> 30s, Attempt 2 -> 120s, Attempt 3 -> 600s, Attempt 4 -> 1800s
+        const backoffSeconds = [30, 120, 600, 1800][attempts - 1] || 1800;
+        const nextAttemptAt = new Date(Date.now() + backoffSeconds * 1000);
+
+        await this.prisma.automationEvent.update({
+          where: { id: event.id },
+          data: {
+            status: OutboxStatus.RETRY_PENDING,
+            attemptCount: attempts,
+            nextAttemptAt,
+            lastError: errMsg,
+          },
+        });
+      }
+    }
+  }
+
   async triggerWorkflow(id: string, testPayload?: Record<string, any>): Promise<AutomationLog> {
     const wf = this.workflows.get(id);
     if (!wf) throw new Error('Workflow not found');
@@ -262,20 +310,9 @@ export class AutomationsService {
       source: 'MANUAL_DASHBOARD_TRIGGER',
     };
 
-    // Dispatch webhook to n8n if endpoint is configured
-    const n8nUrl = this.configService.get<string>('N8N_WEBHOOK_BASE_URL', 'http://localhost:5678');
-    const secret = this.configService.get<string>('N8N_WEBHOOK_SECRET', 'dev-webhook-secret');
-    const signature = crypto
-      .createHmac('sha256', secret)
-      .update(JSON.stringify(payload))
-      .digest('hex');
-
-    this.logger.log(`Triggering automation ${wf.name} (${n8nUrl}${wf.webhookPath}) [sig: ${signature.slice(0, 8)}]`);
-
-    const duration = Date.now() - startTime + Math.floor(Math.random() * 80 + 50);
+    const duration = Date.now() - startTime + 50;
     wf.successCount += 1;
     wf.lastRunAt = new Date().toISOString();
-    this.workflows.set(id, wf);
 
     const newLog: AutomationLog = {
       id: `log-${Date.now()}`,
@@ -290,32 +327,16 @@ export class AutomationsService {
     };
 
     this.logs.unshift(newLog);
-    if (this.logs.length > 50) this.logs.pop();
-
     return newLog;
   }
 
   // ---------------------------------------------------------------------------
-  // Domain Event Listeners -> Automatic Webhook Dispatch
+  // Domain Event Listeners -> Trigger Immediate Outbox Processing
   // ---------------------------------------------------------------------------
 
   @OnEvent('appointment.created')
   async handleAppointmentCreated(event: any) {
     this.logger.log(`Domain Event Received: appointment.created [${event?.id || 'unknown'}]`);
-    await this.triggerWorkflow('wf-booking-created', event);
-    await this.triggerWorkflow('wf-ai-case-classification', event);
-  }
-
-  @OnEvent('appointment.confirmed')
-  async handleAppointmentConfirmed(event: any) {
-    this.logger.log(`Domain Event Received: appointment.confirmed [${event?.id || 'unknown'}]`);
-    await this.triggerWorkflow('wf-appointment-confirmed', event);
-  }
-
-  @OnEvent('appointment.completed')
-  async handleAppointmentCompleted(event: any) {
-    this.logger.log(`Domain Event Received: appointment.completed [${event?.id || 'unknown'}]`);
-    await this.triggerWorkflow('wf-consultation-completed', event);
-    await this.triggerWorkflow('wf-ai-meeting-summary', event);
+    this.processOutbox().catch(err => this.logger.error(`Error processing outbox on event: ${err.message}`));
   }
 }

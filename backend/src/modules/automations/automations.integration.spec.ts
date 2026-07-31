@@ -3,6 +3,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ConfigModule } from '@nestjs/config';
 import { AutomationsModule } from './automations.module.js';
 import { AutomationsService } from './automations.service.js';
+import { PrismaModule } from '../../prisma/prisma.module.js';
 
 describe('Single End-to-End Automation Pipeline Integration', () => {
   let service: AutomationsService;
@@ -12,6 +13,7 @@ describe('Single End-to-End Automation Pipeline Integration', () => {
       imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         EventEmitterModule.forRoot(),
+        PrismaModule,
         AutomationsModule,
       ],
     }).compile();
