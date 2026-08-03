@@ -11,7 +11,7 @@ export class UsersService {
   async findAll(
     pagination: PaginationDto & SortableDto & FilterableDto,
   ): Promise<PaginatedResultDto<User>> {
-    const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'DESC', search } = pagination;
+    const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc', search } = pagination;
 
     const where: any = {
       deletedAt: null,

@@ -3,181 +3,174 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  console.log('Clearing existing database tables...');
+  
+  // Clear tables in reverse dependency order to respect foreign key constraints
   await prisma.auditLog.deleteMany();
   await prisma.notification.deleteMany();
+  await prisma.refreshToken.deleteMany();
+  await prisma.chatbotMessage.deleteMany();
+  await prisma.chatbotSession.deleteMany();
+  await prisma.availabilitySlot.deleteMany();
+  await prisma.setting.deleteMany();
   await prisma.payment.deleteMany();
   await prisma.document.deleteMany();
+  await prisma.appointmentNote.deleteMany();
   await prisma.appointmentHistory.deleteMany();
   await prisma.appointment.deleteMany();
-  await prisma.blog.deleteMany();
-  await prisma.blogCategory.deleteMany();
-  await prisma.fAQ.deleteMany();
-  await prisma.calendarBlock.deleteMany();
-  await prisma.setting.deleteMany();
   await prisma.client.deleteMany();
+  await prisma.clientPortalUser.deleteMany();
+  await prisma.blogPostTag.deleteMany();
+  await prisma.blogPost.deleteMany();
+  await prisma.blogTag.deleteMany();
+  await prisma.blogCategory.deleteMany();
+  await prisma.faq.deleteMany();
+  await prisma.faqCategory.deleteMany();
   await prisma.user.deleteMany();
+
+  console.log('Seeding baseline system users...');
 
   const admin = await prisma.user.create({
     data: {
+      email: 'admin@abcoflaw.com',
       username: 'admin',
-      displayName: 'Practice Admin',
-      role: 'admin',
-      passwordHint: 'admin123',
-      active: true,
+      password: 'password_hash_here',
+      firstName: 'Practice',
+      lastName: 'Admin',
+      role: 'ADMIN', // Upper case Enum match
+      isActive: true,
     },
   });
 
   const receptionist = await prisma.user.create({
     data: {
+      email: 'reception@abcoflaw.com',
       username: 'receptionist',
-      displayName: 'Receptionist',
-      role: 'receptionist',
-      passwordHint: 'admin123',
-      active: true,
+      password: 'password_hash_here',
+      firstName: 'Staff',
+      lastName: 'Receptionist',
+      role: 'RECEPTIONIST',
+      isActive: true,
     },
   });
 
   const lawyer = await prisma.user.create({
     data: {
+      email: 'lawyer@abcoflaw.com',
       username: 'lawyer',
-      displayName: 'Lead Lawyer',
-      role: 'lawyer',
-      passwordHint: 'admin123',
-      active: true,
+      password: 'password_hash_here',
+      firstName: 'Lead',
+      lastName: 'Lawyer',
+      role: 'LAWYER',
+      isActive: true,
     },
   });
 
-  const category = await prisma.blogCategory.create({
+  console.log('Seeding FAQ structures...');
+
+  const faqCategory = await prisma.faqCategory.create({
     data: {
-      name: 'Consultations',
-      slug: 'consultations',
-      description: 'Consultation workflow and practice guidance',
+      name: 'Booking & Documents',
+      description: 'Frequently asked questions regarding client onboarding workflows.',
       order: 1,
     },
   });
 
-  await prisma.fAQ.createMany({
+  await prisma.faq.createMany({
     data: [
       {
-        category: 'Booking',
+        categoryId: faqCategory.id,
         question: 'How do I book a consultation?',
         answer: 'Use the consultation form or chatbot to submit an inquiry for manual review.',
-        sortOrder: 1,
-        visible: true,
+        order: 1,
+        isVisible: true,
       },
       {
-        category: 'Documents',
-        question: 'Can I upload documents?',
-        answer: 'Yes, the booking flow accepts PDF, DOCX, JPG, and PNG files up to 10 MB.',
-        sortOrder: 2,
-        visible: true,
+        categoryId: faqCategory.id,
+        question: 'Can I upload documents securely?',
+        answer: 'Yes, the client portal accepts PDF, DOCX, JPG, and PNG files.',
+        order: 2,
+        isVisible: true,
       },
     ],
   });
 
-  await prisma.client.create({
+  console.log('Seeding Client profiles and active appointments...');
+
+  const client = await prisma.client.create({
     data: {
-      fullName: 'Aman Verma',
+      firstName: 'Aman',
+      lastName: 'Verma',
       phone: '9999999999',
       email: 'aman.verma@example.com',
       notes: 'Seed client for portal verification and dashboard review.',
-      source: 'website',
-      appointments: {
-        create: {
-          createdById: receptionist.id,
-          bookingSource: 'website',
-          preferredDate: new Date('2026-07-15T00:00:00.000Z'),
-          preferredTime: '11:00',
-          scheduledAt: new Date('2026-07-15T05:30:00.000Z'),
-          durationMinutes: 30,
-          status: 'confirmed',
-          notes: 'Seeded consultation',
-          paymentStatus: 'paid',
-          consultationFee: '2500.00',
-          bookedBy: 'Reception team',
-        },
-      },
-      payments: {
-        create: {
-          amount: '2500.00',
-          method: 'gpay',
-          referenceNumber: 'SEED-GPAY-001',
-          status: 'paid',
-          paidAt: new Date('2026-07-14T10:30:00.000Z'),
-          notes: 'Initial consultation fee',
-        },
-      },
-      documents: {
-        create: {
-          fileName: 'seed-id-proof.pdf',
-          originalName: 'id-proof.pdf',
-          mimeType: 'application/pdf',
-          fileSize: 120000,
-          storagePath: 'seed/seed-id-proof.pdf',
-          uploadedById: receptionist.id,
-        },
-      },
     },
   });
 
-  await prisma.blog.create({
+  const appointment = await prisma.appointment.create({
     data: {
-      title: 'How to prepare for your first consultation',
-      slug: 'prepare-for-your-first-consultation',
-      excerpt: 'A short guide to organizing documents and expectations before your intake call.',
-      content: 'Prepare documents, write a concise timeline, and identify the outcome you want from the consultation.',
-      seoTitle: 'Prepare for your first consultation',
-      metaDescription: 'Checklist for new legal consultation clients.',
-      featuredImageUrl: null,
-      tags: ['consultation', 'intake'],
-      visibility: 'published',
-      publishedAt: new Date('2026-07-01T00:00:00.000Z'),
-      authorId: lawyer.id,
-      categoryId: category.id,
+      clientId: client.id,
+      bookedByUserId: receptionist.id,
+      description: 'Initial consultation regarding business compliance structures.',
+      preferredDate: new Date('2026-07-25T00:00:00.000Z'),
+      preferredTime: '11:00',
+      status: 'CONFIRMED',
+      source: 'WEBSITE',
     },
   });
+
+  await prisma.payment.create({
+    data: {
+      appointmentId: appointment.id,
+      clientId: client.id,
+      amount: 2500.00,
+      method: 'GPAY',
+      status: 'PAID',
+      referenceNumber: 'SEED-GPAY-001',
+      paidAt: new Date(),
+      notes: 'Initial consulting intake fee.',
+    },
+  });
+
+  console.log('Seeding content items...');
+
+  const blogCategory = await prisma.blogCategory.create({
+    data: {
+      name: 'Consultations',
+      slug: 'consultations',
+      description: 'Consultation workflow and practice guidance.',
+      order: 1,
+    },
+  });
+
+  await prisma.blogPost.create({
+    data: {
+      authorId: lawyer.id,
+      categoryId: blogCategory.id,
+      title: 'How to prepare for your first consultation',
+      slug: 'prepare-for-your-first-consultation',
+      excerpt: 'A short guide to organizing documents before your intake call.',
+      content: 'Prepare documents, write a concise timeline, and identify your core metrics.',
+      status: 'PUBLISHED',
+      publishedAt: new Date(),
+    },
+  });
+
+  console.log('Populating configuration settings...');
 
   await prisma.setting.createMany({
     data: [
-      { key: 'office-hours', value: { start: '09:00', end: '18:00', sundayClosed: true }, updatedById: admin.id },
-      { key: 'consultation-duration', value: { minutes: 30 }, updatedById: admin.id },
-      { key: 'contact-details', value: { phone: '+91 99999 99999', email: 'office@example.com' }, updatedById: admin.id },
+      { key: 'office-hours', value: { start: '09:00', end: '18:00', sundayClosed: true }, category: 'general', isPublic: true },
+      { key: 'consultation-duration', value: { minutes: 30 }, category: 'general', isPublic: false },
     ],
   });
 
-  await prisma.calendarBlock.create({
-    data: {
-      date: new Date('2026-07-20T00:00:00.000Z'),
-      startTime: '13:00',
-      endTime: '15:00',
-      reason: 'Court appearance',
-    },
-  });
-
-  await prisma.notification.create({
-    data: {
-      userId: receptionist.id,
-      channel: 'in_app',
-      title: 'Seed data ready',
-      body: 'The seeded practice dataset has been created successfully.',
-      status: 'unread',
-    },
-  });
-
-  await prisma.auditLog.create({
-    data: {
-      userId: admin.id,
-      action: 'seed.create',
-      entity: 'bootstrap',
-      entityId: 'seed',
-      metadata: { note: 'Initial local seed data created' },
-    },
-  });
+  console.log('🚀 Database seeding operations completed successfully.');
 }
 
 main()
   .catch((error) => {
-    console.error(error);
+    console.error('❌ Error executing database seed:', error);
     process.exitCode = 1;
   })
   .finally(async () => {
