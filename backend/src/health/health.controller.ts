@@ -1,9 +1,21 @@
-import { Controller, Get, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Res, HttpStatus, Injectable } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { Public } from '../common/decorators/public.decorator.js';
 import { Response } from 'express';
+import { readFileSync } from 'fs';
+import path from 'path';
 
+let APP_VERSION = '1.0.0';
+try {
+  const pkgPath = path.resolve(process.cwd(), 'package.json');
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+  if (pkg.version) APP_VERSION = pkg.version;
+} catch (_err) {
+  // Fallback to default if package.json unavailable
+}
+
+@Injectable()
 @ApiTags('Health')
 @Controller('health')
 export class HealthController {
@@ -11,7 +23,7 @@ export class HealthController {
 
   @Get()
   @Public()
-  @ApiOperation({ summary: 'Check full application and operational metrics' })
+  @ApiOperation({ summary: 'Check active database and operational metrics' })
   async check() {
     let dbStatus = 'down';
     try {
@@ -38,7 +50,7 @@ export class HealthController {
         n8n: 'up',
       },
       environment: process.env.NODE_ENV || 'development',
-      version: '1.0.0',
+      version: APP_VERSION,
     };
   }
 
@@ -51,7 +63,7 @@ export class HealthController {
 
   @Get('ready')
   @Public()
-  @ApiOperation({ summary: 'Readiness probe endpoint verifying database connectivity' })
+  @ApiOperation({ summary: 'Readiness probe endpoint verifying active database query SELECT 1' })
   async ready(@Res() res: Response) {
     try {
       await this.prisma.$queryRaw`SELECT 1`;
@@ -63,11 +75,11 @@ export class HealthController {
 
   @Get('version')
   @Public()
-  @ApiOperation({ summary: 'Get application build version metadata' })
+  @ApiOperation({ summary: 'Get application build version metadata from package.json' })
   version() {
     return {
       name: 'law-practice-crm',
-      version: '1.0.0',
+      version: APP_VERSION,
       environment: process.env.NODE_ENV || 'development',
       nodeVersion: process.version,
       platform: process.platform,

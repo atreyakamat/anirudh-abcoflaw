@@ -13,18 +13,13 @@ const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 const backupFile = path.join(backupDir, `db-backup-${timestamp}.sql`);
 
 try {
-  // Extract DATABASE_URL from environment
-  const dbUrl = process.env.DATABASE_URL;
-  if (!dbUrl) {
-    console.error('❌ DATABASE_URL missing from environment.');
-    process.exit(1);
-  }
+  const schemaFile = path.resolve('backend/prisma/schema.prisma');
 
-  console.log(`💾 Executing database backup dump to: ${backupFile}`);
-  execSync(`npx prisma db pull --print > "${backupFile}"`, { stdio: 'inherit' });
+  console.log(`💾 Executing database schema backup dump to: ${backupFile}`);
+  execSync(`npx prisma db pull --schema="${schemaFile}" --print > "${backupFile}"`, { stdio: 'inherit' });
 
   console.log('\n--------------------------------------------------------');
-  console.log(`✅ Backup Completed Successfully: ${backupFile}`);
+  console.log(`✅ Backup Dump Completed Successfully: ${backupFile}`);
   console.log('--------------------------------------------------------\n');
 } catch (error) {
   console.error('❌ Database Backup Failed:', error.message);

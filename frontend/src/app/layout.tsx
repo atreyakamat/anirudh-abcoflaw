@@ -21,14 +21,51 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: 'AB & Co. Legal | Advocate Anirudha Sinai Borkar',
-  description: 'AB & Co. Legal is a prominent law practice in Goa focusing on civil law, property law, family law, tech contracts, and business consultancy.',
-  keywords: ['lawyer', 'legal consultation', 'attorney', 'law practice', 'legal advice', 'Goa', 'Anirudha Sinai Borkar'],
+  title: 'AB & Co. Legal | Advocate Anirudha Sinai Borkar | Goa',
+  description: 'AB & Co. Legal is a boutique law practice in Porvorim, Goa led by Advocate Anirudha Sinai Borkar, specializing in Civil Litigation, Property Law, Corporate Contracts, and Family Law.',
+  keywords: ['Lawyer Goa', 'Advocate Porvorim', 'Property Law Goa', 'Civil Litigation Goa', 'Anirudha Sinai Borkar', 'AB & Co Legal'],
+  openGraph: {
+    title: 'AB & Co. Legal | Legal Advocates & Consultants, Goa',
+    description: 'Boutique legal consultation, civil litigation, and corporate counsel in Porvorim, Goa.',
+    url: 'https://abcoflaw.com',
+    siteName: 'AB & Co. Legal',
+    locale: 'en_IN',
+    type: 'website',
+  },
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  name: 'AB & Co. Legal',
+  image: 'https://abcoflaw.com/logo.png',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Porvorim',
+    addressLocality: 'North Goa',
+    addressRegion: 'Goa',
+    postalCode: '403521',
+    addressCountry: 'IN',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 15.5414,
+    longitude: 73.8267,
+  },
+  url: 'https://abcoflaw.com',
+  telephone: '+919876543210',
+  priceRange: '₹₹',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${lato.variable} ${ebGaramond.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <QueryProvider>

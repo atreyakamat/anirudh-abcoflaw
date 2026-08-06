@@ -17,6 +17,7 @@
     "setup": "node scripts/setup.js",
     "doctor": "node scripts/doctor.js",
     "db:backup": "node scripts/db-backup.js",
+    "db:restore": "node scripts/db-restore.js",
     "clean": "powershell -ExecutionPolicy Bypass -Command \"Remove-Item -Recurse -Force -ErrorAction SilentlyContinue backend/dist, frontend/.next\"",
     "stop": "powershell -ExecutionPolicy Bypass -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force\"",
     "build": "npm run build -w backend && npm run build -w frontend",
