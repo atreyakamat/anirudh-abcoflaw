@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/page-header';
 import { api } from '@/lib/api/client';
-import { Upload, X, FileText, Image as ImageIcon, File, ShieldCheck, CreditCard, Clock, MapPin } from 'lucide-react';
+import { Upload, X, FileText, Image as ImageIcon, File, ShieldCheck, CreditCard, Clock, MapPin, Copy, CalendarPlus, PhoneCall, CheckCircle2 } from 'lucide-react';
 
 const practiceAreas = [
   'Civil & Criminal Litigation (Goa Courts)',
@@ -40,6 +40,7 @@ export default function BookingPage() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [createdAppointment, setCreatedAppointment] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +104,7 @@ export default function BookingPage() {
         ? `[${form.practiceArea}] [Mode: ${form.consultationMode}] ${form.description}`
         : form.description;
 
-      await api.appointments.create({
+      const res = await api.appointments.create({
         firstName: form.firstName,
         lastName: form.lastName,
         email: form.email,
@@ -115,7 +116,8 @@ export default function BookingPage() {
         documentIds: files.map((f) => f.id),
       });
 
-      toast.success('Consultation request submitted! Payment details will be sent via email.');
+      setCreatedAppointment(res.data);
+      toast.success('Consultation request submitted! Payment details sent via email.');
       setStep(4);
     } catch (error: any) {
       const message = error.response?.data?.message || 'Failed to submit request. Please check inputs.';
@@ -123,6 +125,12 @@ export default function BookingPage() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const copyReferenceNumber = () => {
+    const refNum = createdAppointment?.referenceNumber || 'AB-LEGAL-REF';
+    navigator.clipboard.writeText(refNum);
+    toast.success('Reference number copied to clipboard');
   };
 
   return (
@@ -194,17 +202,60 @@ export default function BookingPage() {
         )}
 
         {step === 4 ? (
-          <div className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-2xl rounded-3xl p-12 text-center animate-in zoom-in-95 duration-500">
-            <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-green-200/50">
-              <svg className="w-10 h-10" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+          <div className="bg-white border border-slate-200 shadow-2xl rounded-3xl p-8 md:p-12 text-center animate-in zoom-in-95 duration-500">
+            <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-emerald-200">
+              <CheckCircle2 className="w-10 h-10" />
             </div>
-            <h2 className="text-3xl font-bold font-serif text-slate-900 mb-3 tracking-tight">Appointment Request Received</h2>
+            
+            <h2 className="text-3xl font-bold font-serif text-slate-900 mb-2 tracking-tight">Consultation Reserved</h2>
             <p className="text-slate-600 text-sm leading-relaxed max-w-md mx-auto mb-6">
               Your consultation request has been submitted. Our office will review the schedule and issue confirmation with payment instructions (UPI / Net Banking / Card).
             </p>
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl max-w-sm mx-auto text-xs text-slate-500">
-              Porvorim Office, North Goa (near Panaji)<br/>
-              Office Hours: Mon–Fri, 10:00–17:00 IST
+
+            {/* Reference Number Box */}
+            <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl max-w-md mx-auto mb-8 flex items-center justify-between gap-4">
+              <div className="text-left">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Reference Number</span>
+                <span className="text-base font-mono font-bold text-slate-900">{createdAppointment?.referenceNumber || 'AB-LEGAL-REF-001'}</span>
+              </div>
+              <button
+                onClick={copyReferenceNumber}
+                className="px-3 py-1.5 text-xs font-medium border border-slate-300 rounded-lg hover:bg-white flex items-center gap-1.5 text-slate-700 shadow-xs transition-colors"
+              >
+                <Copy className="w-3.5 h-3.5" />
+                <span>Copy</span>
+              </button>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid sm:grid-cols-2 gap-4 max-w-md mx-auto mb-8">
+              <a
+                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Consultation+with+AB+%26+Co.+Legal&details=Reference:+${createdAppointment?.referenceNumber}&dates=${form.preferredDate.replace(/-/g, '')}T100000Z/${form.preferredDate.replace(/-/g, '')}T110000Z`}
+                target="_blank"
+                rel="noreferrer"
+                className="p-3 border rounded-xl hover:bg-slate-50 flex items-center justify-center gap-2 text-xs font-bold text-slate-800 transition-colors shadow-xs"
+              >
+                <CalendarPlus className="w-4 h-4 text-blue-600" />
+                <span>Add to Google Calendar</span>
+              </a>
+              <a
+                href="https://maps.google.com/?q=Porvorim+Goa"
+                target="_blank"
+                rel="noreferrer"
+                className="p-3 border rounded-xl hover:bg-slate-50 flex items-center justify-center gap-2 text-xs font-bold text-slate-800 transition-colors shadow-xs"
+              >
+                <MapPin className="w-4 h-4 text-emerald-600" />
+                <span>Get Office Directions</span>
+              </a>
+            </div>
+
+            <div className="p-4 bg-slate-900 text-slate-300 rounded-2xl max-w-md mx-auto text-xs text-left space-y-2 border border-slate-800">
+              <p className="font-bold text-yellow-400 flex items-center gap-2">
+                <PhoneCall className="w-4 h-4" />
+                <span>Porvorim Office Contact:</span>
+              </p>
+              <p className="text-slate-400">• Adv. Anirudha S. Borkar Chamber, Porvorim, North Goa</p>
+              <p className="text-slate-400">• Office Hours: Mon–Fri, 10:00–17:00 IST</p>
             </div>
           </div>
         ) : (

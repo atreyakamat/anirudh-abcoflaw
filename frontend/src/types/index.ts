@@ -188,6 +188,13 @@ export interface DashboardStats {
   statusCounts: { status: string; count: number }[];
   sourceCounts: { source: string; count: number }[];
   recentActivity: AuditLog[];
+  practiceInsights?: {
+    topPracticeArea: string;
+    topPracticeShare: number;
+    webConversionRate: number;
+    completionRate?: number;
+    totalAppointmentsCount: number;
+  };
 }
 
 export interface SearchResult {

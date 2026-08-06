@@ -38,7 +38,7 @@ async function bootstrap() {
     origin: configService.get<string>('CORS_ORIGINS', 'http://localhost:3000').split(','),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Request-Id', 'X-Correlation-Id'],
   });
 
   // Global pipes

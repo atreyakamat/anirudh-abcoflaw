@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { ClientTimeline } from '@/components/portal/client-timeline';
 import {
   CalendarDays,
   FileText,
@@ -101,6 +102,7 @@ export default function PortalDashboard() {
   const client = summary?.client;
   const appointments = client?.appointments || [];
   const payments = summary?.payments || [];
+  const latestAppt = appointments[0];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
@@ -118,6 +120,13 @@ export default function PortalDashboard() {
           <RefreshCw className="w-4 h-4" /> Refresh
         </Button>
       </div>
+
+      {/* Matter Stage Tracker Timeline */}
+      <ClientTimeline
+        currentStatus={latestAppt?.status || 'PENDING_REVIEW'}
+        hasLawyer={Boolean(latestAppt?.bookedByUserId)}
+        hasDocuments={documents.length > 0}
+      />
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

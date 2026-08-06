@@ -1,14 +1,14 @@
 {
-  "name": "Appointment Created Notification",
+  "name": "Appointment Created - Intake & Staff Dispatch",
   "nodes": [
     {
       "parameters": {
         "httpMethod": "POST",
         "path": "appointment-created",
-        "responseMode": "lastNode",
+        "responseMode": "onReceived",
         "options": {}
       },
-      "name": "Webhook",
+      "name": "Webhook Listener",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [250, 300],
@@ -16,62 +16,75 @@
     },
     {
       "parameters": {
-        "functionCode": "const data = $input.item.json;\n\nconst appointment = data.appointment;\nconst client = appointment.client;\n\nconst message = {\n  to: process.env.LAWYER_PHONE || '+919876543210',\n  message: `New appointment request from ${client.firstName} ${client.lastName} for ${new Date(appointment.preferredDate).toLocaleDateString()} at ${appointment.preferredTime}. Description: ${appointment.description.substring(0, 100)}...`
-};\n\nreturn { json: message };"
-      },
-      "name": "Format WhatsApp Message",
-      "type": "n8n-nodes-base.function",
-      "typeVersion": 1,
-      "position": [500, 300]
-    },
-    {
-      "parameters": {
-        "mode": "runOnceForEachItem",
-        "resource": "message",
-        "text": "={{ $json.message }}",
-        "additionalFields": {
-          "sessionName": "default"
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"body\"][\"status\"]}}",
+              "value2": "PENDING_REVIEW"
+            }
+          ]
         }
       },
-      "name": "Send WhatsApp via WAHA",
-      "type": "n8n-nodes-base.waha",
+      "name": "Is Pending Review?",
+      "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [750, 300],
-      "credentials": {
-        "wahaApi": "waha"
-      }
+      "position": [480, 300]
     },
     {
       "parameters": {
-        "subject": "New Appointment Request",
-        "emailHtml": "<h2>New Appointment Request</h2><p>A new appointment has been requested.</p><p><strong>Client:</strong> {{ $json.appointment.client.firstName }} {{ $json.appointment.client.lastName }}</p><p><strong>Date:</strong> {{ $json.appointment.preferredDate }}</p><p><strong>Time:</strong> {{ $json.appointment.preferredTime }}</p><p><strong>Description:</strong> {{ $json.appointment.description }}</p>",
-        "toEmail": "contact@lawpractice.com",
-        "fromName": "Law Practice CRM"
+        "chatId": "={{$env[\"TELEGRAM_RECEPTION_CHAT_ID\"]}}",
+        "text": "=📌 *NEW CONSULTATION REQUEST*\n\n*Client:* {{$json[\"body\"][\"client\"][\"firstName\"]}} {{$json[\"body\"][\"client\"][\"lastName\"]}}\n*Phone:* {{$json[\"body\"][\"client\"][\"phone\"]}}\n*Date:* {{$json[\"body\"][\"preferredDate\"]}}\n*Time:* {{$json[\"body\"][\"preferredTime\"]}}\n*Description:* {{$json[\"body\"][\"description\"]}}\n\n_Review in CRM Dashboard to approve/reschedule._",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
       },
-      "name": "Send Email Notification",
+      "name": "Telegram Receptionist Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [720, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "no-reply@ablaw.com",
+        "toEmail": "={{$json[\"body\"][\"client\"][\"email\"]}}",
+        "subject": "Consultation Request Received — AB & Co. Legal",
+        "html": "=<h2>Thank you for contacting AB & Co. Legal</h2><p>Dear {{$json[\"body\"][\"client\"][\"firstName\"]}},</p><p>We have received your consultation request for <strong>{{$json[\"body\"][\"preferredDate\"]}} at {{$json[\"body\"][\"preferredTime\"]}}</strong>. Our legal team will review your request and confirm your appointment shortly.</p><br/><p>Best regards,<br/>AB & Co. Legal Team</p>"
+      },
+      "name": "Send Acknowledgement Email",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 1,
-      "position": [750, 500]
+      "position": [720, 400]
     }
   ],
   "connections": {
-    "Webhook": {
-      "main": [
-        [{ "node": "Format WhatsApp Message", "type": "main", "index": 0 }]
-      ]
-    },
-    "Format WhatsApp Message": {
+    "Webhook Listener": {
       "main": [
         [
-          { "node": "Send WhatsApp via WAHA", "type": "main", "index": 0 },
-          { "node": "Send Email Notification", "type": "main", "index": 0 }
+          {
+            "node": "Is Pending Review?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Pending Review?": {
+      "main": [
+        [
+          {
+            "node": "Telegram Receptionist Alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Acknowledgement Email",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     }
   },
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "staticData": null,
-  "tags": ["appointments", "notifications"]
+  "active": true,
+  "settings": {}
 }

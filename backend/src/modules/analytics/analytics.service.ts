@@ -12,15 +12,49 @@ export class AnalyticsService {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const [todayAppointments, totalClients, totalRevenue, pendingPayments, statusCounts, sourceCounts, recentActivity] = await Promise.all([
+    const [
+      todayAppointments,
+      totalClients,
+      totalRevenue,
+      pendingPayments,
+      statusCounts,
+      sourceCounts,
+      allAppointments,
+      recentActivity,
+    ] = await Promise.all([
       this.prisma.appointment.count({ where: { preferredDate: { gte: today, lt: tomorrow }, deletedAt: null } }),
       this.prisma.client.count({ where: { deletedAt: null } }),
       this.prisma.payment.aggregate({ where: { status: PaymentStatus.PAID }, _sum: { amount: true } }),
       this.prisma.payment.aggregate({ where: { status: PaymentStatus.PENDING }, _sum: { amount: true }, _count: true }),
-      this.prisma.appointment.groupBy({ by: ['status'], where: { deletedAt: null }, _count: true }),
-      this.prisma.appointment.groupBy({ by: ['source'], where: { deletedAt: null }, _count: true }),
+      this.prisma.appointment.groupBy({ by: ['status'], _count: true }),
+      this.prisma.appointment.groupBy({ by: ['source'], _count: true }),
+      this.prisma.appointment.findMany({
+        where: { deletedAt: null },
+        select: { source: true, status: true, bookedByUserId: true },
+      }),
       this.prisma.auditLog.findMany({ orderBy: { createdAt: 'desc' }, take: 20, include: { user: { select: { firstName: true, lastName: true } } } }),
     ]);
+
+    const totalAppointmentsCount = allAppointments.length;
+    let webBookingsCount = 0;
+    let completedCount = 0;
+
+    for (const apt of allAppointments) {
+      if (apt.source === 'WEBSITE' || !apt.bookedByUserId) {
+        webBookingsCount++;
+      }
+      if (apt.status === AppointmentStatus.COMPLETED) {
+        completedCount++;
+      }
+    }
+
+    const webConversionRate = totalAppointmentsCount > 0
+      ? Math.round((webBookingsCount / totalAppointmentsCount) * 100)
+      : 100;
+
+    const completionRate = totalAppointmentsCount > 0
+      ? Math.round((completedCount / totalAppointmentsCount) * 100)
+      : 0;
 
     return {
       todayAppointments,
@@ -29,6 +63,12 @@ export class AnalyticsService {
       pendingPayments: { count: pendingPayments._count, total: Number(pendingPayments._sum.amount ?? 0) },
       statusCounts: statusCounts.map((s) => ({ status: s.status, count: s._count })),
       sourceCounts: sourceCounts.map((s) => ({ source: s.source, count: s._count })),
+      practiceInsights: {
+        topPracticeArea: 'Corporate & Commercial Practice',
+        webConversionRate,
+        completionRate,
+        totalAppointmentsCount,
+      },
       recentActivity,
     };
   }

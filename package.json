@@ -10,8 +10,15 @@
   ],
   "scripts": {
     "dev": "npm run dev -w frontend",
+    "dev:all": "concurrently -k -p \"[{name}]\" -n \"backend,frontend,n8n\" -c \"cyan,magenta,yellow\" \"npm run start:dev -w backend\" \"npm run dev -w frontend\" \"npx n8n start\"",
     "dev:backend": "npm run start:dev -w backend",
     "dev:frontend": "npm run dev -w frontend",
+    "n8n:bootstrap": "node scripts/bootstrap-n8n.js",
+    "setup": "node scripts/setup.js",
+    "doctor": "node scripts/doctor.js",
+    "db:backup": "node scripts/db-backup.js",
+    "clean": "powershell -ExecutionPolicy Bypass -Command \"Remove-Item -Recurse -Force -ErrorAction SilentlyContinue backend/dist, frontend/.next\"",
+    "stop": "powershell -ExecutionPolicy Bypass -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force\"",
     "build": "npm run build -w backend && npm run build -w frontend",
     "build:shared": "npm run build -w shared",
     "build:backend": "npm run build -w backend",
@@ -42,6 +49,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "commitlint": "^19.5.0",
+    "concurrently": "^10.0.4",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10"
   },
