@@ -2,6 +2,7 @@
   "name": "law-practice-crm",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "packageManager": "npm@10.9.0",
   "workspaces": [
     "frontend",
@@ -10,7 +11,7 @@
   ],
   "scripts": {
     "dev": "npm run dev -w frontend",
-    "dev:all": "concurrently -k -p \"[{name}]\" -n \"backend,frontend,n8n\" -c \"cyan,magenta,yellow\" \"npm run start:dev -w backend\" \"npm run dev -w frontend\" \"npx n8n start\"",
+    "dev:all": "concurrently -k -p \"[{name}]\" -n \"backend,frontend,n8n\" -c \"cyan,magenta,yellow\" \"npm run start:dev -w backend\" \"npm run dev -w frontend\" \"node scripts/start-n8n.js\"",
     "dev:backend": "npm run start:dev -w backend",
     "dev:frontend": "npm run dev -w frontend",
     "n8n:bootstrap": "node scripts/bootstrap-n8n.js",
@@ -18,8 +19,8 @@
     "doctor": "node scripts/doctor.js",
     "db:backup": "node scripts/db-backup.js",
     "db:restore": "node scripts/db-restore.js",
-    "clean": "powershell -ExecutionPolicy Bypass -Command \"Remove-Item -Recurse -Force -ErrorAction SilentlyContinue backend/dist, frontend/.next\"",
-    "stop": "powershell -ExecutionPolicy Bypass -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force\"",
+    "clean": "node scripts/clean.js",
+    "stop": "node scripts/stop.js",
     "build": "npm run build -w backend && npm run build -w frontend",
     "build:shared": "npm run build -w shared",
     "build:backend": "npm run build -w backend",

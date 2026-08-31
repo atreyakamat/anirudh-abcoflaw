@@ -13,51 +13,49 @@ Enterprise-grade Consultation Management, Client Relationship Management, Websit
 └──────────────┴──────────────┴──────────┴────────────────────┘
 ```
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Docker-Free Local Development)
 
 ### Prerequisites
 
-- Node.js 20+
-- npm 10+
-- Docker & Docker Compose
-- PostgreSQL 16+ (via Docker)
+- **Node.js**: 20+ LTS (`v20.x` or `v22.x`)
+- **npm**: 10+
+- **PostgreSQL**: PostgreSQL 16+ (Local system service on port 5432 or Supabase)
 
-### Installation
+### One-Command Setup & Launch
 
 ```bash
-# Clone and install dependencies
-git clone <repository-url>
-cd law-practice-crm
+# 1. Clone and install workspace dependencies
 npm install
 
-# Start development environment (PostgreSQL + Backend + Frontend)
-npm run docker:up
+# 2. Configure environment file from template
+cp .env.example .env
 
-# Generate Prisma client and run migrations
-npm run db:generate
-npm run db:migrate:dev
+# 3. Run automated setup (Prisma generate, migrations, seed, env sync)
+npm run setup
 
-# Seed database with default data
-npm run db:seed
+# 4. Verify system diagnostics
+npm run doctor
 
-# Start frontend development server
-npm run dev:frontend
-
-# In another terminal, start backend development server
-npm run dev:backend
+# 5. Launch all services concurrently (Frontend, Backend, n8n)
+npm run dev:all
 ```
 
 ### Access Points
 
-- **Frontend (Website + Dashboard)**: http://localhost:3000
-- **Backend API**: http://localhost:3001
-- **API Documentation (Swagger)**: http://localhost:3001/api/docs
+- **Frontend (Website + Portal + Dashboard)**: http://localhost:3000
+- **Backend API**: http://localhost:3001/api/v1
+- **Health Check**: http://localhost:3001/api/v1/health
+- **Readiness Check**: http://localhost:3001/api/v1/health/ready
+- **API Documentation (Swagger)**: http://localhost:3001/docs
+- **n8n Automation Editor**: http://localhost:5678
 - **Prisma Studio**: `npm run db:studio`
-- **PostgreSQL**: localhost:5432 (user: postgres, password: postgres)
 
-### Default Credentials
+### Default Credentials (Development Only)
 
-- **Admin/Receptionist Login**: `admin` / `admin123`
+- **Admin Login**: `admin` / `admin123`
+- **Lawyer Login**: `lawyer` / `lawyer123`
+- **Receptionist Login**: `receptionist` / `receptionist123`
+- **Client Portal Login**: Phone: `9876543210`, Dev OTP: `123456`
 
 ## 📁 Project Structure
 

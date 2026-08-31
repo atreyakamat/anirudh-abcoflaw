@@ -8,6 +8,8 @@ import { api } from '@/lib/api/client';
 import { CommandPalette } from './command-palette';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { CameraWidget } from '@/components/widgets/camera-widget';
+import { PomodoroTimer } from '@/components/widgets/pomodoro-timer';
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -101,6 +103,12 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         </div>
 
         <div className="flex items-center gap-2 ml-auto">
+          {/* Pomodoro Focus Timer */}
+          <PomodoroTimer />
+
+          {/* Camera Popover Widget */}
+          <CameraWidget />
+
           {/* Notification Bell Dropdown Button */}
           <div className="relative">
             <button

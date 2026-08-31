@@ -26,6 +26,11 @@ if (!fs.existsSync(envFile)) {
   console.log('✓ Environment configuration .env present');
 }
 
+// Sync .env to backend and frontend for Prisma and Next.js child processes
+fs.copyFileSync(envFile, path.resolve('backend/.env'));
+fs.copyFileSync(envFile, path.resolve('frontend/.env.local'));
+console.log('✓ Synced .env to backend/.env and frontend/.env.local');
+
 try {
   // 3. Database Prisma Setup
   console.log('\n🗄️ Generating Prisma Client & Running Migrations...');
@@ -38,9 +43,13 @@ try {
   console.log('\n🔄 Bootstrapping n8n Automation Workflows via official n8n CLI...');
   const workflowFile = path.resolve('n8n/workflows/appointment-created.json');
   if (fs.existsSync(workflowFile)) {
-    execSync(`npx n8n import:workflow --input="${workflowFile}"`, { stdio: 'inherit' });
-    execSync('npx n8n update:workflow --all --active=true', { stdio: 'inherit' });
-    console.log('✓ n8n workflow imported and activated via official n8n CLI.');
+    try {
+      execSync(`npx --yes n8n import:workflow --input="${workflowFile}"`, { stdio: 'inherit', timeout: 15000 });
+      execSync('npx --yes n8n update:workflow --all --active=true', { stdio: 'inherit', timeout: 15000 });
+      console.log('✓ n8n workflow imported and activated via official n8n CLI.');
+    } catch (n8nErr) {
+      console.warn('⚠️ n8n CLI workflow bootstrap postponed (n8n will import workflows on dev:all startup):', n8nErr.message);
+    }
   }
 
   console.log('\n========================================================');
