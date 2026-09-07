@@ -1,10 +1,11 @@
 import { db, hasKeys } from './firebase';
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  deleteDoc, 
-  doc 
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc
 } from 'firebase/firestore';
 
 const COLLECTION_NAME = 'lawyers';
@@ -33,7 +34,7 @@ export const addLawyer = async (name, specialization) => {
     });
     return { id: docRef.id, success: true };
   } catch (error) {
-    console.error("Error adding lawyer context: ", error);
+    console.error("Firestore Write Exception (addLawyer):", error);
     throw error;
   }
 };
@@ -52,7 +53,26 @@ export const getAllLawyers = async () => {
       ...doc.data()
     }));
   } catch (error) {
-    console.error("Error retrieving lawyers database: ", error);
+    console.error("Firestore Read Exception (getAllLawyers):", error);
+    throw error;
+  }
+};
+
+// Update
+export const updateLawyer = async (id, data) => {
+  if (!hasKeys) {
+    localMockLawyers = localMockLawyers.map(l =>
+      l.id === id ? { ...l, ...data } : l
+    );
+    return { success: true };
+  }
+
+  try {
+    const docRef = doc(db, COLLECTION_NAME, id);
+    await updateDoc(docRef, data);
+    return { success: true };
+  } catch (error) {
+    console.error("Firestore Update Exception (updateLawyer):", error);
     throw error;
   }
 };
@@ -69,7 +89,7 @@ export const removeLawyer = async (id) => {
     await deleteDoc(docRef);
     return { success: true };
   } catch (error) {
-    console.error("Error removing document: ", error);
+    console.error("Firestore Delete Exception (removeLawyer):", error);
     throw error;
   }
 };

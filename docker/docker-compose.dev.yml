@@ -13,7 +13,7 @@ services:
       POSTGRES_DB: law_practice_crm
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:Z
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 10s
@@ -25,11 +25,12 @@ services:
   backend:
     build:
       context: ../backend
-      dockerfile: Dockerfile.dev
+      dockerfile: ../docker/backend/Dockerfile.dev
     container_name: law_practice_crm_backend
     restart: unless-stopped
     ports:
       - '3001:3001'
+    command: ["sh", "-c", "npm run build && npm run start:dev"]
     environment:
       NODE_ENV: development
       PORT: 3001
@@ -41,23 +42,26 @@ services:
       JWT_REFRESH_EXPIRES_IN: 7d
       ADMIN_USERNAME: admin
       ADMIN_PASSWORD: admin123
-      CORS_ORIGINS: http://localhost:3000
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
       THROTTLE_TTL: 60000
       THROTTLE_LIMIT: 100
+      # Injected Firebase Credentials
+      FIREBASE_PROJECT_ID: "abcoflaw-116d7"
+      FIREBASE_CLIENT_EMAIL: "firebase-adminsdk-fbsvc@abcoflaw-116d7.iam.gserviceaccount.com"
+      FIREBASE_PRIVATE_KEY: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDY44mC6+x0NGro\n51PEzUFSsbK4StvoPsjGWv6lXlM5BprhGGdIEXNf25IwIOmp3h/CGBP8kMQY/PbN\nWcd5mAJZva0yO1j+2sQXEKe2iTTp9I75pI2ZjRzzLlboLEH/ETax5lV48I98bbHC\nWsV2em8qSYw90039SH+GjeoNSbYto4dbgDNkODDP6+cxMkRQQogAQ6LJfoByqyzW\nWiDdOii2O7psSuss0l+hceCf3RVn7DmIBZv56y4Mu+RZKvVzt3Zzhz7RFwNy6qn2\nYaBbjai9AC1TcVBCsO8m5/mM+Ak8xLqg0viwqwR18LEjs5ibsMKZZ6ntrLWShiqz\n/JYLz/mzAgMBAAECggEAFDhyc5BHRTY12WzntGtmca07ek8QXYCs+0E0iHpYy/I/\nskiyKFfoJ8GyyWXoIvwgfdn80wk0HxhGcjKylDWF0pQKd6psy6XdrkDRQgVct4sj\nYUbkJLKxRkLFu3OU25DhRoiw40uaNQGNFw+bZUZY4tpkhscSeFCwAv1sGr0KjQqL\n/XH2KXFxQ1SvoxuCRlwbQG9XCAHONPKMue5zHL5BPcdPR4z6G2WgdlArTnC4AfbV\nF/k2Ca3jwZ3posoPmrWCzG2Wv58pVHrQM/KjPFjFqApR3BRtz921GAG6Ka5lO1X4\nnjL6Od6eQ4ypaz8GnWOCv2vc3NlST1SnjDYOTgUDsQKBgQDuX8jMejes5yQ/G9tY\nWWqhLEddK/gOo3GRlbSaUDvCzTMZiJeksiTFkOrhsNKY2CLNl3hXJTiKqX6HCYUL\niPJO+TKLH1DTMVd55GDeyiueA7ZR/yrer+vcyvWDY0KTU/QnlLvB4b1b0RgEg7A4\nfw7PKKrGOQ5Wwzw97+iUmweG7QKBgQDo7Q3QMCgfJyCGUmErvUJBpDJCdVnweqRg\nqIFy+d9k0cyAbIe3Fjd0MNi2wkrS7YVAFHztj5F6bnt9SszyWSr8/sw7JL9cbqbZ\n+paelVI0QMoSCCzj3DI4FG8PiUxBzIZVB8AMHsBnG4xLbKCAMFHV0isSGWs0oeoG\nNDcYUGHPHwKBgQCmZnzwqJx2+X+nAlYzLXAvBI7oroniBhyAaYYCduHQ0ZfLSju5\nf5YFyGz+kYXhpnddF1CtXNFEkp89utqCO94SXQj4byrn0rji4RbyTyT1kFfUk5Ck\nlR/MKG4Mgtz1pZR5kO0koeWi06q1dAwu1BtNZ3EXILsuu+kwv2mXW0V83QKBgHBS\nF84j2sUjBhEf2pHQAwpKVp4rnsJTMb8Wos3B5tLkRJxNOai1Qup5v5dp29EZDp+X\nAaNBDyMd8di6YFghXZSAfhWrI8g756PHrigs02Y1M/w8CwGaJnFakS/JwoccTE7m\nnNp7Xcaaxy175W3LXzsfzPs+XK8VwRdayJKl+HR7AoGBANYgkzvBc9gGj8xnovt/\nlaYNWW8i2OXh/AL18kMJW5uH9AjQEIs8rVOLvcVF+LU/0B1H2aTEI1enngfyAu11\nFjjKZaemZvj9E07xGdqH9J60Bhxj7H73z184Dh/T6HMyKmp0xvlud9lfztfi7sr5\nF5osGOQwcLoHLv2Spjzk06f8\n-----END PRIVATE KEY-----\n"
     volumes:
-      - ../backend/src:/app/src
-      - ../backend/prisma:/app/prisma
-      - ../backend/uploads:/app/uploads
+      - ../backend/src:/app/src:Z 
+      - ../backend/prisma:/app/prisma:Z 
+      - ../backend/uploads:/app/uploads:Z 
     depends_on:
-      postgres:
-        condition: service_healthy
+      postgres
     networks:
       - law_practice_network
 
   frontend:
     build:
       context: ../frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: ../docker/frontend/Dockerfile.dev
     container_name: law_practice_crm_frontend
     restart: unless-stopped
     ports:
@@ -67,8 +71,27 @@ services:
       NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
       NEXT_PUBLIC_APP_URL: http://localhost:3000
     volumes:
-      - ../frontend/src:/app/src
-      - ../frontend/public:/app/public
+      - ../frontend/src:/app/src:Z 
+      - ../frontend/public:/app/public:Z
+    depends_on:
+      - backend
+    networks:
+      - law_practice_network
+
+  admin-dashboard:
+    build:
+      context: ../admin-dashboard
+      dockerfile: ../docker/frontend/Dockerfile.dev
+    container_name: law_practice_crm_admin_dashboard
+    restart: unless-stopped
+    ports:
+      - '5173:5173'
+    environment:
+      - NODE_ENV=development
+    command: npm run dev -- --host
+    volumes:
+      - ../admin-dashboard/src:/app/src:Z 
+      - ../admin-dashboard/public:/app/public:Z
     depends_on:
       - backend
     networks:

@@ -22,7 +22,8 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "rxjs": ["node_modules/rxjs"],
+      "rxjs/*": ["node_modules/rxjs/*"] 
     }
   },
   "include": ["src/**/*"],

@@ -100,7 +100,7 @@ export class PortalService {
         email: client.email,
         role: 'CLIENT',
       },
-      { expiresIn: accessTokenTtl },
+      { expiresIn: accessTokenTtl as any },
     );
 
     this.logger.log(`Portal OTP verified for client ${client.id}`);
