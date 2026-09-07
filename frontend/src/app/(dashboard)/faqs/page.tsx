@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api/client';
 import { ChevronDown, ChevronUp, Plus } from 'lucide-react';
 import { useState } from 'react';
-import type { Faq, FaqCategory } from '@/types';
+import type { Faq } from '@/types';
 
 export default function FaqsPage() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -12,11 +12,6 @@ export default function FaqsPage() {
     queryKey: ['faqs-admin'],
     queryFn: async () => { const res = await api.faqs.list({}); return res.data.data as Faq[]; },
   });
-  const { data: categories } = useQuery({
-    queryKey: ['faq-categories'],
-    queryFn: async () => { const res = await api.faqs.categories(); return res.data.data as FaqCategory[]; },
-  });
-
   return (
     <div className="space-y-6 animate-in">
       <div className="flex items-center justify-between">

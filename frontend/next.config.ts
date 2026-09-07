@@ -1,8 +1,13 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  output: (process.env.DOCKER_BUILD === 'true' || process.env.BUILD_STANDALONE === 'true') ? 'standalone' : undefined,
   reactStrictMode: true,
+  compress: true,
+  poweredByHeader: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
   images: {
     domains: ['localhost'],
     unoptimized: process.env.NODE_ENV === 'development',
@@ -10,8 +15,24 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'}/:path*`,
+        source: '/api/v1/:path*',
+        // BACKEND_URL is a server-only env var pointing to the NestJS instance.
+        // NEVER use NEXT_PUBLIC_API_URL here — it's now a relative path (/api/v1)
+        // which would create a circular rewrite.
+        destination: `${process.env.BACKEND_URL || 'http://localhost:3001'}/api/v1/:path*`,
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
       },
     ];
   },

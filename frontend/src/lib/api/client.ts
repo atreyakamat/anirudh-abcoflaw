@@ -1,9 +1,37 @@
 import axios from 'axios';
 
+// In the browser, use relative path (/api/v1) so requests go through the
+// Next.js proxy rewrite → same-origin → httpOnly cookies work correctly.
+// In SSR (Node.js), use the direct backend URL since the proxy doesn't apply.
+const baseURL =
+  typeof window !== 'undefined'
+    ? process.env.NEXT_PUBLIC_API_URL || '/api/v1'
+    : process.env.NEXT_PUBLIC_API_URL_INTERNAL || 'http://localhost:3001/api/v1';
+
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1',
+  baseURL,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
+});
+
+// Add Supabase Token interceptor
+apiClient.interceptors.request.use(async (config) => {
+  if (typeof window !== 'undefined') {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (supabaseUrl && !supabaseUrl.includes('placeholder.supabase.co')) {
+      try {
+        const { createClient } = await import('@/lib/supabase/client');
+        const supabase = createClient();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.access_token) {
+          config.headers.Authorization = `Bearer ${session.access_token}`;
+        }
+      } catch {
+        // Ignore Supabase session fetch errors in local mode
+      }
+    }
+  }
+  return config;
 });
 
 apiClient.interceptors.response.use(
@@ -12,22 +40,39 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      try {
-        await apiClient.post('/auth/refresh');
-        return apiClient(originalRequest);
-      } catch {
-        if (typeof window !== 'undefined') window.location.href = '/login';
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      if (typeof window !== 'undefined' && supabaseUrl && !supabaseUrl.includes('placeholder.supabase.co')) {
+        try {
+          const { createClient } = await import('@/lib/supabase/client');
+          const supabase = createClient();
+          const { data: { session }, error: refreshError } = await supabase.auth.refreshSession();
+          if (!refreshError && session) {
+            originalRequest.headers.Authorization = `Bearer ${session.access_token}`;
+            return apiClient(originalRequest);
+          }
+        } catch {
+          if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
+            window.location.href = '/login';
+          }
+        }
       }
     }
     return Promise.reject(error);
   },
 );
 
+// Separate client for multipart form data (file uploads)
+const uploadClient = axios.create({
+  baseURL,
+  withCredentials: true,
+});
+
 export default apiClient;
 
 export const api = {
   auth: {
     login: (data: { username: string; password: string }) => apiClient.post('/auth/login', data),
+    googleLogin: (token: string) => apiClient.post('/auth/google', { token }),
     logout: () => apiClient.post('/auth/logout'),
     me: () => apiClient.get('/auth/me'),
     refresh: () => apiClient.post('/auth/refresh'),
@@ -60,6 +105,7 @@ export const api = {
     get: (id: string) => apiClient.get(`/blogs/${id}`),
     bySlug: (slug: string) => apiClient.get(`/blogs/slug/${slug}`),
     getBySlug: (slug: string) => apiClient.get(`/blogs/slug/${slug}`),
+    categories: () => apiClient.get('/blogs/categories'),
     create: (data: any) => apiClient.post('/blogs', data),
     update: (id: string, data: any) => apiClient.put(`/blogs/${id}`, data),
     publish: (id: string) => apiClient.post(`/blogs/${id}/publish`),
@@ -104,4 +150,35 @@ export const api = {
     getAppointments: (startDate: string, endDate: string) => apiClient.get('/calendar/appointments', { params: { startDate, endDate } }),
     getSlots: (date: string) => apiClient.get('/calendar/slots', { params: { date } }),
   },
+  documents: {
+    uploadPublic: (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      return uploadClient.post('/documents/upload/public', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    },
+  },
+  portal: {
+    sendOtp: (phone: string, email?: string) => apiClient.post('/portal/send-otp', { phone, email }),
+    verifyOtp: (phone: string, code: string) => apiClient.post('/portal/verify-otp', { phone, code }),
+    login: (phone: string, email?: string) => apiClient.post('/portal/login', { phone, email }),
+    logout: () => apiClient.post('/portal/logout'),
+    me: () => apiClient.get('/portal/me'),
+    summary: () => apiClient.get('/portal/summary'),
+    documents: () => apiClient.get('/portal/documents'),
+    uploadDocument: (data: any) => apiClient.post('/portal/documents/upload', data),
+    reschedule: (data: { appointmentId: string; preferredDate: string; preferredTime: string; reason?: string }) =>
+      apiClient.post('/portal/appointments/reschedule', data),
+  },
+  automations: {
+    list: () => apiClient.get('/automations'),
+    logs: () => apiClient.get('/automations/logs'),
+    toggle: (id: string) => apiClient.post(`/automations/${id}/toggle`),
+    trigger: (id: string, payload?: any) => apiClient.post(`/automations/${id}/trigger`, payload),
+  },
+  get: <T = any>(url: string, config?: any) => apiClient.get<T>(url, config),
+  post: <T = any>(url: string, data?: any, config?: any) => apiClient.post<T>(url, data, config),
+  put: <T = any>(url: string, data?: any, config?: any) => apiClient.put<T>(url, data, config),
+  delete: <T = any>(url: string, config?: any) => apiClient.delete<T>(url, config),
 };

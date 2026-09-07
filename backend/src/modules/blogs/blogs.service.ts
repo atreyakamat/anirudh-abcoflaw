@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { BlogPost, BlogPostStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { PaginationDto, PaginatedResultDto, SortableDto, FilterableDto } from '../../common/dto/pagination.dto.js';
@@ -9,7 +9,9 @@ export class BlogsService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(pagination: PaginationDto & SortableDto & FilterableDto & { status?: BlogPostStatus; categoryId?: string }): Promise<PaginatedResultDto<BlogPost>> {
-    const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'DESC', search, status, categoryId } = pagination;
+    const page = Number(pagination.page) || 1;
+    const limit = Number(pagination.limit) || 20;
+    const { sortBy = 'createdAt', sortOrder = 'desc', search, status, categoryId } = pagination;
     const where: any = { deletedAt: null };
     if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { slug: { contains: search, mode: 'insensitive' } }, { excerpt: { contains: search, mode: 'insensitive' } }];
     if (status) where.status = status;
@@ -26,19 +28,37 @@ export class BlogsService {
   }
 
   async findPublished(pagination: PaginationDto & SortableDto & FilterableDto): Promise<PaginatedResultDto<BlogPost>> {
-    const { page = 1, limit = 20, search, categoryId } = pagination;
+    const page = Number(pagination.page) || 1;
+    const limit = Number(pagination.limit) || 20;
+    const { search, categoryId } = pagination;
     const where: any = { status: BlogPostStatus.PUBLISHED, deletedAt: null };
     if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { excerpt: { contains: search, mode: 'insensitive' } }];
     if (categoryId) where.categoryId = categoryId;
 
     const [items, total] = await Promise.all([
       this.prisma.blogPost.findMany({
-        where, orderBy: { publishedAt: 'desc' }, skip: (page - 1) * limit, take: limit,
-        include: { author: { select: { firstName: true, lastName: true } }, category: true, tags: { include: { tag: true } } },
+        where,
+        orderBy: { publishedAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          featuredImage: true,
+          publishedAt: true,
+          viewCount: true,
+          status: true,
+          createdAt: true,
+          author: { select: { firstName: true, lastName: true } },
+          category: { select: { id: true, name: true, slug: true } },
+          tags: { include: { tag: true } },
+        },
       }),
       this.prisma.blogPost.count({ where }),
     ]);
-    return new PaginatedResultDto(items, total, page, limit);
+    return new PaginatedResultDto(items as any, total, page, limit);
   }
 
   async findBySlug(slug: string): Promise<BlogPost> {

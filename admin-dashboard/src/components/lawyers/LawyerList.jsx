@@ -33,6 +33,7 @@ export default function LawyerList() {
     try {
       console.log(`Deleting lawyer with ID: ${id}`);
       await removeLawyer(id);
+      // Optimistic UI change: filter out the deleted card immediately
       setLawyers((prev) => prev.filter((lawyer) => lawyer.id !== id));
     } catch (error) {
       console.error('Failed to delete lawyer from Firestore:', error);
@@ -65,7 +66,7 @@ export default function LawyerList() {
       setIsModalOpen(false);
       setFormData({ name: '', specialization: '' });
       setEditingId(null);
-      await fetchLawyers();
+      await fetchLawyers(); // Refresh list
     } catch (error) {
       console.error('Failed to save lawyer to database:', error);
     }

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Delete, Param, Query, UseGuards, UploadedFile, UseInterceptors, HttpCode, HttpStatus } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { DocumentsService } from './documents.service.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { RolesGuard, Roles } from '../../common/guards/roles.guard.js';
@@ -46,6 +46,16 @@ export class DocumentsController {
     @CurrentUser('id') userId?: string,
   ) {
     return this.documentsService.upload(file, clientId, appointmentId, userId);
+  }
+
+  @Public()
+  @Post('upload/public')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Upload document (public - for booking form)' })
+  uploadPublic(@UploadedFile() file: Express.Multer.File) {
+    return this.documentsService.upload(file, undefined, undefined, undefined);
   }
 
   @Delete(':id')

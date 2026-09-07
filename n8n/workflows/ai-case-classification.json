@@ -1,0 +1,83 @@
+{
+  "name": "AI Case Classification & Practice Area Assignment",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-case-classification",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook Listener",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a legal intake AI assistant for AB & Co. Legal. Categorize client consultation descriptions into one of: ['Corporate Law', 'Family Law', 'Criminal Defense', 'Property & Real Estate', 'Intellectual Property', 'Civil Litigation']. Determine priority ('HIGH', 'MEDIUM', 'LOW') and output strictly JSON."
+            },
+            {
+              "role": "user",
+              "content": "Client Description: {{$json[\"body\"][\"description\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "LLM Practice Area Classifier",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "PUT",
+        "url": "=http://backend:3001/api/v1/appointments/{{$json[\"body\"][\"id\"]}}",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "lawyerNote",
+              "value": "=[AI Auto-Classification] Category: {{$json[\"message\"][\"content\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Update CRM Appointment Notes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [750, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Listener": {
+      "main": [
+        [
+          {
+            "node": "LLM Practice Area Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Practice Area Classifier": {
+      "main": [
+        [
+          {
+            "node": "Update CRM Appointment Notes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

@@ -2,6 +2,7 @@
   "name": "law-practice-crm",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "packageManager": "npm@10.9.0",
   "workspaces": [
     "frontend",
@@ -10,9 +11,17 @@
   ],
   "scripts": {
     "dev": "npm run dev -w frontend",
+    "dev:all": "concurrently -k -p \"[{name}]\" -n \"backend,frontend,n8n\" -c \"cyan,magenta,yellow\" \"npm run start:dev -w backend\" \"npm run dev -w frontend\" \"node scripts/start-n8n.js\"",
     "dev:backend": "npm run start:dev -w backend",
     "dev:frontend": "npm run dev -w frontend",
-    "build": "npm run build -w shared && npm run build -w backend && npm run build -w frontend",
+    "n8n:bootstrap": "node scripts/bootstrap-n8n.js",
+    "setup": "node scripts/setup.js",
+    "doctor": "node scripts/doctor.js",
+    "db:backup": "node scripts/db-backup.js",
+    "db:restore": "node scripts/db-restore.js",
+    "clean": "node scripts/clean.js",
+    "stop": "node scripts/stop.js",
+    "build": "npm run build -w backend && npm run build -w frontend",
     "build:shared": "npm run build -w shared",
     "build:backend": "npm run build -w backend",
     "build:frontend": "npm run build -w frontend",
@@ -22,27 +31,35 @@
     "typecheck": "npm run typecheck -w backend && npm run typecheck -w frontend",
     "typecheck:backend": "npm run typecheck -w backend",
     "typecheck:frontend": "npm run typecheck -w frontend",
+    "test": "npm run test -w backend",
+    "test:backend": "npm run test -w backend",
+    "test:e2e": "npm run test:e2e -w frontend",
     "db:prepare": "npm run db:generate && npm run db:migrate:dev && npm run db:seed",
     "start:local": "powershell -ExecutionPolicy Bypass -File scripts/start-local.ps1",
+    "db:generate": "npm run prisma:generate -w backend",
     "db:migrate:dev": "npm run prisma:migrate:dev -w backend",
     "db:studio": "npm run prisma:studio -w backend",
     "db:seed": "npm run prisma:seed -w backend",
     "db:reset": "npm run prisma:reset -w backend",
-    "docker:up": "docker-compose -f docker/docker-compose.yml up -d",
-    "docker:down": "docker-compose -f docker/docker-compose.yml down",
-    "docker:logs": "docker-compose -f docker/docker-compose.yml logs -f",
-    "docker:build": "docker-compose -f docker/docker-compose.yml build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:build": "docker compose build",
     "prepare": "husky install"
   },
   "devDependencies": {
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
-    "commitlint": "^19.5.0",
     "@commitlint/cli": "^19.5.0",
-    "@commitlint/config-conventional": "^19.5.0"
+    "@commitlint/config-conventional": "^19.5.0",
+    "commitlint": "^19.5.0",
+    "concurrently": "^10.0.4",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10"
   },
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
+  },
+  "dependencies": {
+    "firebase": "^12.16.0"
   }
 }

@@ -1,0 +1,902 @@
+[
+  {
+    "viewport": "320px",
+    "route": "/",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/about",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/services",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/blog",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/faq",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/contact",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/book",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/privacy",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/terms",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "320px",
+    "route": "/portal",
+    "status": 200,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "375px",
+    "route": "/",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\home_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/about",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\about_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/services",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\services_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/blog",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\blog_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/faq",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\faq_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/contact",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\contact_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/book",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\book_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/privacy",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\privacy_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/terms",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\terms_375px.png"
+  },
+  {
+    "viewport": "375px",
+    "route": "/portal",
+    "status": 200,
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [
+      "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:\n\n- A server/client branch `if (typeof window !== 'undefined')`.\n- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.\n- Date formatting in a user's locale which doesn't match the server.\n- External changing data without sending a snapshot of it along with the HTML.\n- Invalid HTML tag nesting.\n\nIt can also happen if the client has a browser extension installed which messes with the HTML before React loaded.\n\n%s%s https://react.dev/link/hydration-mismatch \n\n  ...\n    <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>\n      <HTTPAccessFallbackErrorBoundary pathname=\"/\" notFound={<SegmentViewNode>} forbidden={undefined} ...>\n        <RedirectBoundary>\n          <RedirectErrorBoundary router={{...}}>\n            <InnerLayoutRouter url=\"/\" tree={[...]} cacheNode={{lazyData:null, ...}} segmentPath={[...]}>\n              <SegmentViewNode type=\"layout\" pagePath=\"(public)/l...\">\n                <SegmentTrieNode>\n                <ClientSegmentRoot Component={function PublicLayout} slots={{...}} params={{}}>\n                  <PublicLayout params={Promise}>\n                    <div className=\"min-h-scre...\">\n                      <script>\n                      <header>\n                      <main>\n                      <footer>\n                      <FloatingChatbot>\n                        <button>\n                        <div className=\"fixed bott...\">\n                          <div>\n                          <div>\n                          <div>\n                          <div>\n                          <div className=\"p-3 bg-whi...\">\n                            <form onSubmit={function handleSend} className=\"flex items...\">\n                              <input\n                                type=\"text\"\n                                value=\"\"\n                                onChange={function onChange}\n                                placeholder=\"Ask an administrative question...\"\n                                className=\"flex-1 pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg f...\"\n-                               style={{caret-color:\"transparent\"}}\n                              >\n                              ...\n            ...\n"
+    ],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\portal_375px.png"
+  },
+  {
+    "viewport": "390px",
+    "route": "/",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/about",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/services",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/blog",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/faq",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/contact",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/book",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/privacy",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/terms",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "390px",
+    "route": "/portal",
+    "status": 200,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/about",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/services",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/blog",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/faq",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/contact",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/book",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/privacy",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/terms",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "430px",
+    "route": "/portal",
+    "status": 200,
+    "scrollWidth": 430,
+    "clientWidth": 430,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "768px",
+    "route": "/",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\home_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/about",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\about_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/services",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\services_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/blog",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\blog_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/faq",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\faq_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/contact",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\contact_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/book",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\book_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/privacy",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\privacy_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/terms",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\terms_768px.png"
+  },
+  {
+    "viewport": "768px",
+    "route": "/portal",
+    "status": 200,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\portal_768px.png"
+  },
+  {
+    "viewport": "1024px",
+    "route": "/",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/about",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/services",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/blog",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/faq",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/contact",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/book",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/privacy",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/terms",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1024px",
+    "route": "/portal",
+    "status": 200,
+    "scrollWidth": 1024,
+    "clientWidth": 1024,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/about",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/services",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/blog",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/faq",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/contact",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/book",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/privacy",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/terms",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1366px",
+    "route": "/portal",
+    "status": 200,
+    "scrollWidth": 1366,
+    "clientWidth": 1366,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": null
+  },
+  {
+    "viewport": "1440px",
+    "route": "/",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\home_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/about",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\about_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/services",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\services_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/blog",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\blog_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/faq",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\faq_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/contact",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\contact_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/book",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\book_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/privacy",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\privacy_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/terms",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\terms_1440px.png"
+  },
+  {
+    "viewport": "1440px",
+    "route": "/portal",
+    "status": 200,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "hasOverflow": false,
+    "overflowElements": [],
+    "consoleErrors": [],
+    "screenshotPath": "G:\\Projects\\anirudh-abcoflaw\\scratch\\screenshots\\portal_1440px.png"
+  }
+]

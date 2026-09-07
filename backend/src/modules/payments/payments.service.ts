@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { Payment, PaymentStatus, PaymentMethod } from '@prisma/client';
+import { Payment, PaymentStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { PaginationDto, PaginatedResultDto, SortableDto, FilterableDto } from '../../common/dto/pagination.dto.js';
 import { CreatePaymentDto, UpdatePaymentDto } from './dto/payment.dto.js';
@@ -17,7 +17,7 @@ export class PaymentsService {
     if (search) where.OR = [{ referenceNumber: { contains: search, mode: 'insensitive' } }, { client: { firstName: { contains: search, mode: 'insensitive' } } }];
 
     const [items, total] = await Promise.all([
-      this.prisma.payment.findMany({ where, orderBy: { [sortBy]: sortOrder }, skip: (page - 1) * limit, take: limit, include: { client: true, appointment: { select: { id: true, referenceNumber: true, description: true } } } }),
+      this.prisma.payment.findMany({ where, orderBy: { [sortBy]: sortOrder.toLowerCase() as 'asc' | 'desc' }, skip: (page - 1) * limit, take: limit, include: { client: true, appointment: { select: { id: true, referenceNumber: true, description: true } } } }),
       this.prisma.payment.count({ where }),
     ]);
     return new PaginatedResultDto(items, total, page, limit);

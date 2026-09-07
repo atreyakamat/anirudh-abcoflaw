@@ -50,7 +50,6 @@ export class SettingsController {
   update(
     @Param('key') key: string,
     @Body() body: { value: any; category?: string; isPublic?: boolean },
-    @Body('userId') userId?: string,
   ) {
     return this.settingsService.set(
       key,

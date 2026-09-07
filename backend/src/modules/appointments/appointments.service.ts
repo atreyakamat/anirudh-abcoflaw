@@ -7,12 +7,16 @@ import {
 import { Appointment, AppointmentStatus, BookingSource } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { PaginationDto, PaginatedResultDto, SortableDto, FilterableDto } from '../../common/dto/pagination.dto.js';
-import { CreateAppointmentDto } from './dto/create-appointment.dto.js';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto.js';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { NotificationsService } from '../notifications/notifications.service.js';
 
 @Injectable()
 export class AppointmentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationsService: NotificationsService,
+    private eventEmitter: EventEmitter2,
+  ) {}
 
   // Valid status transitions
   private readonly validTransitions: Record<AppointmentStatus, AppointmentStatus[]> = {
@@ -35,9 +39,9 @@ export class AppointmentsService {
   async findAll(
     pagination: PaginationDto & SortableDto & FilterableDto & { status?: AppointmentStatus; clientId?: string },
   ): Promise<PaginatedResultDto<Appointment>> {
+    const page = Number(pagination.page) || 1;
+    const limit = Number(pagination.limit) || 20;
     const {
-      page = 1,
-      limit = 20,
       sortBy = 'createdAt',
       sortOrder = 'DESC',
       search,
@@ -78,7 +82,7 @@ export class AppointmentsService {
     const [items, total] = await Promise.all([
       this.prisma.appointment.findMany({
         where,
-        orderBy: { [sortBy]: sortOrder },
+        orderBy: { [sortBy]: (sortOrder || 'desc').toLowerCase() as 'asc' | 'desc' },
         skip: (page - 1) * limit,
         take: limit,
         include: {
@@ -143,60 +147,110 @@ export class AppointmentsService {
       firstName?: string;
       lastName?: string;
       description: string;
-      preferredDate: Date;
+      preferredDate: string | Date;
       preferredTime: string;
       source?: BookingSource;
+      documentIds?: string[];
     },
     userId?: string,
   ): Promise<Appointment> {
-    // Create or find client
-    let clientId = data.clientId;
+    // Execute creation, document linkage, and history tracking inside a transaction
+    return this.prisma.$transaction(async (tx) => {
+      let resolvedClientId = data.clientId;
 
-    if (!clientId && data.email) {
-      let client = await this.prisma.client.findUnique({
-        where: { email: data.email },
+      if (!resolvedClientId && data.email) {
+        let client = await tx.client.findUnique({
+          where: { email: data.email },
+        });
+
+        if (!client) {
+          client = await tx.client.create({
+            data: {
+              email: data.email,
+              phone: data.phone || '',
+              firstName: data.firstName || 'Unknown',
+              lastName: data.lastName || 'Client',
+            },
+          });
+        }
+
+        resolvedClientId = client.id;
+      }
+
+      if (!resolvedClientId) {
+        throw new BadRequestException('Client ID or email is required');
+      }
+
+      // Check for time slot conflicts
+      await this.checkConflicts(new Date(data.preferredDate), data.preferredTime, data.preferredTime, undefined, tx);
+
+      const appointment = await tx.appointment.create({
+        data: {
+          clientId: resolvedClientId,
+          bookedByUserId: userId,
+          description: data.description,
+          preferredDate: new Date(data.preferredDate),
+          preferredTime: data.preferredTime,
+          source: data.source || BookingSource.WEBSITE,
+          status: AppointmentStatus.PENDING_REVIEW,
+        },
+        include: {
+          client: true,
+        },
       });
 
-      if (!client) {
-        client = await this.prisma.client.create({
-          data: {
-            email: data.email,
-            phone: data.phone || '',
-            firstName: data.firstName || 'Unknown',
-            lastName: data.lastName || 'Client',
-          },
+      // Link uploaded documents to this appointment
+      if (data.documentIds && data.documentIds.length > 0) {
+        await tx.document.updateMany({
+          where: { id: { in: data.documentIds } },
+          data: { appointmentId: appointment.id, clientId: resolvedClientId },
         });
       }
 
-      clientId = client.id;
-    }
+      // Create history entry within transaction
+      await tx.appointmentHistory.create({
+        data: {
+          appointmentId: appointment.id,
+          changedByUser: userId || null,
+          previousStatus: null,
+          newStatus: AppointmentStatus.PENDING_REVIEW,
+          reason: 'Appointment created',
+        },
+      });
 
-    if (!clientId) {
-      throw new BadRequestException('Client ID or email is required');
-    }
+      // Persist durable Transactional Outbox event atomically with appointment
+      const eventId = `evt_${crypto.randomUUID()}`;
+      await tx.automationEvent.create({
+        data: {
+          eventId,
+          eventType: 'appointment.created',
+          aggregateType: 'APPOINTMENT',
+          aggregateId: appointment.id,
+          payload: {
+            eventId,
+            appointmentId: appointment.id,
+            referenceNumber: appointment.referenceNumber,
+            description: appointment.description,
+            preferredDate: appointment.preferredDate,
+            preferredTime: appointment.preferredTime,
+            client: appointment.client ? {
+              id: appointment.client.id,
+              firstName: appointment.client.firstName,
+              lastName: appointment.client.lastName,
+              email: appointment.client.email,
+              phone: appointment.client.phone,
+            } : null,
+          },
+          status: 'PENDING',
+          nextAttemptAt: new Date(),
+        },
+      });
 
-    // Check for time slot conflicts
-    await this.checkConflicts(data.preferredDate, data.preferredTime, data.preferredTime);
+      // Emit domain event asynchronously for background outbox processing
+      this.eventEmitter.emit('appointment.created', { ...appointment, eventId });
 
-    const appointment = await this.prisma.appointment.create({
-      data: {
-        clientId,
-        bookedByUserId: userId,
-        description: data.description,
-        preferredDate: data.preferredDate,
-        preferredTime: data.preferredTime,
-        source: data.source || BookingSource.WEBSITE,
-        status: AppointmentStatus.PENDING_REVIEW,
-      },
-      include: {
-        client: true,
-      },
-    });
-
-    // Create history entry
-    await this.createHistoryEntry(appointment.id, null, null, AppointmentStatus.PENDING_REVIEW, 'Appointment created');
-
-    return appointment;
+      return appointment;
+    }, { timeout: 20000 });
   }
 
   async updateStatus(
@@ -235,6 +289,16 @@ export class AppointmentsService {
     // Create history entry
     await this.createHistoryEntry(id, userId, currentStatus, newStatus, reason);
 
+    // Trigger domain events
+    if (newStatus === AppointmentStatus.CONFIRMED) {
+      this.eventEmitter.emit('appointment.confirmed', updated);
+    } else if (newStatus === AppointmentStatus.COMPLETED) {
+      this.eventEmitter.emit('appointment.completed', updated);
+    }
+
+    // Trigger n8n webhook
+    this.notificationsService.sendN8nWebhook('APPOINTMENT_STATUS_UPDATED', { appointment: updated, previousStatus: currentStatus, newStatus, reason }).catch(err => console.error(err));
+
     return updated;
   }
 
@@ -242,7 +306,7 @@ export class AppointmentsService {
     id: string,
     data: {
       description?: string;
-      preferredDate?: Date;
+      preferredDate?: string | Date;
       preferredTime?: string;
       lawyerNote?: string;
     },
@@ -253,7 +317,7 @@ export class AppointmentsService {
     // Check for conflicts if date/time changed
     if (data.preferredDate || data.preferredTime) {
       await this.checkConflicts(
-        data.preferredDate || appointment.preferredDate,
+        new Date(data.preferredDate || appointment.preferredDate),
         data.preferredTime || appointment.preferredTime,
         appointment.preferredTime,
         id,
@@ -264,7 +328,7 @@ export class AppointmentsService {
       where: { id },
       data: {
         description: data.description,
-        preferredDate: data.preferredDate,
+        preferredDate: data.preferredDate ? new Date(data.preferredDate) : undefined,
         preferredTime: data.preferredTime,
         lawyerNote: data.lawyerNote,
       },
@@ -331,6 +395,7 @@ export class AppointmentsService {
   }
 
   async getUpcomingAppointments(limit = 10): Promise<Appointment[]> {
+    const numLimit = Number(limit) || 10;
     const now = new Date();
     now.setHours(0, 0, 0, 0);
 
@@ -346,7 +411,7 @@ export class AppointmentsService {
         client: true,
       },
       orderBy: [{ preferredDate: 'asc' }, { preferredTime: 'asc' }],
-      take: limit,
+      take: numLimit,
     });
   }
 
@@ -377,7 +442,9 @@ export class AppointmentsService {
     startTime: string,
     endTime: string,
     excludeId?: string,
+    tx?: any,
   ): Promise<void> {
+    const client = tx || this.prisma;
     const dateStr = date.toISOString().split('T')[0];
 
     const where: any = {
@@ -395,7 +462,7 @@ export class AppointmentsService {
       where.id = { not: excludeId };
     }
 
-    const conflicts = await this.prisma.appointment.findMany({
+    const conflicts = await client.appointment.findMany({
       where,
       select: {
         id: true,

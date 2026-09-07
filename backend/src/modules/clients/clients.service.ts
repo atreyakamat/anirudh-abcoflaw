@@ -10,7 +10,12 @@ export class ClientsService {
   async findAll(
     pagination: PaginationDto & SortableDto & FilterableDto,
   ): Promise<PaginatedResultDto<Client>> {
-    const { page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'DESC', search, startDate, endDate } = pagination;
+    const page = Number(pagination.page) || 1;
+    const limit = Number(pagination.limit) || 20;
+    const { sortBy = 'createdAt', sortOrder = 'DESC', search, startDate, endDate } = pagination;
+    // Prisma requires lowercase sort direction; normalise here to accept both
+    // 'ASC'/'DESC' (from legacy clients) and 'asc'/'desc' (Prisma native).
+    const prismaOrder = sortOrder.toLowerCase() as 'asc' | 'desc';
 
     const where: any = {
       deletedAt: null,
@@ -34,7 +39,7 @@ export class ClientsService {
     const [items, total] = await Promise.all([
       this.prisma.client.findMany({
         where,
-        orderBy: { [sortBy]: sortOrder },
+        orderBy: { [sortBy]: prismaOrder },
         skip: (page - 1) * limit,
         take: limit,
         include: {
@@ -134,19 +139,20 @@ export class ClientsService {
   }
 
   async getTimeline(id: string, limit = 20): Promise<any[]> {
-    const client = await this.findOne(id);
+    await this.findOne(id);
 
-    const appointments = await this.prisma.appointment.findMany({
-      where: { clientId: id, deletedAt: null },
-      orderBy: { createdAt: 'desc' },
-      take: limit,
-    });
-
-    const payments = await this.prisma.payment.findMany({
-      where: { clientId: id },
-      orderBy: { createdAt: 'desc' },
-      take: limit,
-    });
+    const [appointments, payments] = await Promise.all([
+      this.prisma.appointment.findMany({
+        where: { clientId: id, deletedAt: null },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+      }),
+      this.prisma.payment.findMany({
+        where: { clientId: id },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+      }),
+    ]);
 
     // Merge and sort by date
     const timeline = [

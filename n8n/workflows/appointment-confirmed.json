@@ -1,0 +1,65 @@
+{
+  "name": "Appointment Confirmed - Calendar & SMS Dispatch",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "appointment-confirmed",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook Listener",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "calendarId": "primary",
+        "start": "={{$json[\"body\"][\"preferredDate\"]}}T{{$json[\"body\"][\"preferredTime\"]}}:00Z",
+        "end": "={{$json[\"body\"][\"preferredDate\"]}}T{{$json[\"body\"][\"preferredTime\"]}}:30Z",
+        "summary": "=Legal Consultation: {{$json[\"body\"][\"client\"][\"firstName\"]}} {{$json[\"body\"][\"client\"][\"lastName\"]}}",
+        "description": "={{$json[\"body\"][\"description\"]}}",
+        "additionalFields": {
+          "attendees": [
+            "={{$json[\"body\"][\"client\"][\"email\"]}}"
+          ]
+        }
+      },
+      "name": "Google Calendar Invite",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [500, 200]
+    },
+    {
+      "parameters": {
+        "message": "=Your consultation with AB & Co. Legal is CONFIRMED for {{$json[\"body\"][\"preferredDate\"]}} at {{$json[\"body\"][\"preferredTime\"]}}. Calendar invite sent to {{$json[\"body\"][\"client\"][\"email\"]}}.",
+        "toPhoneNumber": "={{$json[\"body\"][\"client\"][\"phone\"]}}"
+      },
+      "name": "Send Confirmation SMS",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [500, 400]
+    }
+  ],
+  "connections": {
+    "Webhook Listener": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar Invite",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Confirmation SMS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { RequestContextMiddleware } from './common/middleware/request-context.middleware.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 import { AppointmentsModule } from './modules/appointments/appointments.module.js';
@@ -18,7 +19,11 @@ import { SettingsModule } from './modules/settings/settings.module.js';
 import { ChatbotModule } from './modules/chatbot/chatbot.module.js';
 import { SearchModule } from './modules/search/search.module.js';
 import { WebhooksModule } from './modules/webhooks/webhooks.module.js';
+import { PortalModule } from './modules/portal/portal.module.js';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AutomationsModule } from './modules/automations/automations.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { HealthModule } from './health/health.module.js';
 
 @Module({
   imports: [
@@ -26,6 +31,13 @@ import { PrismaModule } from './prisma/prisma.module.js';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
+    }),
+
+    // Event Emitter for n8n domain events
+    EventEmitterModule.forRoot({
+      wildcard: true,
+      delimiter: '.',
+      maxListeners: 20,
     }),
 
     // Rate limiting
@@ -60,6 +72,9 @@ import { PrismaModule } from './prisma/prisma.module.js';
     ChatbotModule,
     SearchModule,
     WebhooksModule,
+    PortalModule,
+    AutomationsModule,
+    HealthModule,
   ],
   providers: [
     {
@@ -68,4 +83,8 @@ import { PrismaModule } from './prisma/prisma.module.js';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestContextMiddleware).forRoutes('*');
+  }
+}

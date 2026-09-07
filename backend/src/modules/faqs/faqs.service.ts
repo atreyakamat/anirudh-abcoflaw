@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Faq, FaqCategory } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
-import { CreateFaqDto, UpdateFaqDto, ReorderFaqDto } from './dto/faq.dto.js';
+import { CreateFaqDto, UpdateFaqDto } from './dto/faq.dto.js';
 
 @Injectable()
 export class FaqsService {

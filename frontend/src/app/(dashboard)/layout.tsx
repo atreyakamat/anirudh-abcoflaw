@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 function DashboardShell({ children }: { children: React.ReactNode }) {
-  const { isLoading, isAuthenticated } = useAuth();
+  const { isLoading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (isLoading) {

@@ -296,6 +296,8 @@ async function main() {
   // ============================================
   // 10. Create Blog Posts
   // ============================================
+  await prisma.blogPostTag.deleteMany();
+  await prisma.blogPost.deleteMany();
   const blogPosts = await Promise.all([
     prisma.blogPost.create({
       data: {
@@ -532,6 +534,7 @@ Need legal help understanding your rights? Schedule a consultation.`,
   // ============================================
   // 12. Create FAQs
   // ============================================
+  await prisma.faq.deleteMany();
   const faqs = await Promise.all([
     prisma.faq.create({
       data: {
@@ -713,7 +716,6 @@ Need legal help understanding your rights? Schedule a consultation.`,
   // ============================================
   // 15. Create Availability Slots
   // ============================================
-  const availabilitySlots = [];
   for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
     const slotDate = new Date(today.getTime() + dayOffset * 24 * 60 * 60 * 1000);
     const dayOfWeek = slotDate.getDay();

@@ -6,17 +6,30 @@ import { PrismaService } from '../../prisma/prisma.service.js';
 export class SettingsService {
   constructor(private prisma: PrismaService) {}
 
+  private cache = new Map<string, Setting>();
+
   async findAll(publicOnly = false): Promise<Setting[]> {
-    return this.prisma.setting.findMany({
+    const settings = await this.prisma.setting.findMany({
       where: publicOnly ? { isPublic: true } : {},
       orderBy: { category: 'asc' },
     });
+    for (const setting of settings) {
+      this.cache.set(setting.key, setting);
+    }
+    return settings;
   }
 
   async findByKey(key: string): Promise<Setting | null> {
-    return this.prisma.setting.findUnique({
+    if (this.cache.has(key)) {
+      return this.cache.get(key)!;
+    }
+    const setting = await this.prisma.setting.findUnique({
       where: { key },
     });
+    if (setting) {
+      this.cache.set(key, setting);
+    }
+    return setting;
   }
 
   async get<T = any>(key: string, defaultValue?: T): Promise<T | null> {
@@ -32,7 +45,7 @@ export class SettingsService {
     isPublic = false,
     userId?: string,
   ): Promise<Setting> {
-    return this.prisma.setting.upsert({
+    const setting = await this.prisma.setting.upsert({
       where: { key },
       update: {
         value,
@@ -48,6 +61,8 @@ export class SettingsService {
         updatedByUserId: userId,
       },
     });
+    this.cache.set(key, setting);
+    return setting;
   }
 
   async delete(key: string): Promise<void> {
@@ -59,6 +74,7 @@ export class SettingsService {
     await this.prisma.setting.delete({
       where: { key },
     });
+    this.cache.delete(key);
   }
 
   // Initialize default settings
