@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Param, Body, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ChatbotService, ChatbotQueryResult } from './chatbot.service.js';
+import { SubmitLeadDto } from './dto/submit-lead.dto.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { RolesGuard, Roles } from '../../common/guards/roles.guard.js';
 import { UserRole } from '@prisma/client';
@@ -55,13 +56,20 @@ export class ChatbotController {
   @Public()
   @Post('sessions/:id/lead')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Submit lead from chatbot' })
+  @ApiOperation({ summary: 'Submit lead from chatbot; creates an appointment when booking details (email + date + time) are provided' })
   async submitLead(
     @Param('id') sessionId: string,
-    @Body() body: { name?: string; email?: string; phone?: string; message?: string },
+    @Body() dto: SubmitLeadDto,
   ) {
-    await this.chatbotService.qualifyAndSaveLead(sessionId, body);
-    return { success: true, message: 'Lead submitted successfully' };
+    const result = await this.chatbotService.qualifyAndSaveLead(sessionId, dto);
+    return {
+      success: true,
+      message: result.appointment
+        ? 'Consultation request created'
+        : 'Lead submitted successfully',
+      referenceNumber: result.appointment?.referenceNumber ?? null,
+      appointment: result.appointment,
+    };
   }
 
   @Public()

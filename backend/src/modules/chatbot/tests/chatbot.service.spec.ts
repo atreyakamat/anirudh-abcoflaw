@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChatbotService } from '../chatbot.service.js';
 import { PrismaService } from '../../../prisma/prisma.service.js';
 import { NotificationsService } from '../../notifications/notifications.service.js';
+import { AppointmentsService } from '../../appointments/appointments.service.js';
 
 // Mock Prisma Service with proper typing
 const createMockPrismaService = () => ({
@@ -27,6 +28,7 @@ describe('ChatbotService', () => {
   let service: ChatbotService;
   let prismaService: ReturnType<typeof createMockPrismaService>;
   let notificationsService: { create: jest.Mock };
+  let appointmentsService: { create: jest.Mock };
 
   const mockSession = {
     id: 'session-123',
@@ -61,12 +63,14 @@ describe('ChatbotService', () => {
   beforeEach(async () => {
     prismaService = createMockPrismaService();
     notificationsService = { create: jest.fn() };
+    appointmentsService = { create: jest.fn() };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ChatbotService,
         { provide: PrismaService, useValue: prismaService },
         { provide: NotificationsService, useValue: notificationsService },
+        { provide: AppointmentsService, useValue: appointmentsService },
       ],
     }).compile();
 
@@ -256,9 +260,97 @@ describe('ChatbotService', () => {
       });
       notificationsService.create.mockResolvedValue({} as any);
 
-      await service.qualifyAndSaveLead('session-123', leadData);
+      const result = await service.qualifyAndSaveLead('session-123', leadData);
 
       expect(prismaService.chatbotSession.update).toHaveBeenCalled();
+      expect(result).toEqual({ leadCaptured: true, appointment: null });
+      // No booking fields provided - the Booking API must not be called
+      expect(appointmentsService.create).not.toHaveBeenCalled();
+    });
+
+    it('should create an appointment via the Booking API when booking details are provided', async () => {
+      const leadData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '+919876543210',
+        message: 'Property title verification for a plot in Mapusa',
+        practiceArea: 'Property & Conveyancing (RERA / Title)',
+        preferredDate: '2026-09-20',
+        preferredTime: '10:30',
+      };
+
+      const mockAppointment = {
+        id: 'apt-123',
+        referenceNumber: 'AB-LEGAL-REF-001',
+        preferredDate: new Date('2026-09-20'),
+        preferredTime: '10:30',
+      };
+
+      prismaService.chatbotSession.findUnique.mockResolvedValue(mockSession);
+      prismaService.chatbotSession.update.mockResolvedValue(mockSession);
+      appointmentsService.create.mockResolvedValue(mockAppointment);
+      notificationsService.create.mockResolvedValue({} as any);
+
+      const result = await service.qualifyAndSaveLead('session-123', leadData);
+
+      expect(appointmentsService.create).toHaveBeenCalledWith({
+        email: 'john@example.com',
+        phone: '+919876543210',
+        firstName: 'John',
+        lastName: 'Doe',
+        practiceArea: 'Property & Conveyancing (RERA / Title)',
+        description: 'Property title verification for a plot in Mapusa',
+        preferredDate: '2026-09-20',
+        preferredTime: '10:30',
+        source: 'CHATBOT',
+      });
+      expect(result.appointment).toEqual({
+        id: 'apt-123',
+        referenceNumber: 'AB-LEGAL-REF-001',
+        preferredDate: mockAppointment.preferredDate,
+        preferredTime: '10:30',
+      });
+    });
+
+    it('should use a default description when no message is provided', async () => {
+      const leadData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        preferredDate: '2026-09-20',
+        preferredTime: '10:30',
+      };
+
+      prismaService.chatbotSession.findUnique.mockResolvedValue(mockSession);
+      prismaService.chatbotSession.update.mockResolvedValue(mockSession);
+      appointmentsService.create.mockResolvedValue({
+        id: 'apt-123',
+        referenceNumber: 'REF',
+        preferredDate: new Date(),
+        preferredTime: '10:30',
+      });
+      notificationsService.create.mockResolvedValue({} as any);
+
+      await service.qualifyAndSaveLead('session-123', leadData);
+
+      expect(appointmentsService.create).toHaveBeenCalledWith(
+        expect.objectContaining({ description: 'Consultation requested via chatbot' }),
+      );
+    });
+
+    it('should not create an appointment without a date and time', async () => {
+      const leadData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        message: 'Interested in consultation',
+      };
+
+      prismaService.chatbotSession.findUnique.mockResolvedValue(mockSession);
+      prismaService.chatbotSession.update.mockResolvedValue(mockSession);
+      notificationsService.create.mockResolvedValue({} as any);
+
+      await service.qualifyAndSaveLead('session-123', leadData);
+
+      expect(appointmentsService.create).not.toHaveBeenCalled();
     });
   });
 

@@ -1,7 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ChatbotSession, ChatbotMessage, Faq } from '@prisma/client';
+import { ChatbotSession, ChatbotMessage, Faq, BookingSource } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
+import { AppointmentsService } from '../appointments/appointments.service.js';
 
 export interface ChatbotIntent {
   name: string;
@@ -52,6 +53,7 @@ export class ChatbotService {
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
+    private appointmentsService: AppointmentsService,
   ) {}
 
   async createSession(email?: string, source?: string): Promise<ChatbotSession> {
@@ -179,7 +181,7 @@ export class ChatbotService {
       FEES: "Consultation fees vary based on the type of legal service required. For a detailed fee estimate, please book a consultation where our team can provide accurate pricing based on your specific needs. We accept Cash, GPay, and Bank Transfers.",
       HOURS: "Our office is open Monday to Saturday, 9:00 AM to 6:00 PM. We are closed on Sundays and public holidays. For urgent matters, please call our office directly.",
       PHONE: "You can reach us at +91-9876543210 or email contact@lawpractice.com. For immediate assistance, calling during office hours is recommended.",
-      AREAS: "We specialize in Corporate Law, Family Law, Property Law, Employment Law, Criminal Law, and Civil Litigation. What type of legal matter can we assist you with?",
+      AREAS: "We specialize in Civil & Criminal Litigation (Goa Courts), Property & Conveyancing (RERA / Title), Family Law & Succession (Goa Civil Code), Business & Commercial Advisory, and Notary & Preliminary IP Guidance. What type of legal matter can we assist you with?",
       LOCATION: "Our office is located at Porvorim, Goa. For specific directions or to schedule an in-person consultation, please contact us.",
       CANCEL: "To cancel or reschedule an appointment, please login to the client portal or contact our office at least 24 hours in advance. You can reach us at +91-9876543210.",
       DOCUMENT: "When preparing for your consultation, you may bring relevant documents such as identification, contracts, property papers, or any other documents related to your legal matter. We'll confirm what specific documents are needed when you book.",
@@ -225,28 +227,87 @@ export class ChatbotService {
     return !!session?.email;
   }
 
-  async qualifyAndSaveLead(sessionId: string, leadData: { name?: string; email?: string; phone?: string; message?: string }): Promise<void> {
+  async qualifyAndSaveLead(
+    sessionId: string,
+    leadData: {
+      name?: string;
+      email?: string;
+      phone?: string;
+      message?: string;
+      practiceArea?: string;
+      preferredDate?: string;
+      preferredTime?: string;
+    },
+  ): Promise<{
+    leadCaptured: boolean;
+    appointment: {
+      id: string;
+      referenceNumber: string;
+      preferredDate: Date;
+      preferredTime: string;
+    } | null;
+  }> {
+    const session = await this.getSession(sessionId);
+
     await this.prisma.chatbotSession.update({
       where: { id: sessionId },
       data: {
         email: leadData.email,
         metadata: {
-          ...(await this.getSession(sessionId))?.metadata as object || {},
+          ...(session?.metadata as object || {}),
           leadData,
           qualifiedAt: new Date().toISOString(),
         },
       },
     });
 
+    // Booking requested: route through the Booking API so chatbot bookings
+    // enter the same appointment pipeline (status history, conflict check,
+    // automation outbox) as the /book form. Requires email + date + time.
+    let appointment: {
+      id: string;
+      referenceNumber: string;
+      preferredDate: Date;
+      preferredTime: string;
+    } | null = null;
+
+    if (leadData.email && leadData.preferredDate && leadData.preferredTime) {
+      const [firstName, ...lastNameParts] = (leadData.name || '').split(' ').filter(Boolean);
+      const created = await this.appointmentsService.create({
+        email: leadData.email,
+        phone: leadData.phone,
+        firstName: firstName || 'Unknown',
+        lastName: lastNameParts.join(' ') || 'Client',
+        practiceArea: leadData.practiceArea,
+        description: leadData.message?.trim() || 'Consultation requested via chatbot',
+        preferredDate: leadData.preferredDate,
+        preferredTime: leadData.preferredTime,
+        source: BookingSource.CHATBOT,
+      });
+      appointment = {
+        id: created.id,
+        referenceNumber: created.referenceNumber,
+        preferredDate: created.preferredDate,
+        preferredTime: created.preferredTime,
+      };
+    }
+
     // Create notification for receptionist
     if (leadData.email || leadData.phone) {
       await this.notificationsService.create({
         type: 'SYSTEM',
-        title: 'New Chatbot Lead',
-        message: `New lead from chatbot: ${leadData.name || 'Unknown'} (${leadData.email || leadData.phone})`,
-        data: { sessionId, leadData },
+        title: appointment ? 'New Chatbot Booking' : 'New Chatbot Lead',
+        message: `New ${appointment ? 'booking' : 'lead'} from chatbot: ${leadData.name || 'Unknown'} (${leadData.email || leadData.phone})`,
+        data: {
+          sessionId,
+          leadData,
+          appointmentId: appointment?.id ?? null,
+          referenceNumber: appointment?.referenceNumber ?? null,
+        },
       });
     }
+
+    return { leadCaptured: true, appointment };
   }
 
   async getSessionAnalytics(): Promise<{ totalSessions: number; activeSessions: number; leadsGenerated: number }> {

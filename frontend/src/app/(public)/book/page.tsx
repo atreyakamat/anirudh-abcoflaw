@@ -4,15 +4,8 @@ import { useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { PageHeader } from '@/components/page-header';
 import { api } from '@/lib/api/client';
+import { PRACTICE_AREAS } from '@/lib/constants/practice-areas';
 import { Upload, X, FileText, Image as ImageIcon, File, ShieldCheck, CreditCard, Clock, MapPin, Copy, CalendarPlus, PhoneCall, CheckCircle2 } from 'lucide-react';
-
-const practiceAreas = [
-  'Civil & Criminal Litigation (Goa Courts)',
-  'Property & Conveyancing (RERA / Title)',
-  'Family Law & Succession (Goa Civil Code)',
-  'Business & Commercial Advisory',
-  'Notary & Preliminary IP Guidance',
-];
 
 const ALLOWED_TYPES = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -280,7 +273,7 @@ export default function BookingPage() {
                 <div>
                   <label className="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wider">Practice Area *</label>
                   <select required value={form.practiceArea} onChange={(e) => setForm((f) => ({ ...f, practiceArea: e.target.value }))} className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-600/50 focus:border-yellow-600 bg-slate-50 transition-all text-slate-900 text-sm">
-                    <option value="">Select Practice Area...</option>{practiceAreas.map((a) => <option key={a}>{a}</option>)}
+                    <option value="">Select Practice Area...</option>{PRACTICE_AREAS.map((a) => <option key={a}>{a}</option>)}
                   </select>
                 </div>
 

@@ -82,11 +82,14 @@ export const api = {
     get: (id: string) => apiClient.get(`/appointments/${id}`),
     create: (data: any) => apiClient.post('/appointments', data),
     update: (id: string, data: any) => apiClient.put(`/appointments/${id}`, data),
-    updateStatus: (id: string, data: { status: string; reason?: string }) => apiClient.post(`/appointments/${id}/status`, data),
-    confirm: (id: string, reason?: string) => apiClient.post(`/appointments/${id}/confirm`, { reason }),
-    reject: (id: string, reason?: string) => apiClient.post(`/appointments/${id}/reject`, { reason }),
-    cancel: (id: string, reason?: string) => apiClient.post(`/appointments/${id}/cancel`, { reason }),
-    complete: (id: string) => apiClient.post(`/appointments/${id}/complete`),
+    // Status changes go through the single PUT /appointments/:id/status
+    // endpoint; confirm/reject/cancel/complete are convenience mappings onto
+    // the AppointmentStatus state machine (see backend appointments.service).
+    updateStatus: (id: string, data: { status: string; reason?: string }) => apiClient.put(`/appointments/${id}/status`, data),
+    confirm: (id: string, reason?: string) => apiClient.put(`/appointments/${id}/status`, { status: 'CONFIRMED', reason }),
+    reject: (id: string, reason?: string) => apiClient.put(`/appointments/${id}/status`, { status: 'REJECTED', reason }),
+    cancel: (id: string, reason?: string) => apiClient.put(`/appointments/${id}/status`, { status: 'CANCELLED', reason }),
+    complete: (id: string) => apiClient.put(`/appointments/${id}/status`, { status: 'COMPLETED' }),
     addNote: (id: string, content: string) => apiClient.post(`/appointments/${id}/notes`, { content }),
     today: () => apiClient.get('/appointments/today'),
     upcoming: (limit?: number) => apiClient.get('/appointments/upcoming', { params: { limit } }),

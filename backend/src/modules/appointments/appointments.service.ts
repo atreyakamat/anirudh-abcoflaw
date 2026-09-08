@@ -146,6 +146,7 @@ export class AppointmentsService {
       phone?: string;
       firstName?: string;
       lastName?: string;
+      practiceArea?: string;
       description: string;
       preferredDate: string | Date;
       preferredTime: string;
@@ -188,7 +189,11 @@ export class AppointmentsService {
         data: {
           clientId: resolvedClientId,
           bookedByUserId: userId,
-          description: data.description,
+          // practiceArea has no dedicated column; embed it in the description
+          // using the same "[Practice Area] ..." convention as the /book form.
+          description: data.practiceArea
+            ? `[${data.practiceArea}] ${data.description}`
+            : data.description,
           preferredDate: new Date(data.preferredDate),
           preferredTime: data.preferredTime,
           source: data.source || BookingSource.WEBSITE,
