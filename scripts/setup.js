@@ -45,7 +45,11 @@ try {
   if (fs.existsSync(workflowFile)) {
     try {
       execSync(`npx --yes n8n import:workflow --input="${workflowFile}"`, { stdio: 'inherit', timeout: 15000 });
-      execSync('npx --yes n8n update:workflow --all --active=true', { stdio: 'inherit', timeout: 15000 });
+      try {
+        execSync(`npx --yes n8n publish:workflow --id="appointment-created"`, { stdio: 'inherit', timeout: 15000 });
+      } catch {
+        execSync('npx --yes n8n update:workflow --all --active=true', { stdio: 'inherit', timeout: 15000 });
+      }
       console.log('✓ n8n workflow imported and activated via official n8n CLI.');
     } catch (n8nErr) {
       console.warn('⚠️ n8n CLI workflow bootstrap postponed (n8n will import workflows on dev:all startup):', n8nErr.message);
