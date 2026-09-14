@@ -56,6 +56,10 @@ prisma/migrations/.migration_lock.toml
 # Uploads
 uploads/
 
+# Backups
+backups/*.sql
+!backups/db-backup-*.sql.placeholder
+
 # Misc
 *.pem
 .vercel
